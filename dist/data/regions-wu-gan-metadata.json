@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "source": "用户提供《中国语言地图集》B9、B11扫描图",
+  "featureCount": 24,
+  "registration": {
+    "B9": {
+      "method": "sheet-specific affine",
+      "coordinateReferenceSystem": "EPSG:4326",
+      "controlPointCount": 14,
+      "looRMSEKm": 3.92,
+      "looMaximumKm": 6.511,
+      "inSampleRMSEKm": 3.215,
+      "candidateLooRMSEKm": {
+        "1": 3.92,
+        "2": 5.357
+      },
+      "originalImageSize": [
+        2292,
+        3124
+      ],
+      "digitizingCanvasSize": [
+        1321,
+        1800
+      ],
+      "coefficients": [
+        [
+          121.35023059839295,
+          30.123808098531814
+        ],
+        [
+          4.262968886772214,
+          -0.028034851476013777
+        ],
+        [
+          0.008841000261065768,
+          -3.641047716826558
+        ]
+      ],
+      "normalization": "x=(pixelX-900)/1000; y=(pixelY-900)/1000",
+      "controls": [
+        {
+          "name": "南京",
+          "pixel": [
+            303,
+            371
+          ],
+          "longitude": 118.7969,
+          "latitude": 32.0603,
+          "looErrorKm": 1.235
+        },
+        {
+          "name": "镇江",
+          "pixel": [
+            449,
+            331
+          ],
+          "longitude": 119.425,
+          "latitude": 32.187,
+          "looErrorKm": 3.283
+        },
+        {
+          "name": "常州",
+          "pixel": [
+            575,
+            447
+          ],
+          "longitude": 119.974,
+          "latitude": 31.811,
+          "looErrorKm": 4.193
+        },
+        {
+          "name": "苏州",
+          "pixel": [
+            725,
+            576
+          ],
+          "longitude": 120.585,
+          "latitude": 31.299,
+          "looErrorKm": 2.205
+        },
+        {
+          "name": "上海",
+          "pixel": [
+            934,
+            598
+          ],
+          "longitude": 121.4737,
+          "latitude": 31.2304,
+          "looErrorKm": 2.816
+        },
+        {
+          "name": "杭州",
+          "pixel": [
+            608,
+            869
+          ],
+          "longitude": 120.155,
+          "latitude": 30.274,
+          "looErrorKm": 6.241
+        },
+        {
+          "name": "宁波",
+          "pixel": [
+            942,
+            968
+          ],
+          "longitude": 121.55,
+          "latitude": 29.874,
+          "looErrorKm": 2.516
+        },
+        {
+          "name": "温州",
+          "pixel": [
+            742,
+            1486
+          ],
+          "longitude": 120.7,
+          "latitude": 27.99,
+          "looErrorKm": 2.482
+        },
+        {
+          "name": "金华",
+          "pixel": [
+            508,
+            1179
+          ],
+          "longitude": 119.647,
+          "latitude": 29.079,
+          "looErrorKm": 6.511
+        },
+        {
+          "name": "衢州",
+          "pixel": [
+            314,
+            1230
+          ],
+          "longitude": 118.86,
+          "latitude": 28.97,
+          "looErrorKm": 5.143
+        },
+        {
+          "name": "丽水",
+          "pixel": [
+            558,
+            1360
+          ],
+          "longitude": 119.923,
+          "latitude": 28.468,
+          "looErrorKm": 3.496
+        },
+        {
+          "name": "临海",
+          "pixel": [
+            859,
+            1249
+          ],
+          "longitude": 121.145,
+          "latitude": 28.858,
+          "looErrorKm": 4.12
+        },
+        {
+          "name": "慈溪",
+          "pixel": [
+            879,
+            885
+          ],
+          "longitude": 121.266,
+          "latitude": 30.169,
+          "looErrorKm": 1.487
+        },
+        {
+          "name": "兰溪",
+          "pixel": [
+            464,
+            1150
+          ],
+          "longitude": 119.46,
+          "latitude": 29.208,
+          "looErrorKm": 4.553
+        }
+      ]
+    },
+    "B11": {
+      "method": "sheet-specific affine",
+      "coordinateReferenceSystem": "EPSG:4326",
+      "controlPointCount": 13,
+      "looRMSEKm": 9.339,
+      "looMaximumKm": 18.858,
+      "inSampleRMSEKm": 6.842,
+      "candidateLooRMSEKm": {
+        "1": 9.339,
+        "2": 12.02
+      },
+      "originalImageSize": [
+        3106,
+        2306
+      ],
+      "digitizingCanvasSize": [
+        1800,
+        1336
+      ],
+      "coefficients": [
+        [
+          114.39068277154905,
+          26.61746470121216
+        ],
+        [
+          6.658599183989851,
+          -0.030108378021814985
+        ],
+        [
+          0.03436459322667981,
+          -5.7976565801893205
+        ]
+      ],
+      "normalization": "x=(pixelX-900)/1000; y=(pixelY-900)/1000",
+      "controls": [
+        {
+          "name": "武汉",
+          "pixel": [
+            888,
+            216
+          ],
+          "longitude": 114.305,
+          "latitude": 30.593,
+          "looErrorKm": 3.007
+        },
+        {
+          "name": "长沙",
+          "pixel": [
+            690,
+            637
+          ],
+          "longitude": 112.939,
+          "latitude": 28.228,
+          "looErrorKm": 11.029
+        },
+        {
+          "name": "南昌",
+          "pixel": [
+            1124,
+            547
+          ],
+          "longitude": 115.858,
+          "latitude": 28.683,
+          "looErrorKm": 3.514
+        },
+        {
+          "name": "九江",
+          "pixel": [
+            1153,
+            367
+          ],
+          "longitude": 115.994,
+          "latitude": 29.713,
+          "looErrorKm": 7.801
+        },
+        {
+          "name": "吉安",
+          "pixel": [
+            974,
+            814
+          ],
+          "longitude": 114.993,
+          "latitude": 27.114,
+          "looErrorKm": 13.417
+        },
+        {
+          "name": "赣州",
+          "pixel": [
+            990,
+            1035
+          ],
+          "longitude": 114.935,
+          "latitude": 25.831,
+          "looErrorKm": 10.466
+        },
+        {
+          "name": "宜春",
+          "pixel": [
+            913,
+            696
+          ],
+          "longitude": 114.416,
+          "latitude": 27.815,
+          "looErrorKm": 6.182
+        },
+        {
+          "name": "衡阳",
+          "pixel": [
+            630,
+            859
+          ],
+          "longitude": 112.572,
+          "latitude": 26.894,
+          "looErrorKm": 4.986
+        },
+        {
+          "name": "常德",
+          "pixel": [
+            495,
+            483
+          ],
+          "longitude": 111.699,
+          "latitude": 29.031,
+          "looErrorKm": 3.457
+        },
+        {
+          "name": "怀化",
+          "pixel": [
+            232,
+            727
+          ],
+          "longitude": 109.998,
+          "latitude": 27.555,
+          "looErrorKm": 18.858
+        },
+        {
+          "name": "岳阳",
+          "pixel": [
+            720,
+            432
+          ],
+          "longitude": 113.129,
+          "latitude": 29.358,
+          "looErrorKm": 6.168
+        },
+        {
+          "name": "景德镇",
+          "pixel": [
+            1315,
+            433
+          ],
+          "longitude": 117.179,
+          "latitude": 29.268,
+          "looErrorKm": 8.301
+        },
+        {
+          "name": "上饶",
+          "pixel": [
+            1428,
+            572
+          ],
+          "longitude": 117.943,
+          "latitude": 28.455,
+          "looErrorKm": 10.14
+        }
+      ]
+    }
+  },
+  "interpretation": "手工描绘的近似区域；控制点留一误差是配准诊断，不是方言边界位置精度。",
+  "incompleteCoverage": [
+    "B9 苏沪嘉小片长江北岸、崇明等岛屿",
+    "B9 宣州片及徽语绩歙片未提取",
+    "B10 徽语细分与宣州小片尚未提取",
+    "B11 大通、怀岳、洞绥等片的部分离散图斑",
+    "B11 长益片洞庭湖周围北部支片、娄邵片湘西北边缘、吉溆片部分支片",
+    "村落级语言岛、移民语言与水域孔洞"
+  ],
+  "boundaryReview": "原图人工逐点近似描绘；尚未由方言学专家复核，不可用于村落归属断言",
+  "researchPolicy": "地理分类不等于听懂比例；仅实际调查方言点之间可匹配实验结果，未知配对明确未实测。"
+}

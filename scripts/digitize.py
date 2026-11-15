@@ -5,6 +5,9 @@ polygons are used to manufacture linguistic boundaries. Outputs are exploratory.
 """
 from pathlib import Path
 import json, hashlib
+import sys
+if __name__=='__main__' and '--legacy' not in sys.argv:
+    raise SystemExit('Legacy v0.1 extractor retained for provenance only. Use refine-overview.py and the regions_* scripts documented in README. --legacy explicitly permits regenerating OLD output.')
 import numpy as np
 import cv2
 from PIL import Image

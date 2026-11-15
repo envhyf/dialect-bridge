@@ -7,7 +7,7 @@
  <a class="brand" href="./" aria-label="乡音桥首页"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 15C12 5 28 5 35 15M9 21C15 13 25 13 31 21M14 27C17 23 23 23 26 27"/><circle cx="20" cy="33" r="1.8"/></svg><span>乡音桥</span></a>
  <span class="brand-caption">一张可以对话的方言地图</span>
  <nav aria-label="作品导航"><button class="nav-active" id="explore-nav">探索地图</button><button id="atlas-nav">原图档案 <span>↗</span></button><button id="method-nav">如何理解数字</button></nav>
- <span class="edition">中国语言地图集 · 数字实验 01</span>
+ <span class="edition">中国语言地图集 · 片与小片</span>
 </header>
 <main class="workspace">
  <aside class="origin-panel">
@@ -16,18 +16,20 @@
   <p class="intro">把普通话暂时放在一边。<br>沿着地图，寻找听得懂你的远方。</p>
   <label class="field-label" for="origin">我的家乡</label><div class="select-wrap"><select id="origin" aria-label="选择家乡"><option>正在读入地图…</option></select></div>
   <p id="origin-taxonomy" class="taxonomy">正在整理乡音的来处</p>
-  <div class="search-wrap"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="m12 12 5 5"/></svg><input id="search" type="search" aria-label="搜索城市或方言" placeholder="搜索城市或方言" autocomplete="off"><kbd>/</kbd></div>
-  <div class="list-head"><span id="list-title">寻找另一种乡音</span><select id="sort" aria-label="排序方式"><option value="score">实测优先</option><option value="distance">距离 ↑</option></select></div>
+  <div class="list-tabs" role="group" aria-label="查找对象"><button id="list-regions" class="selected" aria-pressed="true">片与小片</button><button id="list-points" aria-pressed="false">研究点</button></div>
+  <div class="search-wrap"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="m12 12 5 5"/></svg><input id="search" type="search" aria-label="搜索片区、方言或城市" placeholder="搜索片区、方言或城市" autocomplete="off"><kbd>/</kbd></div>
+  <div class="list-head"><span id="list-title">寻找另一种乡音</span><select id="sort" aria-label="排序方式"><option value="score">关系优先</option><option value="name">分类排列</option></select></div>
   <div id="city-list" class="city-list" aria-label="地点比较列表"></div>
   <p id="list-count" class="list-count"></p>
   <div class="aside-foot"><span class="source-dot"></span><p>各说本地方言 · 不切换普通话<br><span>地点代表一种乡音，不代表所有居民。</span></p></div>
  </aside>
  <section class="map-sheet" aria-label="交互方言地图">
   <div class="map-top"><div><span class="chapter">02&nbsp; 把声音放回地理</span><p id="map-subtitle">地图深浅，随你的家乡而改变</p></div><div class="map-tabs" role="group" aria-label="地图显示方式"><button id="mode-score" class="selected" aria-pressed="true">乡音关系</button><button id="mode-family" aria-pressed="false">方言分布</button></div></div>
-  <div id="map-stage" class="map-stage"><svg id="map" role="img" aria-label="中国方言分布图，可点击代表城市比较"></svg><div id="map-error" class="map-error" hidden><p>地图资料没有成功载入。</p><button onclick="location.reload()">重新载入</button></div><div id="tooltip" class="map-tooltip" hidden></div>
+  <div class="layer-bar"><label for="detail-level">边界层级</label><select id="detail-level"><option value="family">大区 · 总图</option><option value="cluster">片 · 地区详图</option><option value="subcluster" selected>小片 · 已描边处</option></select><span>点击色区，读一片乡音</span></div>
+  <div id="map-stage" class="map-stage"><svg id="map" role="img" aria-label="中国方言区域地图，可点击片和小片查看分类与研究"></svg><div id="map-error" class="map-error" hidden><p>地图资料没有成功载入。</p><button onclick="location.reload()">重新载入</button></div><div id="tooltip" class="map-tooltip" hidden></div>
    <div class="map-heading"><span id="map-origin">从杭州出发</span><small>乡音有边界，交流有可能。</small></div>
    <div class="map-controls"><button id="zoom-in" aria-label="放大地图">＋</button><button id="zoom-out" aria-label="缩小地图">−</button><button id="reset-map" aria-label="恢复全国视图">⌖</button></div>
-   <div class="map-action"><button id="pick-origin" aria-pressed="false">⊙ 选家乡</button><label class="settlement-toggle"><input id="show-settlements" type="checkbox" checked>客家话居民点</label><span id="map-hint">点击圆点比较</span></div>
+   <div class="map-action"><button id="pick-origin" aria-pressed="false">⊙ 选家乡</button><label class="settlement-toggle"><input id="show-settlements" type="checkbox" checked>客家居民点</label><label class="settlement-toggle"><input id="show-research" type="checkbox">研究点</label><span id="map-hint">点击区域读分类</span></div>
    <div class="north-mark" aria-hidden="true"><span>N</span><svg viewBox="0 0 20 30"><path d="M10 2L16 26L10 21L4 26Z"/></svg></div>
   </div>
   <div class="map-bottom"><div id="legend" class="legend"></div><p id="layer-note">色区：原图提取的方言大区 · 圆点：更细的地点分类</p></div>
@@ -35,6 +37,7 @@
  </section>
  <aside class="detail-panel" aria-live="polite">
   <div class="chapter"><span>03</span> 两种乡音，一次相遇</div>
+  <section id="region-facts" class="region-facts" aria-label="区域分类与研究"></section>
   <div class="pair"><div><small>从</small><strong id="from-name">杭州</strong></div><button id="swap" aria-label="交换家乡与目的地">⇄</button><div><small>到</small><strong id="to-name">苏州</strong></div></div>
   <p id="pair-varieties" class="pair-varieties"></p>
   <div class="score-label"><span id="score-heading">你听对方 · 句中目标词测试</span> <button id="score-info" aria-label="了解测试数字">ⓘ</button></div>

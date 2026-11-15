@@ -19,6 +19,7 @@ export function compare(a,b){
 export function haversine(a,b){const r=Math.PI/180;const dl=(b[0]-a[0])*r,dp=(b[1]-a[1])*r;const h=Math.sin(dp/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dl/2)**2;return 6371*2*Math.asin(Math.sqrt(Math.min(1,h)));}
 export function nearestPoint(c,points,maxKm=100){let best=null;for(const point of points){const distance=haversine(c,point.coordinates);if(distance<=maxKm&&(!best||distance<best.distance))best={point,distance};}return best;}
 export function measuredPair(a,b,records,metric='sentence_target'){
+ if(a?.kind==='region'||b?.kind==='region')return null;
  const heardByYou=records.find(r=>r.from===b.id&&r.to===a.id&&r.metric===metric);
  const heardByThem=records.find(r=>r.from===a.id&&r.to===b.id&&r.metric===metric);
  return heardByYou&&heardByThem?{heardByYou,heardByThem}:null;

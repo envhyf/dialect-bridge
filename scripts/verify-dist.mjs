@@ -15,6 +15,23 @@ const records=await read('data/research.json');
 assert.equal(records.length,450);
 assert.equal(new Set(records.map(r=>`${r.from}/${r.to}/${r.metric}`)).size,450);
 assert.ok(records.every(r=>ids.has(r.from)&&ids.has(r.to)&&r.value>=0&&r.value<=100));
+const regions=await read('data/regions.geojson');
+const regionIds=new Set(regions.features.map(f=>f.properties.id));
+assert.equal(regionIds.size,regions.features.length,'unique area identifiers');
+assert.equal(regions.metadata.complete,false,'partial transcription must be explicit');
+for(const f of regions.features){
+ const p=f.properties;
+ assert.ok(['Polygon','MultiPolygon'].includes(f.geometry.type),'areas must have area geometry');
+ assert.ok(['官话','晋语','吴语','徽语','赣语','湘语','客家话','粤语','平话','闽语'].includes(p.family),'Han dialect family');
+ assert.ok(['区','片','小片'].includes(p.level),'actual hierarchy level');
+ assert.ok(!p.parentId||regionIds.has(p.parentId),'parent exists');
+ assert.equal(p.researchStatus,'no-region-wide-measurement','no fabricated area score');
+ if(!p.derivedParent){assert.ok(p.sourceBoundary.length>=4);assert.ok(p.sourceImageSize.length===2);assert.ok(Number.isFinite(p.registrationRMSEKm));}
+ const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;
+ assert.ok(polygons.length>0);
+ for(const rings of polygons)for(const ring of rings){assert.ok(ring.length>=4);assert.deepEqual(ring[0],ring.at(-1));assert.ok(ring.every(c=>c.length===2&&c.every(Number.isFinite)&&c[0]>65&&c[0]<140&&c[1]>15&&c[1]<55));}
+}
+assert.equal(regions.metadata.tracedFeatureCount,regions.features.filter(f=>!f.properties.derivedParent).length);
 const atlas=await read('atlas/manifest.json');
 assert.ok(atlas.every(a=>a.available===false&&!a.file),'Public archive must contain source metadata only');
 assert.deepEqual((await readdir(join(root,'atlas'))).sort(),['manifest.json'],'Original scans must never enter public artifacts');
