@@ -1,0 +1,1728 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "source": "A2",
+    "scope": "四川盆地清晰红三角符号的局部人工选录",
+    "complete": false,
+    "count": 66,
+    "symbol": "red triangle: 客家话居民点"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-001",
+        "name": "原图客家话居民点 01",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1120.17,
+          "y": 911.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.47956,
+          32.28657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-002",
+        "name": "原图客家话居民点 02",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1117.5,
+          "y": 917.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.39766,
+          32.11815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-003",
+        "name": "原图客家话居民点 03",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1126.67,
+          "y": 917.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.67903,
+          32.11704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-004",
+        "name": "原图客家话居民点 04",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1134.33,
+          "y": 915.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.91487,
+          32.18472
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-005",
+        "name": "原图客家话居民点 05",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1142.83,
+          "y": 909.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.17757,
+          32.32074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-006",
+        "name": "原图客家话居民点 06",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1149.0,
+          "y": 907.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.36834,
+          32.37916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-007",
+        "name": "原图客家话居民点 07",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1149.0,
+          "y": 914.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.36612,
+          32.20203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-008",
+        "name": "原图客家话居民点 08",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1148.17,
+          "y": 923.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.33784,
+          31.97763
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-009",
+        "name": "原图客家话居民点 09",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1138.17,
+          "y": 923.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.03118,
+          31.98062
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-010",
+        "name": "原图客家话居民点 10",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1130.83,
+          "y": 924.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.80621,
+          31.94335
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-011",
+        "name": "原图客家话居民点 11",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1125.67,
+          "y": 930.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.64767,
+          31.79284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-012",
+        "name": "原图客家话居民点 12",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1118.17,
+          "y": 929.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.41844,
+          31.80664
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-013",
+        "name": "原图客家话居民点 13",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1122.33,
+          "y": 936.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.54577,
+          31.6332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-014",
+        "name": "原图客家话居民点 14",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1132.0,
+          "y": 935.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.84076,
+          31.67068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-015",
+        "name": "原图客家话居民点 15",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1134.67,
+          "y": 943.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.92114,
+          31.46255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-016",
+        "name": "原图客家话居民点 16",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1126.5,
+          "y": 942.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.6726,
+          31.46829
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-017",
+        "name": "原图客家话居民点 17",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1079.67,
+          "y": 925.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.24093,
+          31.9071
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-018",
+        "name": "原图客家话居民点 18",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1073.83,
+          "y": 931.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.06535,
+          31.77116
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-019",
+        "name": "原图客家话居民点 19",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1082.0,
+          "y": 933.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.31543,
+          31.71276
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-020",
+        "name": "原图客家话居民点 20",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1077.33,
+          "y": 938.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.17581,
+          31.57289
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-021",
+        "name": "原图客家话居民点 21",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1086.17,
+          "y": 939.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.44466,
+          31.56641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-022",
+        "name": "原图客家话居民点 22",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1081.5,
+          "y": 945.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.30548,
+          31.40503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-023",
+        "name": "原图客家话居民点 23",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1073.83,
+          "y": 945.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.07319,
+          31.38549
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-024",
+        "name": "原图客家话居民点 24",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1081.33,
+          "y": 954.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.30453,
+          31.17532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-025",
+        "name": "原图客家话居民点 25",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1150.67,
+          "y": 973.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.40015,
+          30.67541
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-026",
+        "name": "原图客家话居民点 26",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1159.17,
+          "y": 975.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.65559,
+          30.61615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-027",
+        "name": "原图客家话居民点 27",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1152.17,
+          "y": 980.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.44341,
+          30.48026
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-028",
+        "name": "原图客家话居民点 28",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1142.67,
+          "y": 981.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.15783,
+          30.46135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-029",
+        "name": "原图客家话居民点 29",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1148.83,
+          "y": 986.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.34207,
+          30.33852
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-030",
+        "name": "原图客家话居民点 30",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1142.0,
+          "y": 989.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.13678,
+          30.26676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-031",
+        "name": "原图客家话居民点 31",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1053.5,
+          "y": 941.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.45348,
+          31.48556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-032",
+        "name": "原图客家话居民点 32",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1046.0,
+          "y": 943.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.22766,
+          31.42521
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-033",
+        "name": "原图客家话居民点 33",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1039.67,
+          "y": 950.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.04156,
+          31.25225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-034",
+        "name": "原图客家话居民点 34",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1051.17,
+          "y": 950.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.38972,
+          31.25017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-035",
+        "name": "原图客家话居民点 35",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1045.83,
+          "y": 956.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.23336,
+          31.0954
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-036",
+        "name": "原图客家话居民点 36",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1033.5,
+          "y": 956.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.86133,
+          31.08331
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-037",
+        "name": "原图客家话居民点 37",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1057.83,
+          "y": 956.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.59592,
+          31.09299
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-038",
+        "name": "原图客家话居民点 38",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1052.33,
+          "y": 961.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.43369,
+          30.96446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-039",
+        "name": "原图客家话居民点 39",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1035.5,
+          "y": 965.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.93063,
+          30.84591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-040",
+        "name": "原图客家话居民点 40",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1046.67,
+          "y": 967.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.2681,
+          30.80513
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-041",
+        "name": "原图客家话居民点 41",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1028.33,
+          "y": 975.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.72494,
+          30.60202
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-042",
+        "name": "原图客家话居民点 42",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1035.17,
+          "y": 977.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.93207,
+          30.54609
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-043",
+        "name": "原图客家话居民点 43",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1041.83,
+          "y": 984.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.13864,
+          30.35943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-044",
+        "name": "原图客家话居民点 44",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1050.0,
+          "y": 987.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.3851,
+          30.29051
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-045",
+        "name": "原图客家话居民点 45",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1082.33,
+          "y": 984.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.34963,
+          30.37795
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-046",
+        "name": "原图客家话居民点 46",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1093.0,
+          "y": 985.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.66904,
+          30.37179
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-047",
+        "name": "原图客家话居民点 47",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1085.67,
+          "y": 991.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.45281,
+          30.19238
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-048",
+        "name": "原图客家话居民点 48",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1076.0,
+          "y": 997.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.16755,
+          30.04632
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-049",
+        "name": "原图客家话居民点 49",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1090.17,
+          "y": 998.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.59016,
+          30.01567
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-050",
+        "name": "原图客家话居民点 50",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1071.33,
+          "y": 1006.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.03423,
+          29.81895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-051",
+        "name": "原图客家话居民点 51",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1081.33,
+          "y": 1003.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.32947,
+          29.90056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-052",
+        "name": "原图客家话居民点 52",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1062.0,
+          "y": 1005.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.75713,
+          29.81923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-053",
+        "name": "原图客家话居民点 53",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1052.33,
+          "y": 1012.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.47571,
+          29.65354
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-054",
+        "name": "原图客家话居民点 54",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1062.17,
+          "y": 1013.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.7678,
+          29.62394
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-055",
+        "name": "原图客家话居民点 55",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1080.67,
+          "y": 1018.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.31823,
+          29.50551
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-056",
+        "name": "原图客家话居民点 56",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1095.0,
+          "y": 1017.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.74165,
+          29.5353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-057",
+        "name": "原图客家话居民点 57",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1070.5,
+          "y": 1021.17,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.01981,
+          29.42362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-058",
+        "name": "原图客家话居民点 58",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1079.83,
+          "y": 1026.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.29863,
+          29.28389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-059",
+        "name": "原图客家话居民点 59",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1096.83,
+          "y": 1024.0,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.79867,
+          29.35781
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-060",
+        "name": "原图客家话居民点 60",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1072.5,
+          "y": 1030.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.08516,
+          29.18132
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-061",
+        "name": "原图客家话居民点 61",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1060.83,
+          "y": 1032.33,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.74352,
+          29.12821
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-062",
+        "name": "原图客家话居民点 62",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1052.17,
+          "y": 1031.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.48814,
+          29.1452
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-063",
+        "name": "原图客家话居民点 63",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1045.17,
+          "y": 1029.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.28086,
+          29.18436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-064",
+        "name": "原图客家话居民点 64",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1040.83,
+          "y": 1035.67,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.1595,
+          29.02936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-065",
+        "name": "原图客家话居民点 65",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1096.5,
+          "y": 1043.5,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.79722,
+          28.85012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hakka-settlement-066",
+        "name": "原图客家话居民点 66",
+        "family": "客家话",
+        "markerKind": "客家话居民点",
+        "source": "A2",
+        "sourcePixel": {
+          "x": 1093.5,
+          "y": 1050.83,
+          "width": 2000,
+          "height": 1492
+        },
+        "method": "manual transcription of visible red triangle symbol; same polynomial georeferencing as A2 polygons",
+        "confidence": "symbol manually verified; approximate geographic location",
+        "note": "四川盆地原图红三角符号，未释读具体聚落名；仅表明居民点，不能用作城市代表方言或连续分布面。该层为局部选录，不是全国完整名录。"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.71284,
+          28.65848
+        ]
+      }
+    }
+  ]
+}

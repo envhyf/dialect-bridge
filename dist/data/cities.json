@@ -1,0 +1,1486 @@
+[
+  {
+    "id": "beijing",
+    "name": "北京",
+    "coordinates": [
+      116.4074,
+      39.9042
+    ],
+    "family": "官话",
+    "branch": "北京官话",
+    "cluster": null,
+    "source": "B2",
+    "variety": "北京话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1405,
+      "y": 599,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "tianjin",
+    "name": "天津",
+    "coordinates": [
+      117.2,
+      39.1333
+    ],
+    "family": "官话",
+    "branch": "冀鲁官话",
+    "cluster": null,
+    "source": "B2",
+    "variety": "天津话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1437,
+      "y": 622,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "shijiazhuang",
+    "name": "石家庄",
+    "coordinates": [
+      114.5149,
+      38.0428
+    ],
+    "family": "官话",
+    "branch": "冀鲁官话",
+    "cluster": null,
+    "source": "B2",
+    "variety": "石家庄城区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "baoding",
+    "name": "保定",
+    "coordinates": [
+      115.4648,
+      38.874
+    ],
+    "family": "官话",
+    "branch": "冀鲁官话",
+    "cluster": null,
+    "source": "B2",
+    "variety": "保定话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "jinan",
+    "name": "济南",
+    "coordinates": [
+      117.1201,
+      36.6512
+    ],
+    "family": "官话",
+    "branch": "冀鲁官话",
+    "cluster": null,
+    "source": "B3",
+    "variety": "济南话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1444,
+      "y": 725,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "qingdao",
+    "name": "青岛",
+    "coordinates": [
+      120.3826,
+      36.0671
+    ],
+    "family": "官话",
+    "branch": "胶辽官话",
+    "cluster": null,
+    "source": "B3",
+    "variety": "青岛话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "yantai",
+    "name": "烟台",
+    "coordinates": [
+      121.4479,
+      37.4638
+    ],
+    "family": "官话",
+    "branch": "胶辽官话",
+    "cluster": null,
+    "source": "B3",
+    "variety": "烟台话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "dalian",
+    "name": "大连",
+    "coordinates": [
+      121.6147,
+      38.914
+    ],
+    "family": "官话",
+    "branch": "胶辽官话",
+    "cluster": null,
+    "source": "B1",
+    "variety": "大连话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1567,
+      "y": 617,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "shenyang",
+    "name": "沈阳",
+    "coordinates": [
+      123.4315,
+      41.8057
+    ],
+    "family": "官话",
+    "branch": "东北官话",
+    "cluster": null,
+    "source": "B1",
+    "variety": "沈阳话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1595,
+      "y": 496,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "changchun",
+    "name": "长春",
+    "coordinates": [
+      125.3235,
+      43.8171
+    ],
+    "family": "官话",
+    "branch": "东北官话",
+    "cluster": null,
+    "source": "B1",
+    "variety": "长春话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1627,
+      "y": 408,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "harbin",
+    "name": "哈尔滨",
+    "coordinates": [
+      126.6424,
+      45.756
+    ],
+    "family": "官话",
+    "branch": "东北官话",
+    "cluster": null,
+    "source": "B1",
+    "variety": "哈尔滨话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1651,
+      "y": 331,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "qiqihar",
+    "name": "齐齐哈尔",
+    "coordinates": [
+      123.9182,
+      47.3543
+    ],
+    "family": "官话",
+    "branch": "东北官话",
+    "cluster": null,
+    "source": "B1",
+    "variety": "齐齐哈尔话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "zhengzhou",
+    "name": "郑州",
+    "coordinates": [
+      113.6254,
+      34.7466
+    ],
+    "family": "官话",
+    "branch": "中原官话",
+    "cluster": null,
+    "source": "B3",
+    "variety": "郑州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1342,
+      "y": 799,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "luoyang",
+    "name": "洛阳",
+    "coordinates": [
+      112.454,
+      34.6197
+    ],
+    "family": "官话",
+    "branch": "中原官话",
+    "cluster": null,
+    "source": "B3",
+    "variety": "洛阳话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "kaifeng",
+    "name": "开封",
+    "coordinates": [
+      114.3076,
+      34.7972
+    ],
+    "family": "官话",
+    "branch": "中原官话",
+    "cluster": null,
+    "source": "B3",
+    "variety": "开封话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "xian",
+    "name": "西安",
+    "coordinates": [
+      108.9398,
+      34.3416
+    ],
+    "family": "官话",
+    "branch": "中原官话",
+    "cluster": null,
+    "source": "B4",
+    "variety": "西安话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1196,
+      "y": 832,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "baoji",
+    "name": "宝鸡",
+    "coordinates": [
+      107.2373,
+      34.3619
+    ],
+    "family": "官话",
+    "branch": "中原官话",
+    "cluster": null,
+    "source": "B4",
+    "variety": "宝鸡话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "lanzhou",
+    "name": "兰州",
+    "coordinates": [
+      103.8343,
+      36.0611
+    ],
+    "family": "官话",
+    "branch": "兰银官话",
+    "cluster": null,
+    "source": "B4",
+    "variety": "兰州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1030,
+      "y": 770,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "yinchuan",
+    "name": "银川",
+    "coordinates": [
+      106.2309,
+      38.4872
+    ],
+    "family": "官话",
+    "branch": "兰银官话",
+    "cluster": null,
+    "source": "B4",
+    "variety": "银川话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1113,
+      "y": 671,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "urumqi",
+    "name": "乌鲁木齐",
+    "coordinates": [
+      87.6168,
+      43.8256
+    ],
+    "family": "官话",
+    "branch": "兰银官话",
+    "cluster": null,
+    "source": "B5",
+    "variety": "乌鲁木齐汉语方言",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 587,
+      "y": 428,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "chengdu",
+    "name": "成都",
+    "coordinates": [
+      104.0665,
+      30.5723
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "成渝片",
+    "source": "B6",
+    "variety": "成都话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1038,
+      "y": 974,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "chongqing",
+    "name": "重庆",
+    "coordinates": [
+      106.5516,
+      29.563
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "成渝片",
+    "source": "B6",
+    "variety": "重庆城区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1119,
+      "y": 1017,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "guiyang",
+    "name": "贵阳",
+    "coordinates": [
+      106.6302,
+      26.647
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "昆贵片",
+    "source": "B6",
+    "variety": "贵阳话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1128,
+      "y": 1129,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "kunming",
+    "name": "昆明",
+    "coordinates": [
+      102.8329,
+      24.8801
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "昆贵片",
+    "source": "B6",
+    "variety": "昆明话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 989,
+      "y": 1189,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "wuhan",
+    "name": "汉口",
+    "coordinates": [
+      114.27,
+      30.6
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "武天片",
+    "source": "B6",
+    "variety": "汉口话",
+    "note": "武汉市汉口方言代表点。实验仅对应汉口，不代表整个武汉或所有居民。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "guilin",
+    "name": "桂林",
+    "coordinates": [
+      110.2902,
+      25.2736
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "桂柳片",
+    "source": "B6",
+    "variety": "桂林官话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "liuzhou",
+    "name": "柳州",
+    "coordinates": [
+      109.4281,
+      24.3264
+    ],
+    "family": "官话",
+    "branch": "西南官话",
+    "cluster": "桂柳片",
+    "source": "B6",
+    "variety": "柳州官话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "nanjing",
+    "name": "南京",
+    "coordinates": [
+      118.7969,
+      32.0603
+    ],
+    "family": "官话",
+    "branch": "江淮官话",
+    "cluster": "洪巢片",
+    "source": "B3",
+    "variety": "南京城区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1523,
+      "y": 892,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "yangzhou",
+    "name": "扬州",
+    "coordinates": [
+      119.4127,
+      32.3942
+    ],
+    "family": "官话",
+    "branch": "江淮官话",
+    "cluster": "洪巢片",
+    "source": "B3",
+    "variety": "扬州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "hefei",
+    "name": "合肥",
+    "coordinates": [
+      117.2272,
+      31.8206
+    ],
+    "family": "官话",
+    "branch": "江淮官话",
+    "cluster": "洪巢片",
+    "source": "B3",
+    "variety": "合肥城区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1469,
+      "y": 902,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "nantong",
+    "name": "南通",
+    "coordinates": [
+      120.8943,
+      31.9802
+    ],
+    "family": "官话",
+    "branch": "江淮官话",
+    "cluster": "泰如片",
+    "source": "B3",
+    "variety": "南通城区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "taiyuan",
+    "name": "太原",
+    "coordinates": [
+      112.5489,
+      37.8706
+    ],
+    "family": "晋语",
+    "branch": "晋语",
+    "cluster": "并州片",
+    "source": "B7",
+    "variety": "太原话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1302,
+      "y": 687,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "datong",
+    "name": "大同",
+    "coordinates": [
+      113.3001,
+      40.0768
+    ],
+    "family": "晋语",
+    "branch": "晋语",
+    "cluster": "大包片",
+    "source": "B7",
+    "variety": "大同话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1314,
+      "y": 603,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "hohhot",
+    "name": "呼和浩特",
+    "coordinates": [
+      111.7492,
+      40.8426
+    ],
+    "family": "晋语",
+    "branch": "晋语",
+    "cluster": "大包片",
+    "source": "B7",
+    "variety": "呼和浩特汉语方言",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1263,
+      "y": 576,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "changzhi",
+    "name": "长治",
+    "coordinates": [
+      113.1163,
+      36.1954
+    ],
+    "family": "晋语",
+    "branch": "晋语",
+    "cluster": "上党片",
+    "source": "B7",
+    "variety": "长治话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "shanghai",
+    "name": "上海",
+    "coordinates": [
+      121.4737,
+      31.2304
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "上海市区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1608,
+      "y": 911,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "suzhou",
+    "name": "苏州",
+    "coordinates": [
+      120.5853,
+      31.2989
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "苏州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "wuxi",
+    "name": "无锡",
+    "coordinates": [
+      120.3119,
+      31.4912
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "无锡话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "changzhou",
+    "name": "常州",
+    "coordinates": [
+      119.9741,
+      31.8112
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "常州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "hangzhou",
+    "name": "杭州",
+    "coordinates": [
+      120.1551,
+      30.2741
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "杭州城区话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1568,
+      "y": 956,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "jiaxing",
+    "name": "嘉兴",
+    "coordinates": [
+      120.7555,
+      30.7461
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "嘉兴话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "shaoxing",
+    "name": "绍兴",
+    "coordinates": [
+      120.5802,
+      30.0303
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "绍兴话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "ningbo",
+    "name": "宁波",
+    "coordinates": [
+      121.5503,
+      29.8746
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "太湖片",
+    "source": "B9",
+    "variety": "宁波话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "taizhou-zj",
+    "name": "台州",
+    "coordinates": [
+      121.4208,
+      28.6564
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "台州片",
+    "source": "B9",
+    "variety": "椒江话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "jinhua",
+    "name": "金华",
+    "coordinates": [
+      119.6474,
+      29.0792
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "婺州片",
+    "source": "B9",
+    "variety": "金华话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "lishui",
+    "name": "丽水",
+    "coordinates": [
+      119.9229,
+      28.4672
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "处衢片",
+    "source": "B9",
+    "variety": "丽水话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "wenzhou",
+    "name": "温州",
+    "coordinates": [
+      120.6994,
+      27.9943
+    ],
+    "family": "吴语",
+    "branch": "吴语",
+    "cluster": "瓯江片",
+    "source": "B9",
+    "variety": "温州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1600,
+      "y": 1045,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "shexian",
+    "name": "歙县",
+    "coordinates": [
+      118.4153,
+      29.861
+    ],
+    "family": "徽语",
+    "branch": "徽语",
+    "cluster": "绩歙片",
+    "source": "B10",
+    "variety": "歙县徽语",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "xiuning",
+    "name": "休宁",
+    "coordinates": [
+      118.1936,
+      29.7845
+    ],
+    "family": "徽语",
+    "branch": "徽语",
+    "cluster": "休黟片",
+    "source": "B10",
+    "variety": "休宁话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "nanchang",
+    "name": "南昌",
+    "coordinates": [
+      115.8582,
+      28.6829
+    ],
+    "family": "赣语",
+    "branch": "赣语",
+    "cluster": "昌靖片",
+    "source": "B11",
+    "variety": "南昌话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1441,
+      "y": 1033,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "yichun",
+    "name": "宜春",
+    "coordinates": [
+      114.4168,
+      27.8162
+    ],
+    "family": "赣语",
+    "branch": "赣语",
+    "cluster": "宜浏片",
+    "source": "B11",
+    "variety": "宜春话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "jian",
+    "name": "吉安",
+    "coordinates": [
+      114.9929,
+      27.113
+    ],
+    "family": "赣语",
+    "branch": "赣语",
+    "cluster": "吉茶片",
+    "source": "B11",
+    "variety": "吉安话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "fuzhou-jx",
+    "name": "抚州",
+    "coordinates": [
+      116.3582,
+      27.9492
+    ],
+    "family": "赣语",
+    "branch": "赣语",
+    "cluster": "抚广片",
+    "source": "B11",
+    "variety": "抚州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "changsha",
+    "name": "长沙",
+    "coordinates": [
+      112.9388,
+      28.2282
+    ],
+    "family": "湘语",
+    "branch": "湘语",
+    "cluster": "长益片",
+    "source": "B11",
+    "variety": "长沙话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1343,
+      "y": 1057,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "xiangtan",
+    "name": "湘潭",
+    "coordinates": [
+      112.9441,
+      27.8297
+    ],
+    "family": "湘语",
+    "branch": "湘语",
+    "cluster": "长益片",
+    "source": "B11",
+    "variety": "湘潭话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "loudi",
+    "name": "娄底",
+    "coordinates": [
+      111.9945,
+      27.6973
+    ],
+    "family": "湘语",
+    "branch": "湘语",
+    "cluster": "娄邵片",
+    "source": "B11",
+    "variety": "娄底话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "shaoyang",
+    "name": "邵阳",
+    "coordinates": [
+      111.4679,
+      27.2389
+    ],
+    "family": "湘语",
+    "branch": "湘语",
+    "cluster": "娄邵片",
+    "source": "B11",
+    "variety": "邵阳话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "guangzhou",
+    "name": "广州",
+    "coordinates": [
+      113.2644,
+      23.1291
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": "广府片",
+    "source": "B13",
+    "variety": "广州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1362,
+      "y": 1251,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "foshan",
+    "name": "佛山",
+    "coordinates": [
+      113.1214,
+      23.0215
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": "广府片",
+    "source": "B13",
+    "variety": "佛山话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "hongkong",
+    "name": "香港",
+    "coordinates": [
+      114.1694,
+      22.3193
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": "广府片",
+    "source": "B13",
+    "variety": "香港粤语",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1399,
+      "y": 1285,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "macau",
+    "name": "澳门",
+    "coordinates": [
+      113.5439,
+      22.1987
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": "广府片",
+    "source": "B13",
+    "variety": "澳门粤语",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "taishan",
+    "name": "台山",
+    "coordinates": [
+      112.7941,
+      22.2519
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": "四邑片",
+    "source": "B13",
+    "variety": "台山话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "wuzhou",
+    "name": "梧州",
+    "coordinates": [
+      111.2791,
+      23.4769
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": null,
+    "source": "B14",
+    "variety": "梧州粤语",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "yulin",
+    "name": "玉林",
+    "coordinates": [
+      110.1647,
+      22.6364
+    ],
+    "family": "粤语",
+    "branch": "粤语",
+    "cluster": "勾漏片",
+    "source": "B14",
+    "variety": "玉林白话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "meixian",
+    "name": "梅县",
+    "coordinates": [
+      116.082,
+      24.285
+    ],
+    "family": "客家话",
+    "branch": "客家话",
+    "cluster": "粤台片",
+    "source": "B15",
+    "variety": "梅县客家话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "heyuan",
+    "name": "河源",
+    "coordinates": [
+      114.7004,
+      23.7437
+    ],
+    "family": "客家话",
+    "branch": "客家话",
+    "cluster": null,
+    "source": "B15",
+    "variety": "河源客家话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "changting",
+    "name": "长汀",
+    "coordinates": [
+      116.3576,
+      25.8335
+    ],
+    "family": "客家话",
+    "branch": "客家话",
+    "cluster": "汀州片",
+    "source": "B15",
+    "variety": "长汀客家话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "hsinchu",
+    "name": "新竹",
+    "coordinates": [
+      120.9647,
+      24.8138
+    ],
+    "family": "客家话",
+    "branch": "客家话",
+    "cluster": "粤台片",
+    "source": "B15",
+    "variety": "新竹客家话代表点",
+    "note": "只比较所列传统地方语言；台湾各地同时存在闽南语、客家话、原住民族语言和普通话等。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "nanning-pinghua",
+    "name": "南宁·平话",
+    "coordinates": [
+      108.3669,
+      22.817
+    ],
+    "family": "平话",
+    "branch": "平话",
+    "cluster": "桂南平话",
+    "source": "B14",
+    "variety": "南宁周边桂南平话代表点",
+    "note": "桂南平话分布在南宁周边，本点不代表南宁城区白话；本市还通行粤语、壮语及其他语言。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "fuzhou",
+    "name": "福州",
+    "coordinates": [
+      119.2965,
+      26.0745
+    ],
+    "family": "闽语",
+    "branch": "闽东区",
+    "cluster": "侯官片",
+    "source": "B12",
+    "variety": "福州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1563,
+      "y": 1117,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "ningde",
+    "name": "宁德",
+    "coordinates": [
+      119.5479,
+      26.6656
+    ],
+    "family": "闽语",
+    "branch": "闽东区",
+    "cluster": "福宁片",
+    "source": "B12",
+    "variety": "宁德话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "putian",
+    "name": "莆田",
+    "coordinates": [
+      119.0077,
+      25.454
+    ],
+    "family": "闽语",
+    "branch": "莆仙区",
+    "cluster": null,
+    "source": "B12",
+    "variety": "莆田话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "xiamen",
+    "name": "厦门",
+    "coordinates": [
+      118.0894,
+      24.4798
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "泉漳片",
+    "source": "B12",
+    "variety": "厦门话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1527,
+      "y": 1178,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "quanzhou",
+    "name": "泉州",
+    "coordinates": [
+      118.6759,
+      24.8741
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "泉漳片",
+    "source": "B12",
+    "variety": "泉州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "zhangzhou",
+    "name": "漳州",
+    "coordinates": [
+      117.6471,
+      24.513
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "泉漳片",
+    "source": "B12",
+    "variety": "漳州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "chaozhou",
+    "name": "潮州",
+    "coordinates": [
+      116.6226,
+      23.6567
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "潮汕片",
+    "source": "B12",
+    "variety": "潮州话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "shantou",
+    "name": "汕头",
+    "coordinates": [
+      116.6819,
+      23.3541
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "潮汕片",
+    "source": "B12",
+    "variety": "汕头话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "taipei",
+    "name": "台北",
+    "coordinates": [
+      121.5654,
+      25.033
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "泉漳片",
+    "source": "B12",
+    "variety": "台北闽南语代表点",
+    "note": "只比较所列传统地方语言；台湾各地同时存在闽南语、客家话、原住民族语言和普通话等。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1644,
+      "y": 1152,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "tainan",
+    "name": "台南",
+    "coordinates": [
+      120.227,
+      22.9999
+    ],
+    "family": "闽语",
+    "branch": "闽南区",
+    "cluster": "泉漳片",
+    "source": "B12",
+    "variety": "台南闽南语代表点",
+    "note": "只比较所列传统地方语言；台湾各地同时存在闽南语、客家话、原住民族语言和普通话等。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "jianou",
+    "name": "建瓯",
+    "coordinates": [
+      118.3047,
+      27.0227
+    ],
+    "family": "闽语",
+    "branch": "闽北区",
+    "cluster": null,
+    "source": "B12",
+    "variety": "建瓯话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "yongan",
+    "name": "永安",
+    "coordinates": [
+      117.3652,
+      25.9419
+    ],
+    "family": "闽语",
+    "branch": "闽中区",
+    "cluster": null,
+    "source": "B12",
+    "variety": "永安话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "shaowu",
+    "name": "邵武",
+    "coordinates": [
+      117.4925,
+      27.3403
+    ],
+    "family": "闽语",
+    "branch": "邵将区",
+    "cluster": null,
+    "source": "B12",
+    "variety": "邵武话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  },
+  {
+    "id": "haikou",
+    "name": "海口",
+    "coordinates": [
+      110.1983,
+      20.044
+    ],
+    "family": "闽语",
+    "branch": "琼文区",
+    "cluster": "府城片",
+    "source": "B12",
+    "variety": "海口海南话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point",
+    "sourcePixel": {
+      "source": "A2",
+      "x": 1264,
+      "y": 1381,
+      "width": 2000,
+      "height": 1492
+    }
+  },
+  {
+    "id": "wenchang",
+    "name": "文昌",
+    "coordinates": [
+      110.7977,
+      19.5433
+    ],
+    "family": "闽语",
+    "branch": "琼文区",
+    "cluster": "文昌片",
+    "source": "B12",
+    "variety": "文昌话",
+    "note": "代表所列本地方言；不代表全市居民、城区全部语言或个人语言能力。坐标为城市近似定位。",
+    "classificationConfidence": "atlas-reading; approximate representative point"
+  }
+]

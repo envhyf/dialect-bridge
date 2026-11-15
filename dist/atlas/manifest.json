@@ -1,0 +1,130 @@
+[
+  {
+    "id": "A2",
+    "title": "中国汉语方言图",
+    "width": 3073,
+    "height": 2292,
+    "available": false,
+    "expectedFilename": "A2.JPG"
+  },
+  {
+    "id": "B1",
+    "title": "官话之一：东北地区",
+    "width": 2330,
+    "height": 3151,
+    "available": false,
+    "expectedFilename": "B1.JPG"
+  },
+  {
+    "id": "B2",
+    "title": "官话之二：北京、天津、河北、山东西部",
+    "width": 2277,
+    "height": 3089,
+    "available": false,
+    "expectedFilename": "B2.JPG"
+  },
+  {
+    "id": "B3",
+    "title": "官话之三：河南、山东、皖北、苏北",
+    "width": 3068,
+    "height": 2291,
+    "available": false,
+    "expectedFilename": "B3.JPG"
+  },
+  {
+    "id": "B4",
+    "title": "官话之四：陕西、甘肃、青海、宁夏",
+    "width": 3061,
+    "height": 2300,
+    "available": false,
+    "expectedFilename": "B4.JPG"
+  },
+  {
+    "id": "B5",
+    "title": "官话之五：新疆",
+    "width": 3078,
+    "height": 2292,
+    "available": false,
+    "expectedFilename": "B5.JPG"
+  },
+  {
+    "id": "B6",
+    "title": "官话之六：西南地区、湖北西部",
+    "width": 3060,
+    "height": 2298,
+    "available": false,
+    "expectedFilename": "B6.JPG"
+  },
+  {
+    "id": "B7",
+    "title": "晋语：山西及附近地区",
+    "width": 2300,
+    "height": 3078,
+    "available": false,
+    "expectedFilename": "B7.JPG"
+  },
+  {
+    "id": "B8",
+    "title": "东南地区的汉语方言",
+    "width": 3100,
+    "height": 2315,
+    "available": false,
+    "expectedFilename": "B8.JPG"
+  },
+  {
+    "id": "B9",
+    "title": "吴语：浙江、上海、苏南",
+    "width": 2292,
+    "height": 3124,
+    "available": false,
+    "expectedFilename": "B9.JPG"
+  },
+  {
+    "id": "B10",
+    "title": "安徽南部汉语方言",
+    "width": 3056,
+    "height": 2295,
+    "available": false,
+    "expectedFilename": "B10.JPG"
+  },
+  {
+    "id": "B11",
+    "title": "江西省与湖南省的汉语方言",
+    "width": 3106,
+    "height": 2306,
+    "available": false,
+    "expectedFilename": "B11.JPG"
+  },
+  {
+    "id": "B12",
+    "title": "闽语：福建、台湾、粤东、海南",
+    "width": 3100,
+    "height": 2299,
+    "available": false,
+    "expectedFilename": "B12.JPG"
+  },
+  {
+    "id": "B13",
+    "title": "广东省的汉语方言",
+    "width": 3116,
+    "height": 2307,
+    "available": false,
+    "expectedFilename": "B13.JPG"
+  },
+  {
+    "id": "B14",
+    "title": "广西壮族自治区汉语方言",
+    "width": 3116,
+    "height": 2307,
+    "available": false,
+    "expectedFilename": "B14.JPG"
+  },
+  {
+    "id": "B15",
+    "title": "客家话",
+    "width": 3100,
+    "height": 2315,
+    "available": false,
+    "expectedFilename": "B15.JPG"
+  }
+]

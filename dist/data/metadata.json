@@ -1,0 +1,575 @@
+{
+  "version": "0.1",
+  "source": "User-supplied 东方语言学《中国语言地图集》.zip / A2.JPG and B1–B15",
+  "date": "2026-11-15",
+  "sourceSha256": "ebfe92e8999b3f904b46448c6edbaa5d8e2b5f33ba0234dd2d878fa6017d848c",
+  "sourceDimensions": [
+    3073,
+    2292
+  ],
+  "workingDimensions": [
+    2000,
+    1492
+  ],
+  "registration": {
+    "method": "global second-order polynomial; manually identified city-centre control points",
+    "gcpCount": 40,
+    "trainingRMSEkm": 16.15,
+    "leaveOneOutRMSEkm": 21.94,
+    "leaveOneOutMedianKm": 17.29,
+    "leaveOneOutMaxKm": 69.45,
+    "coefficientOrder": [
+      "1",
+      "x/1000",
+      "y/1000",
+      "(x/1000)^2",
+      "xy/1000000",
+      "(y/1000)^2"
+    ],
+    "coefficients": [
+      [
+        62.40557820291039,
+        51.25526895653404
+      ],
+      [
+        39.24398870980743,
+        8.839885628836214
+      ],
+      [
+        10.687507787270146,
+        -26.412875407394075
+      ],
+      [
+        0.6083142089114174,
+        -4.34151159181468
+      ],
+      [
+        -10.800704352664912,
+        0.8525975857928974
+      ],
+      [
+        0.7667872584196093,
+        -0.2681068570783658
+      ]
+    ],
+    "gcps": [
+      {
+        "name": "北京",
+        "pixel": [
+          1405,
+          599
+        ],
+        "coordinates": [
+          116.4074,
+          39.9042
+        ],
+        "leaveOneOutErrorKm": 6.97
+      },
+      {
+        "name": "天津",
+        "pixel": [
+          1437,
+          622
+        ],
+        "coordinates": [
+          117.2,
+          39.1333
+        ],
+        "leaveOneOutErrorKm": 17.1
+      },
+      {
+        "name": "哈尔滨",
+        "pixel": [
+          1651,
+          331
+        ],
+        "coordinates": [
+          126.6424,
+          45.756
+        ],
+        "leaveOneOutErrorKm": 13.26
+      },
+      {
+        "name": "长春",
+        "pixel": [
+          1627,
+          408
+        ],
+        "coordinates": [
+          125.3235,
+          43.8171
+        ],
+        "leaveOneOutErrorKm": 18.96
+      },
+      {
+        "name": "沈阳",
+        "pixel": [
+          1595,
+          496
+        ],
+        "coordinates": [
+          123.4315,
+          41.8057
+        ],
+        "leaveOneOutErrorKm": 6.17
+      },
+      {
+        "name": "大连",
+        "pixel": [
+          1567,
+          617
+        ],
+        "coordinates": [
+          121.6147,
+          38.914
+        ],
+        "leaveOneOutErrorKm": 21.97
+      },
+      {
+        "name": "济南",
+        "pixel": [
+          1444,
+          725
+        ],
+        "coordinates": [
+          117.1201,
+          36.6512
+        ],
+        "leaveOneOutErrorKm": 11.5
+      },
+      {
+        "name": "郑州",
+        "pixel": [
+          1342,
+          799
+        ],
+        "coordinates": [
+          113.6254,
+          34.7466
+        ],
+        "leaveOneOutErrorKm": 22.74
+      },
+      {
+        "name": "西安",
+        "pixel": [
+          1196,
+          832
+        ],
+        "coordinates": [
+          108.9398,
+          34.3416
+        ],
+        "leaveOneOutErrorKm": 6.85
+      },
+      {
+        "name": "兰州",
+        "pixel": [
+          1030,
+          770
+        ],
+        "coordinates": [
+          103.8343,
+          36.0611
+        ],
+        "leaveOneOutErrorKm": 28.78
+      },
+      {
+        "name": "西宁",
+        "pixel": [
+          968,
+          745
+        ],
+        "coordinates": [
+          101.7782,
+          36.6171
+        ],
+        "leaveOneOutErrorKm": 23.72
+      },
+      {
+        "name": "银川",
+        "pixel": [
+          1113,
+          671
+        ],
+        "coordinates": [
+          106.2309,
+          38.4872
+        ],
+        "leaveOneOutErrorKm": 6.1
+      },
+      {
+        "name": "太原",
+        "pixel": [
+          1302,
+          687
+        ],
+        "coordinates": [
+          112.5489,
+          37.8706
+        ],
+        "leaveOneOutErrorKm": 3.9
+      },
+      {
+        "name": "大同",
+        "pixel": [
+          1314,
+          603
+        ],
+        "coordinates": [
+          113.3001,
+          40.0768
+        ],
+        "leaveOneOutErrorKm": 12.08
+      },
+      {
+        "name": "呼和浩特",
+        "pixel": [
+          1263,
+          576
+        ],
+        "coordinates": [
+          111.7492,
+          40.8426
+        ],
+        "leaveOneOutErrorKm": 24.29
+      },
+      {
+        "name": "成都",
+        "pixel": [
+          1038,
+          974
+        ],
+        "coordinates": [
+          104.0665,
+          30.5723
+        ],
+        "leaveOneOutErrorKm": 9.87
+      },
+      {
+        "name": "重庆",
+        "pixel": [
+          1119,
+          1017
+        ],
+        "coordinates": [
+          106.5516,
+          29.563
+        ],
+        "leaveOneOutErrorKm": 10.98
+      },
+      {
+        "name": "昆明",
+        "pixel": [
+          989,
+          1189
+        ],
+        "coordinates": [
+          102.7123,
+          25.0406
+        ],
+        "leaveOneOutErrorKm": 29.54
+      },
+      {
+        "name": "贵阳",
+        "pixel": [
+          1128,
+          1129
+        ],
+        "coordinates": [
+          106.6302,
+          26.647
+        ],
+        "leaveOneOutErrorKm": 12.13
+      },
+      {
+        "name": "南宁",
+        "pixel": [
+          1188,
+          1272
+        ],
+        "coordinates": [
+          108.3669,
+          22.817
+        ],
+        "leaveOneOutErrorKm": 10.27
+      },
+      {
+        "name": "海口",
+        "pixel": [
+          1264,
+          1381
+        ],
+        "coordinates": [
+          110.1983,
+          20.044
+        ],
+        "leaveOneOutErrorKm": 24.7
+      },
+      {
+        "name": "广州",
+        "pixel": [
+          1362,
+          1251
+        ],
+        "coordinates": [
+          113.2644,
+          23.1291
+        ],
+        "leaveOneOutErrorKm": 18.28
+      },
+      {
+        "name": "香港",
+        "pixel": [
+          1399,
+          1285
+        ],
+        "coordinates": [
+          114.1694,
+          22.3193
+        ],
+        "leaveOneOutErrorKm": 12.14
+      },
+      {
+        "name": "长沙",
+        "pixel": [
+          1343,
+          1057
+        ],
+        "coordinates": [
+          112.9388,
+          28.2282
+        ],
+        "leaveOneOutErrorKm": 11.66
+      },
+      {
+        "name": "武汉",
+        "pixel": [
+          1378,
+          959
+        ],
+        "coordinates": [
+          114.3054,
+          30.5931
+        ],
+        "leaveOneOutErrorKm": 17.62
+      },
+      {
+        "name": "南昌",
+        "pixel": [
+          1441,
+          1033
+        ],
+        "coordinates": [
+          115.8582,
+          28.6829
+        ],
+        "leaveOneOutErrorKm": 14.64
+      },
+      {
+        "name": "杭州",
+        "pixel": [
+          1568,
+          956
+        ],
+        "coordinates": [
+          120.1551,
+          30.2741
+        ],
+        "leaveOneOutErrorKm": 6.16
+      },
+      {
+        "name": "上海",
+        "pixel": [
+          1608,
+          911
+        ],
+        "coordinates": [
+          121.4737,
+          31.2304
+        ],
+        "leaveOneOutErrorKm": 17.48
+      },
+      {
+        "name": "南京",
+        "pixel": [
+          1523,
+          892
+        ],
+        "coordinates": [
+          118.7969,
+          32.0603
+        ],
+        "leaveOneOutErrorKm": 26.62
+      },
+      {
+        "name": "合肥",
+        "pixel": [
+          1469,
+          902
+        ],
+        "coordinates": [
+          117.2272,
+          31.8206
+        ],
+        "leaveOneOutErrorKm": 18.96
+      },
+      {
+        "name": "福州",
+        "pixel": [
+          1563,
+          1117
+        ],
+        "coordinates": [
+          119.2965,
+          26.0745
+        ],
+        "leaveOneOutErrorKm": 6.07
+      },
+      {
+        "name": "厦门",
+        "pixel": [
+          1527,
+          1178
+        ],
+        "coordinates": [
+          118.0894,
+          24.4798
+        ],
+        "leaveOneOutErrorKm": 27.67
+      },
+      {
+        "name": "温州",
+        "pixel": [
+          1600,
+          1045
+        ],
+        "coordinates": [
+          120.6994,
+          27.9943
+        ],
+        "leaveOneOutErrorKm": 22.24
+      },
+      {
+        "name": "台北",
+        "pixel": [
+          1644,
+          1152
+        ],
+        "coordinates": [
+          121.5654,
+          25.033
+        ],
+        "leaveOneOutErrorKm": 24.7
+      },
+      {
+        "name": "高雄",
+        "pixel": [
+          1613,
+          1248
+        ],
+        "coordinates": [
+          120.3014,
+          22.6273
+        ],
+        "leaveOneOutErrorKm": 30.69
+      },
+      {
+        "name": "乌鲁木齐",
+        "pixel": [
+          587,
+          428
+        ],
+        "coordinates": [
+          87.6168,
+          43.8256
+        ],
+        "leaveOneOutErrorKm": 4.57
+      },
+      {
+        "name": "喀什",
+        "pixel": [
+          227,
+          513
+        ],
+        "coordinates": [
+          75.9898,
+          39.4677
+        ],
+        "leaveOneOutErrorKm": 69.45
+      },
+      {
+        "name": "库尔勒",
+        "pixel": [
+          532,
+          504
+        ],
+        "coordinates": [
+          86.1746,
+          41.7269
+        ],
+        "leaveOneOutErrorKm": 19.84
+      },
+      {
+        "name": "伊宁",
+        "pixel": [
+          425,
+          389
+        ],
+        "coordinates": [
+          81.3241,
+          43.9168
+        ],
+        "leaveOneOutErrorKm": 48.22
+      },
+      {
+        "name": "哈密",
+        "pixel": [
+          748,
+          489
+        ],
+        "coordinates": [
+          93.5151,
+          42.8185
+        ],
+        "leaveOneOutErrorKm": 7.95
+      }
+    ]
+  },
+  "segmentation": {
+    "method": "RGB→CIELAB nearest sampled print colour, broad spatial rejection masks, threshold 38 in OpenCV LAB units, 5px close/3px open, contour simplification 1.3px",
+    "families": {
+      "官话": 10,
+      "晋语": 1,
+      "赣语": 18,
+      "徽语": 1,
+      "吴语": 5,
+      "湘语": 6,
+      "客家话": 23,
+      "粤语": 17,
+      "平话": 3,
+      "闽语": 5
+    },
+    "minimumContourAreaPixels": 50,
+    "quality": "exploratory automatic extraction; not fully manually corrected"
+  },
+  "cityCount": 84,
+  "scope": "Main broad Han Chinese dialect colour areas; historical atlas classifications; representative spoken-variety points. Minority languages not scored. Blank areas are unknown, not zero.",
+  "limitations": [
+    "Colour classification may confuse mixed-language hatching, labels, folds and faint printing.",
+    "White enclaves and small islands may be lost; minimum component area 50 working pixels.",
+    "GCP coordinates anchor modern city centres, not the original survey sites; registration is approximate.",
+    "LOOCV error measures georeferencing only, not dialect-boundary accuracy or classification accuracy.",
+    "A broad dialect colour never implies every inhabitant speaks it.",
+    "No empirical mutual intelligibility percentage is present in these files.",
+    "The same cluster is a linguistic grouping, not a guarantee of understanding."
+  ],
+  "settlements": {
+    "count": 66,
+    "source": "A2",
+    "method": "manually verified red triangle symbols, pixel positions georeferenced with same polynomial",
+    "scope": "partial Sichuan Basin transcription; not exhaustive",
+    "complete": false,
+    "names": "Anonymous source symbol IDs; no village names inferred",
+    "file": "settlements.geojson"
+  }
+}

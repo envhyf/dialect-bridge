@@ -1,0 +1,13 @@
+node_modules/
+reference/
+qa/
+.openai/
+.taste-skill/
+dist/atlas/*
+!dist/atlas/manifest.json
+*.zip
+*.tar.gz
+*.log
+__pycache__/
+.env
+.env.*

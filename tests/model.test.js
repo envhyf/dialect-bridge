@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {compare,haversine,nearestPoint,measuredPair} from '../dist/model.js';
+const a={id:'a',family:'吴语',branch:'吴语',cluster:'太湖片',coordinates:[121.47,31.23]};
+const b={id:'b',family:'吴语',branch:'吴语',cluster:'太湖片',coordinates:[120.58,31.3]};
+test('unknown data has no invented numeric score',()=>{assert.equal(compare(null,b).score,null);assert.equal(compare({id:'x'},b).score,null)});
+test('taxonomy never fabricates a numerical comprehension rate',()=>{assert.equal(compare(a,a).score,null);assert.equal(compare(a,b).score,null);assert.equal(compare(a,b).level,1)});
+test('editorial classification proxy is explicitly symmetric',()=>assert.deepEqual(compare(a,b),compare(b,a)));
+test('different Min branches are not treated as same subgroup',()=>{const m={id:'m',family:'闽语',branch:'闽南区',cluster:'泉漳片'};const n={id:'n',family:'闽语',branch:'闽东区',cluster:'侯官片'};assert.ok(compare(m,n).level>compare(a,b).level)});
+test('a branch repeating the family is not an attested subgroup',()=>{const w={id:'w',family:'吴语',branch:'吴语',cluster:'瓯江片'};assert.equal(compare(a,w).level,3)});
+test('experiment direction is speaker to listener, and unknown pairs stay empty',()=>{const r=[{from:'a',to:'b',value:13,metric:'sentence_target'},{from:'b',to:'a',value:28,metric:'sentence_target'}];assert.equal(measuredPair(a,b,r).heardByYou.value,28);assert.equal(measuredPair(a,b,r).heardByThem.value,13);assert.equal(measuredPair(a,{id:'x'},r),null)});
+test('distance is km and unknown map locations do not snap far away',()=>{assert.ok(haversine(a.coordinates,b.coordinates)>70);assert.ok(haversine(a.coordinates,b.coordinates)<100);assert.equal(nearestPoint([85,30],[a,b],100),null);assert.equal(nearestPoint(a.coordinates,[a,b],100).point.id,'a')});

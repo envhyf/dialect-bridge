@@ -1,0 +1,13 @@
+{
+  "name": "dialect-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "乡音桥 · 汉语方言地图与双向互通实验",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "build": "node scripts/verify-dist.mjs",
+    "start": "node scripts/serve.mjs"
+  }
+}
