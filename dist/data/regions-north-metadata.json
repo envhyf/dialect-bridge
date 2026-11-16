@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "scope": "B2 北京官话及旧版北方官话部分小片；B3 江淮官话三片；B7 晋语八片及部分小片",
+  "schemaVersion": 2,
+  "scope": "B1东北三片及两小片已核部分、辽东与方言岛；B2图例13小片与北京三片；B3江淮三片、胶辽两片、中原四片主要片块；B4六片；B5三片；B7晋语八片与汾河三小片",
   "status": "approximate-traced",
   "completeCoverage": false,
   "method": "Manual source-pixel outline tracing; independent per-sheet affine registration in Lambert conformal conic coordinates; source-city GCPs; no city buffers, Voronoi or administrative polygon substitution.",
@@ -11,6 +11,575 @@
     "B7 部分分散片区按独立区域发布，同名多块须结合 evidenceNote。"
   ],
   "sheets": {
+    "B1": {
+      "sourceImageSize": [
+        2330,
+        3151
+      ],
+      "workingPreviewSize": [
+        1183,
+        1600
+      ],
+      "gcps": [
+        [
+          "哈尔滨",
+          660.5,
+          923.5,
+          126.642,
+          45.756
+        ],
+        [
+          "长春",
+          583,
+          1080.5,
+          125.323,
+          43.817
+        ],
+        [
+          "沈阳",
+          471.3,
+          1253.3,
+          123.432,
+          41.805
+        ],
+        [
+          "齐齐哈尔",
+          509.5,
+          792,
+          123.918,
+          47.354
+        ],
+        [
+          "大庆",
+          565,
+          851,
+          125.104,
+          46.589
+        ],
+        [
+          "牡丹江",
+          836,
+          1017,
+          129.634,
+          44.551
+        ],
+        [
+          "佳木斯",
+          876,
+          832,
+          130.361,
+          46.809
+        ],
+        [
+          "绥化",
+          686,
+          848,
+          126.969,
+          46.653
+        ],
+        [
+          "吉林",
+          665,
+          1081.7,
+          126.549,
+          43.837
+        ],
+        [
+          "延吉",
+          843,
+          1150,
+          129.509,
+          42.891
+        ],
+        [
+          "锦州",
+          325,
+          1306,
+          121.127,
+          41.095
+        ],
+        [
+          "大连",
+          348.3,
+          1495.3,
+          121.614,
+          38.914
+        ],
+        [
+          "丹东",
+          526.7,
+          1392.3,
+          124.354,
+          40.0
+        ],
+        [
+          "黑河",
+          684,
+          553,
+          127.499,
+          50.245
+        ],
+        [
+          "海拉尔",
+          268,
+          626,
+          119.766,
+          49.212
+        ],
+        [
+          "满洲里",
+          153,
+          592,
+          117.379,
+          49.598
+        ]
+      ],
+      "registration": "Affine pixel-to-LCC then inverse to WGS84 (approximate); original scan projection not confirmed.",
+      "workingCRS": "+proj=lcc +lat_1=25 +lat_2=47 +lat_0=35 +lon_0=105 +datum=WGS84 +units=m +no_defs",
+      "registrationRMSEKm": 13.01,
+      "leaveOneOutErrors": [
+        {
+          "name": "哈尔滨",
+          "errorKm": 0.08
+        },
+        {
+          "name": "长春",
+          "errorKm": 7.73
+        },
+        {
+          "name": "沈阳",
+          "errorKm": 3.9
+        },
+        {
+          "name": "齐齐哈尔",
+          "errorKm": 10.43
+        },
+        {
+          "name": "大庆",
+          "errorKm": 10.38
+        },
+        {
+          "name": "牡丹江",
+          "errorKm": 6.86
+        },
+        {
+          "name": "佳木斯",
+          "errorKm": 11.86
+        },
+        {
+          "name": "绥化",
+          "errorKm": 12.59
+        },
+        {
+          "name": "吉林",
+          "errorKm": 9.07
+        },
+        {
+          "name": "延吉",
+          "errorKm": 7.55
+        },
+        {
+          "name": "锦州",
+          "errorKm": 3.23
+        },
+        {
+          "name": "大连",
+          "errorKm": 21.7
+        },
+        {
+          "name": "丹东",
+          "errorKm": 11.69
+        },
+        {
+          "name": "黑河",
+          "errorKm": 26.34
+        },
+        {
+          "name": "海拉尔",
+          "errorKm": 13.77
+        },
+        {
+          "name": "满洲里",
+          "errorKm": 20.76
+        }
+      ],
+      "pixelToProjectedCoefficients": [
+        [
+          557979.4773345714,
+          2397463.4400496986
+        ],
+        [
+          1303931.419423738,
+          263755.52449894673
+        ],
+        [
+          263809.23504771315,
+          -1307730.9330576002
+        ]
+      ],
+      "sha256": "94fa730043c8bca180201b1a81ce5e41ba0bfde9afe39cf32693d984422e734a"
+    },
+    "B4": {
+      "sourceImageSize": [
+        3061,
+        2300
+      ],
+      "workingPreviewSize": [
+        1600,
+        1202
+      ],
+      "gcps": [
+        [
+          "西宁",
+          712,
+          651,
+          101.778,
+          36.617
+        ],
+        [
+          "兰州",
+          889,
+          714,
+          103.835,
+          36.061
+        ],
+        [
+          "银川",
+          1106,
+          438,
+          106.233,
+          38.488
+        ],
+        [
+          "西安",
+          1354.5,
+          895,
+          108.943,
+          34.263
+        ],
+        [
+          "宝鸡",
+          1200,
+          888.5,
+          107.153,
+          34.36
+        ],
+        [
+          "天水",
+          1060,
+          867,
+          105.724,
+          34.58
+        ],
+        [
+          "张掖",
+          611,
+          391.7,
+          100.454,
+          38.932
+        ],
+        [
+          "酒泉",
+          456.3,
+          289.7,
+          98.495,
+          39.733
+        ],
+        [
+          "敦煌",
+          138.5,
+          230.25,
+          94.661,
+          40.142
+        ],
+        [
+          "武威",
+          796,
+          506,
+          102.638,
+          37.928
+        ],
+        [
+          "榆林",
+          1397,
+          441,
+          109.734,
+          38.285
+        ],
+        [
+          "汉中",
+          1198.5,
+          1035,
+          107.024,
+          33.068
+        ],
+        [
+          "安康",
+          1378,
+          1074,
+          109.029,
+          32.69
+        ],
+        [
+          "延安",
+          1384,
+          632,
+          109.489,
+          36.585
+        ]
+      ],
+      "registration": "Affine pixel-to-LCC then inverse to WGS84 (approximate); original scan projection not confirmed.",
+      "workingCRS": "+proj=lcc +lat_1=25 +lat_2=47 +lat_0=35 +lon_0=105 +datum=WGS84 +units=m +no_defs",
+      "registrationRMSEKm": 7.89,
+      "leaveOneOutErrors": [
+        {
+          "name": "西宁",
+          "errorKm": 8.84
+        },
+        {
+          "name": "兰州",
+          "errorKm": 10.9
+        },
+        {
+          "name": "银川",
+          "errorKm": 8.12
+        },
+        {
+          "name": "西安",
+          "errorKm": 2.21
+        },
+        {
+          "name": "宝鸡",
+          "errorKm": 6.71
+        },
+        {
+          "name": "天水",
+          "errorKm": 11.18
+        },
+        {
+          "name": "张掖",
+          "errorKm": 2.38
+        },
+        {
+          "name": "酒泉",
+          "errorKm": 9.54
+        },
+        {
+          "name": "敦煌",
+          "errorKm": 5.42
+        },
+        {
+          "name": "武威",
+          "errorKm": 2.39
+        },
+        {
+          "name": "榆林",
+          "errorKm": 2.72
+        },
+        {
+          "name": "汉中",
+          "errorKm": 12.57
+        },
+        {
+          "name": "安康",
+          "errorKm": 9.6
+        },
+        {
+          "name": "延安",
+          "errorKm": 6.63
+        }
+      ],
+      "pixelToProjectedCoefficients": [
+        [
+          -999022.1451101209,
+          833245.5895432787
+        ],
+        [
+          1010841.4133804135,
+          -23825.565517946263
+        ],
+        [
+          -16889.633214305766,
+          -977634.3344280311
+        ]
+      ],
+      "sha256": "be0f54b46b88b4eea3e8af5f68579843925b664d771de78e2c1d2abf5c390f73"
+    },
+    "B5": {
+      "sourceImageSize": [
+        3078,
+        2292
+      ],
+      "workingPreviewSize": [
+        1600,
+        1191
+      ],
+      "gcps": [
+        [
+          "乌鲁木齐",
+          985.1,
+          456.6,
+          87.617,
+          43.826
+        ],
+        [
+          "克拉玛依",
+          832,
+          327,
+          84.889,
+          45.579
+        ],
+        [
+          "伊宁",
+          652,
+          446,
+          81.32,
+          43.92
+        ],
+        [
+          "石河子",
+          900,
+          419,
+          86.079,
+          44.306
+        ],
+        [
+          "喀什",
+          328.5,
+          753.5,
+          75.989,
+          39.47
+        ],
+        [
+          "和田",
+          549.4,
+          966.5,
+          79.922,
+          37.114
+        ],
+        [
+          "阿克苏",
+          591,
+          655,
+          80.263,
+          41.168
+        ],
+        [
+          "库尔勒",
+          907.6,
+          610.6,
+          86.17,
+          41.725
+        ],
+        [
+          "哈密",
+          1306,
+          506,
+          93.51,
+          42.818
+        ],
+        [
+          "吐鲁番",
+          1076.2,
+          514.6,
+          89.189,
+          42.95
+        ],
+        [
+          "阿勒泰",
+          995,
+          147,
+          88.144,
+          47.846
+        ],
+        [
+          "塔城",
+          741,
+          232,
+          82.987,
+          46.754
+        ],
+        [
+          "博乐",
+          693,
+          369,
+          82.07,
+          44.9
+        ]
+      ],
+      "registration": "Affine pixel-to-LCC then inverse to WGS84 (approximate); original scan projection not confirmed.",
+      "workingCRS": "+proj=lcc +lat_1=25 +lat_2=47 +lat_0=35 +lon_0=105 +datum=WGS84 +units=m +no_defs",
+      "registrationRMSEKm": 14.05,
+      "leaveOneOutErrors": [
+        {
+          "name": "乌鲁木齐",
+          "errorKm": 5.16
+        },
+        {
+          "name": "克拉玛依",
+          "errorKm": 12.3
+        },
+        {
+          "name": "伊宁",
+          "errorKm": 8.04
+        },
+        {
+          "name": "石河子",
+          "errorKm": 2.28
+        },
+        {
+          "name": "喀什",
+          "errorKm": 29.12
+        },
+        {
+          "name": "和田",
+          "errorKm": 26.43
+        },
+        {
+          "name": "阿克苏",
+          "errorKm": 15.31
+        },
+        {
+          "name": "库尔勒",
+          "errorKm": 8.93
+        },
+        {
+          "name": "哈密",
+          "errorKm": 11.92
+        },
+        {
+          "name": "吐鲁番",
+          "errorKm": 8.84
+        },
+        {
+          "name": "阿勒泰",
+          "errorKm": 11.77
+        },
+        {
+          "name": "塔城",
+          "errorKm": 4.5
+        },
+        {
+          "name": "博乐",
+          "errorKm": 8.94
+        }
+      ],
+      "pixelToProjectedCoefficients": [
+        [
+          -2669401.1750458525,
+          2033073.353576299
+        ],
+        [
+          1454690.5246481562,
+          -309642.5759606918
+        ],
+        [
+          -309449.6774744622,
+          -1410860.209204649
+        ]
+      ],
+      "sha256": "ac2587411196a81fb5684d6b66cf55eb4a5ef952b3233a5f53ad1da33aeefe1c"
+    },
     "B3": {
       "sourceImageSize": [
         3068,
@@ -453,89 +1022,330 @@
         ],
         [
           "张家口",
-          971,
-          631,
+          981.2,
+          634.2,
           114.886,
           40.769
         ]
       ],
       "registration": "Affine pixel-to-LCC then inverse to WGS84 (approximate); original scan projection not confirmed.",
       "workingCRS": "+proj=lcc +lat_1=25 +lat_2=47 +lat_0=35 +lon_0=105 +datum=WGS84 +units=m +no_defs",
-      "registrationRMSEKm": 6.25,
+      "registrationRMSEKm": 6.39,
       "leaveOneOutErrors": [
         {
           "name": "太原",
-          "errorKm": 4.39
+          "errorKm": 3.7
         },
         {
           "name": "大同",
-          "errorKm": 4.35
+          "errorKm": 6.59
         },
         {
           "name": "呼和浩特",
-          "errorKm": 7.65
+          "errorKm": 9.44
         },
         {
           "name": "包头",
-          "errorKm": 3.36
+          "errorKm": 1.94
         },
         {
           "name": "银川",
-          "errorKm": 6.64
+          "errorKm": 9.33
         },
         {
           "name": "榆林",
-          "errorKm": 5.41
+          "errorKm": 5.49
         },
         {
           "name": "忻州",
-          "errorKm": 2.29
+          "errorKm": 1.8
         },
         {
           "name": "临汾",
-          "errorKm": 3.99
+          "errorKm": 3.49
         },
         {
           "name": "运城",
-          "errorKm": 9.0
+          "errorKm": 7.15
         },
         {
           "name": "长治",
-          "errorKm": 2.88
+          "errorKm": 2.85
         },
         {
           "name": "晋城",
-          "errorKm": 1.4
+          "errorKm": 1.04
         },
         {
           "name": "邯郸",
-          "errorKm": 13.24
+          "errorKm": 12.35
         },
         {
           "name": "阳泉",
-          "errorKm": 6.37
+          "errorKm": 6.29
         },
         {
           "name": "张家口",
-          "errorKm": 6.17
+          "errorKm": 6.03
         }
       ],
       "pixelToProjectedCoefficients": [
         [
-          -15942.790406325454,
-          1132161.149446065
+          -17589.109162449447,
+          1132593.5635547396
         ],
         [
-          828882.7245220505,
-          44797.170125366305
+          825082.8538983075,
+          45680.1797666644
         ],
         [
-          46598.03229079195,
-          -794644.4756207286
+          50185.357449486524,
+          -795521.0807325394
         ]
       ],
       "sha256": "99be8d2203ad36740b759e5e6705d06cf3c50f78807fd3de35584ecca523bc5a"
     }
   },
-  "featureCount": 34
+  "legendInventory": {
+    "B1": {
+      "mappedClusters": [
+        "吉沈片",
+        "哈阜片",
+        "黑松片",
+        "盖桓片",
+        "登连片"
+      ],
+      "mappedIslands": [
+        "虎林方言岛",
+        "二屯方言岛",
+        "太平方言岛"
+      ],
+      "mappedSubclusters": [
+        "通溪小片",
+        "嫩克小片（仅海拉尔—满洲里独立片块）"
+      ],
+      "subclusterReview": [
+        {
+          "name": "蛟宁小片",
+          "sourceNumber": 1,
+          "result": "not-closed",
+          "readable": "与通溪2的南界红色密点线已完整转录；与哈阜片的西界为明确红色长虚线。",
+          "unresolved": "与延吉3接界北段：在宁安—汪清/安图北面只见较粗黑色省界式点线，不能仅由1/3编号分列两侧，就把该线认作红色小片界。",
+          "focusNativeBounds": [
+            1500,
+            1950,
+            1880,
+            2240
+          ]
+        },
+        {
+          "name": "通溪小片",
+          "sourceNumber": 2,
+          "result": "closed-candidate",
+          "readable": "靖宇北片界至安图西北的红色密点线，以及安图/和龙西侧密点线至国界，可以连续追踪；余边沿既有吉沈片真实外界闭合。",
+          "nativeStart": [
+            1308.7,
+            2326.3
+          ],
+          "nativeEnd": [
+            1545.7,
+            2424.7
+          ],
+          "focusNativeBounds": [
+            1200,
+            2150,
+            1650,
+            2450
+          ]
+        },
+        {
+          "name": "延吉小片",
+          "sourceNumber": 3,
+          "result": "not-closed",
+          "readable": "安图—和龙以西的红色密点线及东南国界可读，西界已作为通溪2东界转录。",
+          "unresolved": "北界与粗黑点省/自治州界混线，未发现可独立复核的红色密点覆盖；须确认是否原图以行政线兼作小片界，当前不默认采用。",
+          "focusNativeBounds": [
+            1500,
+            1950,
+            1880,
+            2240
+          ]
+        },
+        {
+          "name": "肇阜小片",
+          "sourceNumber": 4,
+          "result": "readable-segment-not-closed",
+          "readable": "白城东侧—乾安北/西—长岭北—榆树西北可辨红色密点小片线。",
+          "unresolved": "西北回接嫩江/镇赉处与水系线靠近；乌兰浩特—白城之间同时有黑色内蒙古/吉林省界点线。未将该行政线补成4/5分区闭合边。",
+          "focusNativeBounds": [
+            650,
+            1620,
+            1350,
+            2150
+          ]
+        },
+        {
+          "name": "长锦小片",
+          "sourceNumber": 5,
+          "result": "not-closed",
+          "readable": "与肇阜4共用上述可读红色密点线；南部轮廓与哈阜片主体一致的部分有5编号佐证。",
+          "unresolved": "需要先解决4/5西北闭合；不能把整个哈阜片扣去一个猜测的4区得到5区。林西北侧5号小凸出与南部着色连续，不按经纬框截为独立子区。",
+          "focusNativeBounds": [
+            650,
+            1620,
+            1350,
+            2150
+          ]
+        },
+        {
+          "name": "嫩克小片",
+          "sourceNumber": 6,
+          "result": "isolated-component-candidate",
+          "readable": "海拉尔—满洲里分离着色块内仅标6，外界完整，可直接转录为嫩克小片已核部分。",
+          "unresolved": "黑松大陆主体与站话8、佳富7的内部边界仍需逐段复核；本次不把母区其余面积默认归6。",
+          "componentParentFeature": "b1-heisong-2"
+        },
+        {
+          "name": "佳富小片",
+          "sourceNumber": 7,
+          "result": "not-closed",
+          "readable": "东部佳木斯—富锦附近的7号着色主体及东部母区外界可读。",
+          "unresolved": "西侧伊春/松花江附近同时有水系、行政点线与浅红点线，尚无从北部到片界的可复核连续小片折线。",
+          "focusPreviewBounds": [
+            740,
+            610,
+            1135,
+            965
+          ],
+          "previewSize": [
+            1183,
+            1600
+          ]
+        },
+        {
+          "name": "站话小片",
+          "sourceNumber": 8,
+          "result": "not-closed",
+          "readable": "塔河—黑河—嫩江南向条带内8编号可读，两侧局部细点线可见；肇州/肇源另有8编号。",
+          "unresolved": "北端回接漠河/塔河处以及嫩江以南转折与河流线重合，肇州段向北与6区连接处不能仅凭编号闭合。未用河道或直线补口。",
+          "focusPreviewBounds": [
+            430,
+            285,
+            720,
+            960
+          ],
+          "previewSize": [
+            1183,
+            1600
+          ]
+        }
+      ],
+      "reason": "两个独立识读者核查原图密点小片线；只纳入可闭合轮廓。其余具体缺口与行政/河流混线原因见逐项review，不按父面或行政线猜补。"
+    },
+    "B2": {
+      "mappedSubclusters": [
+        "涞阜",
+        "定霸",
+        "天津",
+        "蓟遵",
+        "滦昌",
+        "抚龙",
+        "赵深",
+        "邢衡",
+        "聊泰",
+        "黄乐",
+        "阳寿",
+        "章桓",
+        "莒照"
+      ],
+      "mappedBeijingClusters": [
+        "京师片",
+        "怀承片",
+        "朝峰片"
+      ],
+      "minorLimits": [
+        "沿海极小碎片与羽状过渡不能逐村确定；不影响图例13小片均已有真实区域。"
+      ],
+      "cityCoverageGaps": []
+    },
+    "B3": {
+      "mapped": [
+        "洪巢片主体",
+        "泰如片主体",
+        "黄孝片主体",
+        "青州片主体",
+        "登连片胶东主体",
+        "洛徐片豫西/许昌/太康/徐州",
+        "郑曹片豫东北/南阳/商阜鲁南",
+        "蔡鲁片三个主要片块及开封以南窄舌",
+        "信蚌片两个主要片块"
+      ],
+      "unresolved": [
+        {
+          "item": "开封—许昌—太康窄舌的村落尺度接点",
+          "reason": "图内蔡鲁与洛徐主轮廓已分别转录；最窄接点只有数个印刷像素，被文字和界线占据，维持地图比例尺下概括，不宣称逐村精度。"
+        },
+        {
+          "item": "Zb/Bz/Bj/Br性质混合区独立分型",
+          "reason": "本轮保留原图主类并在说明标记混合；未将接触性质转化为独立方言比例或互通数值。"
+        },
+        {
+          "item": "沿海极小岛屿",
+          "reason": "原图尺度下多个岛仅为小色斑，无法可靠提取闭合类别轮廓。"
+        }
+      ],
+      "contextNotDuplicated": [
+        "西部汾河片由更详细B7片/小片提供；B3不重复按低精度重画。",
+        "北方官话背景部分由B2提供，不误归中原官话。"
+      ]
+    },
+    "B4": {
+      "mappedClusters": [
+        "关中片",
+        "秦陇片",
+        "陇中片",
+        "金城片",
+        "银吴片",
+        "河西片"
+      ],
+      "subclusters": "原图未进一步划分小片",
+      "contextNotDuplicated": [
+        "晋语四片由B7提供",
+        "西南官话红色区域原图未分片，未冒充中原官话"
+      ]
+    },
+    "B5": {
+      "mappedClusters": [
+        "北京官话北疆片",
+        "兰银官话北疆片",
+        "中原官话南疆片"
+      ],
+      "subclusters": "原图未进一步划分小片",
+      "retainedUnknown": "浅绿未调查地区保留为真实几何空白；城市方块不外推区域。"
+    },
+    "B7": {
+      "mappedClusters": [
+        "并州片",
+        "吕梁片",
+        "上党片",
+        "五台片",
+        "大包片",
+        "张呼片",
+        "邯新片",
+        "志延片"
+      ],
+      "mappedContext": [
+        "中原官话汾河片",
+        "平阳小片",
+        "绛州小片",
+        "解州小片"
+      ],
+      "uncertain": [
+        "北缘羽状渐变色带只能概括外包络",
+        "黄河南岸汾河片原图未标小片数字，保留为片级"
+      ]
+    }
+  },
+  "sourcePixelDensificationMaxStep": 3,
+  "featureCount": 95
 }

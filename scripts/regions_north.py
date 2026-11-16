@@ -1,4 +1,4 @@
-"""Reproducible manual outline transcription from privately held atlas B2/B3/B7.
+"""Reproducible source-pixel outline transcription from private atlas B1/B2/B3/B4/B5/B7.
 
 Vertices below are read on aspect-preserving previews, not derived from city
 buffers or administrative units. Output includes original-scan pixel vertices.
@@ -8,7 +8,9 @@ from pathlib import Path
 import json, math, hashlib
 import numpy as np
 from PIL import Image, ImageDraw
+import cv2
 from shapely.geometry import Polygon, mapping
+from shapely.ops import unary_union
 from shapely.validation import make_valid
 from pyproj import Transformer
 
@@ -21,6 +23,34 @@ TO_GEO = Transformer.from_crs(LCC, 'EPSG:4326', always_xy=True)
 ROOT = Path(__file__).resolve().parents[1]
 SCANS = ROOT.parent / 'dialect-atlas' / 'reference'
 SHEETS = {
+ 'B1': {'preview':[1183,1600], 'gcps':[
+  ['哈尔滨',660.5,923.5,126.642,45.756],['长春',583,1080.5,125.323,43.817],
+  ['沈阳',471.3,1253.3,123.432,41.805],['齐齐哈尔',509.5,792,123.918,47.354],
+  ['大庆',565,851,125.104,46.589],['牡丹江',836,1017,129.634,44.551],
+  ['佳木斯',876,832,130.361,46.809],['绥化',686,848,126.969,46.653],
+  ['吉林',665,1081.7,126.549,43.837],['延吉',843,1150,129.509,42.891],
+  ['锦州',325,1306,121.127,41.095],['大连',348.3,1495.3,121.614,38.914],
+  ['丹东',526.7,1392.3,124.354,40.000],['黑河',684,553,127.499,50.245],
+  ['海拉尔',268,626,119.766,49.212],['满洲里',153,592,117.379,49.598]
+ ]},
+ 'B4': {'preview':[1600,1202], 'gcps':[
+  ['西宁',712,651,101.778,36.617],['兰州',889,714,103.835,36.061],
+  ['银川',1106,438,106.233,38.488],['西安',1354.5,895,108.943,34.263],
+  ['宝鸡',1200,888.5,107.153,34.360],['天水',1060,867,105.724,34.580],
+  ['张掖',611,391.7,100.454,38.932],['酒泉',456.3,289.7,98.495,39.733],
+  ['敦煌',138.5,230.25,94.661,40.142],['武威',796,506,102.638,37.928],
+  ['榆林',1397,441,109.734,38.285],['汉中',1198.5,1035,107.024,33.068],
+  ['安康',1378,1074,109.029,32.690],['延安',1384,632,109.489,36.585]
+ ]},
+ 'B5': {'preview':[1600,1191], 'gcps':[
+  ['乌鲁木齐',985.1,456.6,87.617,43.826],['克拉玛依',832,327,84.889,45.579],
+  ['伊宁',652,446,81.320,43.920],['石河子',900,419,86.079,44.306],
+  ['喀什',328.5,753.5,75.989,39.470],['和田',549.4,966.5,79.922,37.114],
+  ['阿克苏',591,655,80.263,41.168],['库尔勒',907.6,610.6,86.170,41.725],
+  ['哈密',1306,506,93.510,42.818],['吐鲁番',1076.2,514.6,89.189,42.950],
+  ['阿勒泰',995,147,88.144,47.846],['塔城',741,232,82.987,46.754],
+  ['博乐',693,369,82.070,44.900]
+ ]},
  'B3': {'preview':[1600,1195], 'gcps':[
   ['南京',936,855,118.797,32.060],['合肥',774,879,117.227,31.820],
   ['扬州',991,814,119.412,32.394],['芜湖',890.2,948.7,118.383,31.334],
@@ -45,7 +75,7 @@ SHEETS = {
   ['忻州',765.5,968.4,112.734,38.417],['临汾',638,1289,111.519,36.088],
   ['运城',580.3,1431.1,111.008,35.026],['长治',811.2,1271.9,113.116,36.195],
   ['晋城',784.1,1365.5,112.851,35.491],['邯郸',966,1200,114.490,36.610],
-  ['阳泉',853.3,1046.4,113.580,37.860],['张家口',971,631,114.886,40.769]
+  ['阳泉',853.3,1046.4,113.580,37.860],['张家口',981.2,634.2,114.886,40.769]
  ]}
 }
 REGIONS=[]
@@ -64,7 +94,7 @@ add('B2','b2-chaofeng','朝峰片','北京官话','朝峰片',None,
 add('B2','b2-laifu','涞阜小片','北方官话','保唐片','涞阜小片',
  '135,762 159,769 184,757 213,746 241,742 256,750 260,775 249,793 258,816 247,840 242,866 230,887 219,904 207,899 189,884 190,859 170,838 159,816 144,815 137,802')
 add('B2','b2-dingba','定霸小片','北方官话','保唐片','定霸小片',
- '260,775 283,787 305,771 320,772 321,798 330,818 349,840 381,863 402,872 428,865 449,843 478,855 498,865 498,894 486,915 469,926 463,950 443,959 432,969 415,952 393,947 376,961 368,982 349,990 335,1013 310,1024 282,1036 263,1028 243,1024 223,1015 214,991 220,971 211,950 199,929 201,911 207,899 219,904 230,887 242,866 247,840 258,816 249,793',
+ '260,775 283,787 305,771 320,772 321,798 330,818 349,840 381,863 402,872 428,865 449,843 478,855 498,865 498,894 486,915 469,926 463,950 443,959 432,969 415,952 393,947 376,961 368,982 349,990 335,1013 310,1024 290,1033.3 273.7,1027.7 256.7,1020 237.3,1012.7 225,1007.7 217.3,1000.7 224.7,995 229.3,985.7 234.3,976.7 230.3,968.7 224,958 215,951.7 205.7,944.7 199,934.7 195,923.3 195,910 199,899 207,899 219,904 230,887 242,866 247,840 258,816 249,793',
  '已描绘保定—定州—霸州主体；西侧邻近晋语的细长边缘区仍待复核，不能视为完整边界。')
 add('B2','b2-tianjin','天津小片','北方官话','保唐片','天津小片',
  '498,894 518,881 549,875 569,887 581,907 587,920 579,940 565,957 563,976 544,977 528,980 509,976 489,968 476,971 465,981 459,973 463,950 469,926 486,915')
@@ -75,8 +105,8 @@ add('B2','b2-luanchang','滦昌小片','北方官话','保唐片','滦昌小片'
 add('B2','b2-fulong','抚龙小片','北方官话','保唐片','抚龙小片',
  '642,666 682,664 709,654 722,637 736,654 753,652 754,667 771,680 798,680 807,700 808,725 816,742 828,755 829,768 809,778 795,786 776,811 759,802 742,797 721,794 711,782 692,771 681,753 657,738 649,720 651,696')
 add('B2','b2-zhaoshen','赵深小片','北方官话','石济片','赵深小片',
- '144,955 161,948 177,957 190,979 214,991 223,1015 243,1024 263,1028 282,1036 310,1024 335,1013 349,1025 370,1039 383,1055 370,1079 352,1095 332,1091 319,1086 305,1094 285,1114 263,1127 237,1137 215,1136 197,1126 180,1127 187,1108 197,1102 191,1084 182,1063 190,1039 177,1025 165,999',
- '主体初描；平山附近的西部孤片尚未描绘。')
+ '162.7,978.3 173.3,970 183,966.7 193.3,969.3 203,977.7 210,987.3 217.3,1000.7 225,1007.7 237.3,1012.7 256.7,1020 273.7,1027.7 290,1033.3 310,1024 335,1013 349,1025 370,1039 383,1055 370,1079 352,1095 332,1091 319,1086 305,1094 285,1114 263,1127 237,1137 215,1136 197,1126 180,1127 187,1108 197,1102 191,1084 182,1063 190,1039 192,1031 192,1024 187,1014 181,1003 173,991',
+ '主体初描；井陉西部孤片以独立要素补录。')
 add('B2','b2-xingheng','邢衡小片','北方官话','石济片','邢衡小片',
  '180,1127 197,1126 215,1136 237,1137 263,1127 285,1114 305,1094 319,1086 332,1091 352,1095 370,1079 370,1108 363,1129 364,1150 354,1167 343,1182 326,1195 311,1207 283,1210 262,1207 252,1197 235,1197 232,1223 211,1218 193,1223 183,1220 167,1221 154,1210 161,1183 151,1164 159,1144 156,1132')
 add('B2','b2-huangle','黄乐小片','北方官话','沧惠片','黄乐小片',
@@ -85,7 +115,7 @@ add('B2','b2-yangshou','阳寿小片','北方官话','沧惠片','阳寿小片',
  '624,1088 635,1089 641,1110 656,1124 677,1120 699,1117 716,1105 730,1105 744,1111 748,1124 738,1135 744,1150 734,1172 721,1184 692,1188 668,1191 650,1205 620,1207 599,1198 584,1195 554,1203 535,1211 516,1227 490,1222 471,1225 456,1218 444,1224 421,1224 414,1207 417,1187 429,1176 437,1175 442,1155 455,1134 470,1150 498,1144 521,1138 536,1124 540,1098 560,1092 580,1096 607,1097')
 add('B2','b2-zhanghuan-north','章桓小片·北部','北方官话','沧惠片','章桓小片',
  '641,1110 635,1089 641,1067 652,1068 659,1082 666,1084 670,1071 684,1082 693,1080 709,1087 724,1084 730,1105 716,1105 699,1117 677,1120 656,1124',
- '本要素为章桓小片北部独立片区；同名南部片区尚未描绘，不能理解为完整覆盖。')
+ '本要素为章桓小片北部独立片区；同名南部舌状片区以独立要素补录。')
 
 # B7 晋语: central/southern closed outlines and explicitly bounded islands.
 add('B7','b7-bingzhou','并州片','晋语','并州片',None,
@@ -106,10 +136,10 @@ add('B7','b7-huoji','获济小片','晋语','邯新片','获济小片',
  '883,1231 912,1242 923,1251 945,1251 964,1268 984,1261 983,1296 970,1314 946,1326 942,1347 948,1354 945,1366 957,1377 961,1399 951,1411 953,1424 937,1426 920,1412 903,1421 875,1430 869,1443 849,1434 835,1433 822,1444 804,1455 787,1454 773,1446 760,1449 746,1451 733,1443 715,1438 700,1423 700,1403 691,1381 704,1367 715,1360 725,1354 738,1358 744,1345 762,1338 777,1335 789,1354 807,1361 819,1374 833,1373 852,1355 854,1340 867,1322 871,1295 872,1262 882,1254')
 add('B7','b7-zhiyan','志延片','晋语','志延片',None,
  '236,1124 250,1137 267,1129 284,1137 295,1117 317,1125 337,1119 353,1118 365,1134 391,1141 408,1162 414,1184 405,1195 406,1220 394,1232 373,1228 358,1217 351,1226 344,1241 333,1244 314,1230 292,1225 282,1213 264,1210 258,1195 239,1194 225,1179 228,1151',
- '仅描绘志延片西部闭合主片；东部狭长片区尚未纳入。')
+ '志延片西部闭合主片；东部狭长片区以独立要素发布。')
 add('B7','b7-zhanghu-middle','张呼片·中部','晋语','张呼片',None,
  '850,965 854,941 869,926 881,919 891,926 910,920 926,921 948,929 963,945 978,962 964,970 953,971 945,985 927,991 907,986 891,999 882,997 869,994 850,980',
- '张呼片为多块分布；此为灵丘附近的中部独立片区，不代表完整张呼片。')
+ '张呼片为多块分布；此为灵寿附近的中部独立片区，不代表完整张呼片。')
 add('B7','b7-zhanghu-south','张呼片·南部','晋语','张呼片',None,
  '920,1036 936,1033 956,1044 966,1055 966,1070 956,1080 939,1087 930,1105 914,1114 907,1133 897,1136 883,1150 873,1163 858,1173 851,1193 844,1175 850,1157 865,1147 876,1132 881,1115 894,1098 903,1080 916,1067',
  '张呼片为多块分布；此为井陉以南的狭长片区，不代表完整张呼片。')
@@ -149,6 +179,26 @@ add('B3','b3-tairu','泰如片','江淮官话','泰如片',None,
 add('B3','b3-huangxiao','黄孝片','江淮官话','黄孝片',None,
  '397,866 403,880 414,896 423,895 433,886 446,892 465,899 478,898 482,913 495,929 516,936 533,937 544,928 552,934 559,950 571,957 586,966 601,974 614,976 622,978 614,993 607,1012 609,1028 615,1042 615,1062 624,1080 632,1097 638,1119 642,1145 639,1158 616,1154 597,1147 579,1145 566,1133 559,1115 548,1106 535,1100 535,1080 521,1071 504,1071 493,1052 477,1044 461,1035 440,1032 426,1024 413,1026 396,1020 377,1017 362,1010 349,1000 341,991 349,975 355,962 349,946 351,938 371,940 375,915 376,892 384,881',
  '按原图黄孝片垂直纹理和方言区界线描绘；长江湖汊概括处理，未按水体或文字扣洞。')
+add('B3','b3-denglian-shandong','登连片·胶东','胶辽官话','登连片',None,
+ '1056,155 1064,146 1068,133 1080,122 1099,111 1114,105 1128,111 1133,117 1145,125 1157,135 1166,135 1179,150 1195,153 1209,149 1220,149 1234,144 1242,135 1259,140 1268,154 1292,159 1293,189 1284,199 1286,213 1274,218 1270,231 1258,228 1257,220 1246,225 1237,235 1225,237 1211,242 1200,240 1189,249 1177,255 1160,262 1149,264 1138,275 1126,274 1107,259 1080,251 1065,220',
+ 'B3胶东半岛的登连片主体，与B1辽东半岛图幅分开转录；最东端受原图框范围限制，近岸小岛尚未逐一提取。')
+add('B3','b3-qingzhou','青州片','胶辽官话','青州片',None,
+ '956,201 977,204 996,201 1015,193 1035,183 1049,157 1056,155 1065,220 1080,251 1107,259 1126,274 1114,294 1111,312 1101,322 1080,320 1068,321 1075,336 1065,350 1050,360 1048,372 1032,385 1015,401 1008,404 993,389 978,396 956,389 943,369 947,353 935,345 930,369 927,392 916,399 900,395 894,381 880,373 878,353 893,347 890,340 881,329 880,310 873,296 876,280 872,264 881,246 891,243 907,254 916,269 927,295 947,298 948,254 948,230',
+ '按B3青州片斜纹面与分片线描绘；西侧、南侧标有其他官话性质的混合条纹区不在此处冒充纯青州片。')
+
+add('B3','b3-luoxu-west','洛徐片·豫西','中原官话','洛徐片',None,
+ '54,563 66,560 82,552 96,548 115,540 128,534 150,525 170,524 176,510 179,490 198,475 208,456 222,459 231,465 248,470 258,478 276,487 292,492 307,487 317,483 330,494 351,488 357,505 352,523 368,525 391,524 410,536 422,553 421,569 410,576 385,575 362,570 351,552 328,541 313,543 299,549 301,560 288,562 274,574 267,590 258,605 244,612 227,611 224,628 211,638 191,630 176,623 160,624 146,628 135,629 132,637 119,638 110,651 101,633 84,624 77,609 73,593 77,580 70,570',
+ 'B3洛徐片豫西连续片块，依弧形纹理与片界初描；许昌、太康和徐州片块以独立要素发布，不将分散区域连成假面。')
+add('B3','b3-zhengcao-north','郑曹片·豫东北','中原官话','郑曹片',None,
+ '527,335 521,317 521,301 540,298 558,306 577,320 596,325 620,320 632,323 645,337 669,339 693,339 695,318 706,312 725,316 729,351 746,358 762,358 777,385 796,397 780,402 758,401 736,406 712,404 690,401 671,400 651,401 657,412 650,421 650,438 658,455 660,474 652,483 642,486 611,486 596,474 583,464 574,448 555,439 542,434 537,448 542,463 550,473 572,478 575,489 600,490 611,500 611,517 603,523 575,523 560,519 536,516 519,521 492,515 492,533 490,550 492,572 478,574 458,579 448,580 436,585 423,581 410,576 421,569 422,553 410,536 391,524 368,525 352,523 357,505 351,488 368,475 408,471 442,468 458,465 464,443 466,424 477,404 487,389 505,371 524,352',
+ 'B3郑曹片豫东北片块，含原图Zb接触性质标记区域；并非纯一方言或全人口覆盖。南阳与商阜鲁南其他片块以独立要素发布。')
+
+add('B2','b2-laifu-south','涞阜小片·阜平一带','北方官话','保唐片','涞阜小片',
+ '105,913 110,904 123,903 132,892 151,898 162,901 177,895 189,884 207,899 199,899 195,910 195,923.3 199,934.7 205.7,944.7 215,951.7 224,958 230.3,968.7 234.3,976.7 229.3,985.7 224.7,995 217.3,1000.7 210,987.3 203,977.7 193.3,969.3 183,966.7 173.3,970 162.7,978.3 145,958 131,946 123,939 111,938 108,930',
+ 'B2涞阜小片的阜平—曲阳西侧片块，按原图斜纹和小片界补入；与北部涞源片块同属一小片。')
+add('B2','b2-zhaoshen-jingxing','赵深小片·井陉孤片','北方官话','石济片','赵深小片',
+ '106.3,1039.7 123.3,1036 138.3,1035 151.3,1037.3 159.3,1040.3 160.3,1049.3 159,1060.3 155,1069.7 145.7,1073 132.7,1074.3 122.3,1077.7 115.3,1070 111.3,1060.3 110.7,1052',
+ 'B2原图在晋语色区中独立标出7号井陉片块，依其真实点纹外轮廓转录；保留原图分类，不按行政县界推定面积。')
 
 def design(xy):
  x,y=np.asarray(xy,dtype=float).T/1000
@@ -159,14 +209,418 @@ def fit(gcps):
 def transform(xy,matrix):
  p=design(xy)@matrix
  return np.column_stack(TO_GEO.transform(p[:,0],p[:,1]))
+def project_ring(xy,matrix):
+ # Densification happens in source-pixel space, so adjacent source lines stay
+ # shared after the nonlinear inverse projection rather than cutting corners.
+ dense=[]
+ for a,b in zip(xy,xy[1:]):
+  n=max(1,math.ceil(math.hypot(b[0]-a[0],b[1]-a[1])/3))
+  dense.extend([[a[0]+(b[0]-a[0])*i/n,a[1]+(b[1]-a[1])*i/n] for i in range(n)])
+ dense.append(xy[-1])
+ return transform(dense,matrix).round(7).tolist()
 def dist(a,b):
  lon=(a[0]-b[0])*111.32*math.cos(math.radians((a[1]+b[1])/2))
  return math.hypot(lon,(a[1]-b[1])*111.32)
+
+def xinjiang_color_regions():
+ """B5 has explicit solid area fills. Follow those fills, never city symbols.
+
+ White letters/lakes are filled inside an area; the atlas's pale green
+ 'uninvestigated' areas remain real gaps. Dark red/green city squares fail
+ the light-fill saturation/value thresholds and cannot become regions.
+ """
+ s=SHEETS['B5']; im=Image.open(SCANS/'B5.JPG').convert('RGB').resize(tuple(s['preview']))
+ hsv=cv2.cvtColor(np.array(im),cv2.COLOR_RGB2HSV);h,sa,v=cv2.split(hsv)
+ base=(sa>=55)&(sa<=190)&(v>=175)
+ masks=[base&((h<=8)|(h>=175)),base&(h>=23)&(h<=37),base&(h>=10)&(h<=23)]
+ # Legend is not mapped data. Remove the complete legend rectangle and frame.
+ for mask in masks:
+  mask[:525,:401]=False;mask[:45]=False;mask[1160:]=False;mask[:,:36]=False;mask[:,1572:]=False
+ kernel=cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
+ masks=[cv2.morphologyEx(m.astype(np.uint8)*255,cv2.MORPH_CLOSE,kernel) for m in masks]
+ unknown=((h>=43)&(h<=90)&(sa>=12)&(sa<=60)&(v>=160)).astype(np.uint8)*255
+ unknown[:525,:401]=0
+ unknown=cv2.morphologyEx(unknown,cv2.MORPH_CLOSE,kernel)
+ # Remove isolated text/river pixels; keep large, explicitly shaded gaps.
+ n,l,stats,_=cv2.connectedComponentsWithStats(unknown)
+ unknown=np.isin(l,[i for i in range(1,n) if stats[i,cv2.CC_STAT_AREA]>=150]).astype(np.uint8)*255
+ specs=[('beijing','北京官话北疆片','北京官话','北疆片'),
+        ('lanyin','兰银官话北疆片','兰银官话','北疆片'),
+        ('zhongyuan','中原官话南疆片','中原官话','南疆片')]
+ for j,(prefix,name,branch,cluster) in enumerate(specs):
+  n,l,stats,_=cv2.connectedComponentsWithStats(masks[j]);ids=[i for i in range(1,n) if stats[i,4]>=90]
+  ids.sort(key=lambda i:-stats[i,4]);component=0
+  for k in ids:
+   m=(l==k).astype(np.uint8)*255
+   contours,_=cv2.findContours(m,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+   filled=np.zeros_like(m);cv2.drawContours(filled,contours,-1,255,-1)
+   # Other fill classes and genuine uninvestigated polygons remain excluded.
+   filled[unknown>0]=0
+   for q,other in enumerate(masks):
+    if q!=j:filled[other>0]=0
+   contours,hierarchy=cv2.findContours(filled,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
+   if hierarchy is None:continue
+   for i,c in enumerate(contours):
+    if hierarchy[0,i,3]>=0 or cv2.contourArea(c)<90:continue
+    xy=cv2.approxPolyDP(c,1.4,True).reshape(-1,2).astype(float).tolist()
+    if len(xy)<3:continue
+    holes=[];child=hierarchy[0,i,2]
+    while child>=0:
+     hc=contours[child]
+     if cv2.contourArea(hc)>=90:
+      ring=cv2.approxPolyDP(hc,1.4,True).reshape(-1,2).astype(float).tolist()
+      if len(ring)>=3:holes.append(ring)
+     child=hierarchy[0,child,0]
+    component+=1
+    REGIONS.append(dict(sheet='B5',id=f'b5-{prefix}-{component}',name=name+(f'·片块{component}' if component>1 else ''),
+     branch=branch,cluster=cluster,subcluster=None,xy=xy,holes=holes,
+     extraction='reviewed-source-color-contours',
+     note='按B5原图连续浅色面提取，深色城市方块不构造圆形区域。保留浅绿“未调查地区”的真实空白；极小色斑与调查点不外推面积。原版此图未进一步分小片。'))
+
+def mask_geometry(mask,minimum=100,epsilon=1.3):
+ contours,hierarchy=cv2.findContours(mask,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
+ polygons=[]
+ if hierarchy is None:return Polygon()
+ for i,c in enumerate(contours):
+  if hierarchy[0,i,3]>=0 or cv2.contourArea(c)<minimum:continue
+  xy=cv2.approxPolyDP(c,epsilon,True).reshape(-1,2).tolist();holes=[]
+  if len(xy)<3:continue
+  child=hierarchy[0,i,2]
+  while child>=0:
+   if cv2.contourArea(contours[child])>=minimum:
+    h=cv2.approxPolyDP(contours[child],epsilon,True).reshape(-1,2).tolist()
+    if len(h)>=3:holes.append(h)
+   child=hierarchy[0,child,0]
+  p=make_valid(Polygon(xy,holes))
+  polygons.extend(polygon_parts(p))
+ return unary_union(polygons)
+
+def polygon_parts(geom):
+ if geom.geom_type=='Polygon':return [geom]
+ if hasattr(geom,'geoms'):return [p for g in geom.geoms for p in polygon_parts(g)]
+ return []
+
+def pixel_polygon(xy):
+ return make_valid(Polygon([list(map(float,p.split(','))) for p in xy.split()]))
+
+def emit_pixel_geometry(sheet,prefix,name,branch,cluster,geom,note,subcluster=None):
+ if geom.is_empty:return
+ parts=polygon_parts(geom)
+ parts.sort(key=lambda g:-g.area)
+ for n,p in enumerate(parts,1):
+  if p.area<90:continue
+  REGIONS.append(dict(sheet=sheet,id=prefix+(f'-{n}' if n>1 else ''),name=name+(f'·片块{n}' if n>1 else ''),
+   branch=branch,cluster=cluster,subcluster=subcluster,xy=[list(p) for p in p.exterior.coords][:-1],
+   holes=[[list(p) for p in r.coords][:-1] for r in p.interiors],note=note,extraction='reviewed-source-color-contours-and-traced-texture-boundaries'))
+
+def northwest_regions():
+ """B4 outer color contours plus manually traced genuine texture boundaries.
+
+ The masking polygons below are only partitions: their outside edges never
+ become output boundaries; intersection with the printed color footprint
+ produces the final source-pixel rings. All orange remainder is Qinlong,
+ exactly as the legend's three-way texture partition specifies.
+ """
+ s=SHEETS['B4'];rgb=np.array(Image.open(SCANS/'B4.JPG').convert('RGB').resize(tuple(s['preview'])))
+ h,sa,v=cv2.split(cv2.cvtColor(rgb,cv2.COLOR_RGB2HSV));kernel=np.ones((5,5),np.uint8)
+ def color(lo,hi):
+  m=((h>=lo)&(h<=hi)&(sa>60)&(sa<195)&(v>190)).astype(np.uint8)*255
+  m[715:,:525]=0;m[:50]=0;m[1170:]=0;m[:,:29]=0;m[:,1571:]=0
+  return mask_geometry(cv2.morphologyEx(m,cv2.MORPH_CLOSE,kernel),minimum=400)
+ yellow=color(22,39);orange=color(9,20)
+ # Closing may overlap adjacent fill masks by a few pixels. Bright yellow
+ # source areas are exclusively Lanyin, never orange texture-letter islands.
+ orange=orange.difference(yellow)
+ red=((h<=8)&(sa>85)&(v>205)).astype(np.uint8)*255
+ red[:50]=0;red[715:,:525]=0
+ red=cv2.morphologyEx(red,cv2.MORPH_CLOSE,kernel)
+ n,labels,stats,_=cv2.connectedComponentsWithStats(red)
+ # Select actual solid red SW-Mandarin areas by source-map seed pixels.
+ # Red category lettering elsewhere is ink, not a dialect enclave.
+ selected={int(labels[y,x]) for x,y in [(1180,975),(1290,1000),(1300,1110),(1417,1155),(1017,1090)]}
+ selected.discard(0)
+ red=np.isin(labels,list(selected)).astype(np.uint8)*255
+ red=cv2.dilate(red,np.ones((3,3),np.uint8))
+ orange=orange.difference(mask_geometry(red,minimum=250))
+ # Jincheng/Hexi texture boundary, read on B4; all remaining sides lie outside
+ # the yellow footprint and are clipped to the actual printed contour.
+ jinmask=pixel_polygon('790,645 803,637 814,632 824,634 825,615 833,603 839,613 841,626 853,634 868,638 878,628 904,624 924,630 961,638 980,800 750,800 750,665')
+ yinmask=pixel_polygon('930,546 954,544 1010,516 1030,310 1225,300 1250,660 970,660 932,585')
+ jin=yellow.intersection(jinmask);yin=yellow.intersection(yinmask);hexi=yellow.difference(unary_union([jin,yin]))
+ # Guanzhong main territory plus its Hanzhong pocket. Dashed Qinlong/Guanzhong
+ # boundaries are transcribed independently of the prefecture lines.
+ guanmain=pixel_polygon('1186,758 1200,752 1220,764 1239,768 1253,776 1265,786 1266,803 1258,812 1246,819 1226,824 1218,834 1217,850 1227,862 1229,875 1225,891 1229,909 1228,924 1220,930 1215,941 1214,956 1240,958 1264,948 1284,945 1293,947 1303,945 1313,942 1328,943 1340,948 1350,951 1358,965 1362,979 1359,993 1367,1003 1380,1005 1390,1011 1391,1030 1570,1040 1570,620 1390,600 1280,710 1259,716 1244,720 1223,718 1208,727 1199,738 1189,738')
+ guanhan=pixel_polygon('1180,963 1192,951 1204,959 1214,956 1216,972 1236,986 1244,1007 1264,1018 1285,1025 1285,1033 1264,1042 1244,1048 1226,1052 1217,1064 1217,1075 1228,1086 1215,1095 1197,1093 1187,1087 1183,1073 1183,1053 1184,1029 1175,1007 1174,988')
+ # Re-read at original resolution: use the actual dashed line, not the
+ # prefecture river line. Coordinates from documented private QA crops.
+ def cropxy(text,x0,y0,scale):
+  return [[x0+float(p.split(',')[0])/scale,y0+float(p.split(',')[1])/scale] for p in text.split()]
+ north=cropxy('1026,277 988,280 962,273 947,259 923,252 921,274 918,293 884,290 851,301 825,315 822,334 826,355 792,380 774,418 756,435 728,455 711,473 690,478 659,468 637,459 617,459 588,470 560,484 545,484 534,478 526,462 521,451 505,468 478,470 453,476 433,487 424,509 411,516 376,516 373,551 346,554 327,560 322,574 328,611 349,632 373,648',1130,570,3)
+ # east-detail.jpg was an original-scan crop scaled 1.1x, not a preview crop.
+ def east(text):
+  return [[(2050+float(p.split(',')[0])/1.1)*1600/3061,(1370+float(p.split(',')[1])/1.1)*1202/2300] for p in text.split()]
+ western=east('382,185 380,203 389,225 385,251 383,279 411,298 423,310 418,332 422,357 424,384 421,409 419,435 411,452 384,451 373,465 366,490 366,520')
+ southern=east('430,517 490,501 537,491 582,486 596,470 620,461 646,461 662,468 681,473 710,471 719,485 725,508 719,520 722,539 732,557 721,579 720,598 745,607')
+ guanmain=make_valid(Polygon(north+western+southern+[[1590,1080],[1590,550]]))
+ zhengning=Polygon(cropxy('392,642 418,622 443,602 464,578 488,559 509,550 526,525 535,515 547,536 558,553 567,582 566,608 554,629 533,641 511,643 480,645 456,643 438,634 416,642',1130,570,3))
+ guanmain=guanmain.difference(zhengning)
+ guanhan=Polygon(east('315,535 301,537 289,548 279,568 277,590 284,607 289,622 288,646 290,675 290,705 292,731 302,742 335,745 340,734 329,722 316,710 318,696 338,683 351,673 376,668 395,666 416,651 438,637 435,605 429,576 414,560 393,549 366,536 343,526'))
+ guan=orange.intersection(unary_union([guanmain,guanhan]))
+ # Longzhong's northeastern Qinghai pocket.
+ longwest=pixel_polygon('635,540 658,544 675,548 691,559 711,567 738,573 754,584 765,590 765,608 752,628 740,645 724,639 706,626 697,611 684,604 666,592 645,580')
+ # Eastern Qinghai connection and Gansu Longzhong main body, including the
+ # Tianshui tongue. White unclassified enclaves survive the orange mask.
+ longmain=pixel_polygon('774,610 800,636 816,664 821,686 843,696 858,700 878,711 914,741 932,754 945,707 951,690 959,679 968,677 990,678 1013,677 1042,679 1033,659 1026,638 1025,625 1017,616 1015,605 1030,603 1098,620 1100,638 1102,653 1093,678 1090,691 1097,706 1091,720 1092,730 1112,731 1112,749 1113,778 1119,795 1120,810 1131,822 1140,824 1146,835 1139,846 1132,854 1128,862 1126,871 1137,877 1151,886 1161,892 1159,902 1154,904 1144,899 1138,897 1135,909 1131,922 1126,922 1123,910 1119,903 1117,904 1118,918 1114,922 1110,921 1107,915 1103,912 1097,913 1088,915 1080,915 1072,916 1063,922 1060,928 1056,926 1054,917 1050,913 1043,910 1040,904 1043,896 1043,887 1030,878 1017,871 1016,864 1018,860 1031,859 1043,855 1043,846 1038,836 1033,829 1029,823 1025,825 1019,829 1014,827 1012,836 1004,835 994,827 987,816 986,806 991,792 991,781 984,775 973,772 963,770 953,769 949,774 950,788 941,789 949,799 950,806 945,812 946,822 934,824 926,821 915,824 905,822 889,826 885,806 863,799 850,785 829,779 820,766 816,747 803,738 789,734 776,739 767,730 747,724 735,723 735,714 755,714 763,708 759,700 748,686 743,677 720,675 720,657 723,640 724,639 740,645 752,628 765,608')
+ longzhong=orange.intersection(unary_union([longwest,longmain])).difference(guan)
+ qinlong=orange.difference(unary_union([guan,longzhong]))
+ note='原图色面外轮廓与片界纹理线联合转录；保留不同方言/未分类的真实内嵌空白。属于图幅范围内的概括分布，未按行政边界重画；原图未给这些片进一步的小片。'
+ for key,name,branch,geom in [('jincheng','金城片','兰银官话',jin),('yinwu','银吴片','兰银官话',yin),('hexi','河西片','兰银官话',hexi),('guanzhong','关中片','中原官话',guan),('longzhong','陇中片','中原官话',longzhong),('qinlong','秦陇片','中原官话',qinlong)]:
+  emit_pixel_geometry('B4','b4-'+key,name,branch,name,geom,note)
+
+def northeast_regions():
+ """B1: trace the three legible texture families; do not invent micro-lines.
+
+ All eight subcluster names are inventoried in metadata. A subcluster with
+ an unread/unreviewed dotted boundary remains an explicit missing geometry,
+ instead of getting its parent polygon mislabeled as its own footprint.
+ """
+ s=SHEETS['B1'];rgb=np.array(Image.open(SCANS/'B1.JPG').convert('RGB').resize(tuple(s['preview'])))
+ h,sa,v=cv2.split(cv2.cvtColor(rgb,cv2.COLOR_RGB2HSV));kernel=np.ones((5,5),np.uint8)
+ def color(lo,hi):
+  m=((h>=lo)&(h<=hi)&(sa>50)&(v>165)).astype(np.uint8)*255
+  m[:285]=0;m[1553:]=0;m[:,:54]=0;m[:,1141:]=0
+  return mask_geometry(cv2.morphologyEx(m,cv2.MORPH_CLOSE,kernel),minimum=200)
+ orange=color(9,25);green=color(38,80)
+ taiping=color(0,8).intersection(Polygon([(800,610),(900,610),(900,710),(800,710)]))
+ orange=orange.difference(unary_union([green,taiping]))
+ # Source texture transitions. Only the outside portions of these masks
+ # are clipped by the printed orange footprint; they create no city circles.
+ hafu=pixel_polygon('0,840 350,840 370,852 390,865 414,877 440,876 461,878 475,881 495,880 509,878 521,884 532,890 544,892 555,888 566,877 567,862 577.5,854 591,854.5 604.5,865 614.5,883 622.5,892.5 634.5,899 647,899.5 654,894.5 647.5,885 650,875.5 663,875.5 675.5,872 686,861 691.5,848 697,840 695,830.5 701.5,823.5 710.5,823.5 723,826.5 733.5,837.5 741.5,848 747,862 748.5,876 750,889 755.5,899.5 762,905 785,902 799,904 811,904 820,899 813.5,914.5 806,927.5 793,932.5 788.5,939.5 778.5,942 772,954 764,966 755,974 746.5,971.5 740.5,966 737.5,957.5 731,948 727.5,939.5 721,946.5 718,959 708,964.5 691,975.5 666,977 656,985 649,1013 652,1024.5 658,1038 656.5,1046.5 648,1055.5 637,1058.5 617.5,1065.5 617.5,1075 613.5,1088 617,1102 619.5,1115 627,1119 637.5,1122 645,1135 651.5,1143.5 660,1158.5 663.5,1177.5 662.5,1188 656.5,1195 650,1205 640.5,1208.5 631.5,1205.5 623,1198 617.5,1187.5 611,1180.5 604.5,1179 595.5,1181.5 588.5,1189 581,1200 575,1210 568,1213 563,1209.5 561.5,1200.5 559,1189 551.5,1177 544.5,1168 537,1167 528.5,1170 518.5,1175 509,1178 499.5,1182 488.5,1184 477.5,1185.5 465,1185.5 459.5,1183 448.5,1185 447.5,1195 441,1207 439.5,1222 435.5,1234.5 428.5,1245 420,1262 399,1278 390,1297 381,1318 369,1325 200,1500 0,1500')
+ jishen=pixel_polygon('0,1000 650,1000 665,978 692,976 708,964 718,960 721,946 727.5,939.5 731,948 737.5,957.5 740.5,966 746.5,971.5 755,974 764,966 772,954 778.5,942 788.5,939.5 793,932.5 806,927.5 813.5,914.5 820,899 830,913 831,932 844,939 857,944 875.5,954.5 879.5,941.5 888,935.5 902.5,934.5 912.5,929 925,930.5 939,936 953,940.5 965,943.5 976.5,945 1180,940 1180,1600 0,1600')
+ hafu=hafu.union(pixel_polygon('300,820 450,820 452,882 440,900 400,920 300,920'))
+ hafugeom=orange.intersection(hafu);jishengeom=orange.intersection(jishen).difference(hafugeom)
+ heisong=orange.difference(unary_union([hafugeom,jishengeom]))
+ note='按B1图例的片级纹理及片界描绘。该片含的小片名称已转录入分类清单；小片点状边界尚未全部核验，不能将本片轮廓冒充任何一个小片。'
+ for key,name,geom in [('hafu','哈阜片',hafugeom),('jishen','吉沈片',jishengeom),('heisong','黑松片',heisong)]:
+  emit_pixel_geometry('B1','b1-'+key,name,'东北官话',name,geom,note)
+ # Jiaoliao components: solid Gaihuan north of the dashed line; hatched
+ # Denglian peninsula and two named eastern islands in the same legend.
+ gaihuanmask=pixel_polygon('280,1250 650,1250 650,1380 537,1385 529.7,1389 522,1397 514.3,1402.7 506.3,1401.7 498,1396.3 491,1394.7 483.7,1398.3 476,1403.3 465.3,1402.7 452.7,1400 440.7,1397 429.3,1396.7 415,1400.3 403,1402.7 394.7,1407.3 385,1405.3 371,1398.7 359,1392 280,1380')
+ gaihuan=green.intersection(gaihuanmask)
+ southern=green.intersection(Polygon([(250,1250),(680,1250),(680,1553),(250,1553)]))
+ denglian=southern.difference(gaihuan)
+ emit_pixel_geometry('B1','b1-gaihuan','盖桓片','胶辽官话','盖桓片',gaihuan,'B1盖桓片大陆色区；边界按原图分片线初描。')
+ emit_pixel_geometry('B1','b1-denglian','登连片','胶辽官话','登连片',denglian,'B1登连片辽东半岛范围；胶东半岛另见B3，不将两张图拼为同一精度。')
+ for key,name,box in [('hulin','虎林方言岛',(960,790,1120,990)),('ertun','二屯方言岛',(1030,650,1140,790))]:
+  x1,y1,x2,y2=box
+  emit_pixel_geometry('B1','b1-'+key,name,'胶辽官话','登连片',green.intersection(Polygon([(x1,y1),(x2,y1),(x2,y2),(x1,y2)])),
+   '原图图例明确标出的登连片方言岛，轮廓取自绿色印刷色面；不是围绕城市构造的圆。')
+ emit_pixel_geometry('B1','b1-taiping','太平方言岛','北方官话','太平方言岛',taiping,
+  'B1图例明示北方官话太平方言岛；保留原版名称，不擅自对应现代官话分支。')
+
+def b2_southern_subclusters():
+ """Finish the B2 southern teal footprint using the visible 9/12/13 lines."""
+ s=SHEETS['B2'];rgb=np.array(Image.open(SCANS/'B2.JPG').convert('RGB').resize(tuple(s['preview'])))
+ h,sa,v=cv2.split(cv2.cvtColor(rgb,cv2.COLOR_RGB2HSV))
+ m=((h>=65)&(h<=92)&(sa>=16)&(sa<=120)&(v>=140)).astype(np.uint8)*255
+ m[:1110]=0;m[:,850:]=0;m[:,:210]=0;m[1555:]=0
+ m=cv2.morphologyEx(m,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
+ m=cv2.morphologyEx(m,cv2.MORPH_OPEN,np.ones((3,3),np.uint8))
+ teal=mask_geometry(m,minimum=200)
+ # This southern B2 footprint contains no enclosed non-teal language island;
+ # water and text inside it are not language holes. The 13/9 split comes next.
+ teal=unary_union([Polygon(g.exterior) for g in polygon_parts(teal)])
+ south_edge=[[270,1319],[281,1334],[299,1347],[312.5,1349.5],[327,1357],[335,1349.5],
+  [348,1344.5],[363,1344.5],[369,1335.5],[381.5,1339.5],[389,1358],[407,1362.5],
+  [432.5,1365],[452.5,1370],[476,1378.5],[484,1391.5],[497.5,1396],[511,1395],
+  [518,1391],[524.5,1407.5],[535,1421.5],[546.5,1427.5],[555.5,1436.5],
+  [565,1453.5],[579,1445.5],[584,1442],[589.5,1455],[603,1463.5],[607.5,1473],
+  [627,1471],[639.5,1479],[647,1490.5],[643.5,1497.5],[656.5,1503.5],
+  [664.5,1497.5],[675,1506.5],[682.5,1511.5],[690.5,1505],[706,1510]]
+ # Follow the actual teal/green boundary so the blue Yellow River outside
+ # the dialect area cannot become a long spurious language component.
+ outer=Polygon([[210,1110],[850,1110],[850,1555],[706,1555]]+list(reversed(south_edge))+[[210,1350]])
+ teal=teal.intersection(outer)
+ existing=unary_union([Polygon(r['xy'],r.get('holes',[])) for r in REGIONS if r['sheet']=='B2'])
+ remaining=teal.difference(existing)
+ # The arbitrary analysis window lies outside these three source areas.
+ # Delete only tiny residual raster slivers, never replace their real outline.
+ remaining=unary_union([g for g in polygon_parts(remaining) if g.area>=400])
+ def crop(text):
+  return [[210+float(p.split(',')[0])/2,1120+float(p.split(',')[1])/2] for p in text.split()]
+ juzhao_mask=Polygon(crop('1018,615 1003,634 991,651 984,674 972,700 974,714 985,725 998,733 997,753 992,778 993,800 982,832 990,846 1039,863 1041,844 1061,836 1102,835 1127,814 1147,812 1162,824 1174,813 1177,783 1189,762 1201,738 1214,712 1224,681 1235,663 1222,652 1206,648 1192,633 1172,626 1154,636 1128,621 1102,610 1092,600 1073,597 1069,578 1063,567 1058,555 1065,539 1064,526 1054,519 1038,519 1024,522 1008,531 1009,554 1016,580 1021,596'))
+ # Zhanghuan's key-shaped tongue south of the Yellow River. Shared upper
+ # boundary is the already traced Yangshou edge, not a latitude cut.
+ key=crop('620,208 644,222 668,235 678,257 673,283 673,319 671,334 695,340 712,327 736,326 753,328 768,311 761,293 764,282 779,272 790,271 799,245 815,238 839,240 867,253 885,276 892,292')
+ upper=[[520,1224],[535,1211],[554,1203],[584,1195],[599,1198],[620,1207],[650,1205],[668,1191],[692,1188],[721,1184],[850,1170],[850,1330],[800,1330],[762,1320],[739,1337],[717,1347],[695,1344],[680,1338],[680,1320],[677,1300],[670,1290],[656,1266]]
+ zhanghuan_mask=make_valid(Polygon(upper+list(reversed(key))))
+ juzhao=remaining.intersection(juzhao_mask)
+ zhanghuan=remaining.intersection(zhanghuan_mask).difference(juzhao)
+ liaotai=remaining.difference(unary_union([juzhao,zhanghuan]))
+ for key,name,cluster,geom in [('liaotai','聊泰小片','石济片',liaotai),('zhanghuan-south','章桓小片·南部','沧惠片',zhanghuan),('juzhao','莒照小片','沧惠片',juzhao)]:
+  emit_pixel_geometry('B2','b2-'+key,name,'北方官话',cluster,geom,
+   'B2南部蓝绿色面及9/12/13小片界线转录，保留章桓南部舌状区与莒照北端细长分布；沿海极小色斑未逐个建面。',
+   name.replace('·南部',''))
+
+def b3_cailu_xinbeng():
+ """Original B3 horizontal/scribble texture outlines, read on enlarged crops.
+
+ Every crop transform is explicit. The shared boundaries replace the earlier
+ coarse same-sheet traces; this is not cross-sheet geographic clipping.
+ """
+ def pts(text,x0,y0,scale):
+  return [[x0+float(p.split(',')[0])/scale,y0+float(p.split(',')[1])/scale] for p in text.split()]
+ # Cai-Lu western (Zhumadian–Zhoukou) connected footprint.
+ upper=pts('247,0 258,20 286,39 318,44 337,53 350,59 371,50 391,47 405,50 422,57 434,68 428,89 424,110 429,133 445,153 441,174 435,198 440,219 440,246 443,276 425,283 400,290 396,305 400,321 409,331 399,345 398,354 417,365 443,371 460,384 475,404 477,431 475,456 482,473 507,479 533,484 552,498 572,527 579,540',360,600,2.5)
+ # Reuse the exact Xin-Beng/Cai-Lu common line, rather than independently
+ # approximating the same edge from the overlapping crop a second time.
+ lower=pts('587,151 580,171 571,187 554,197 533,197 517,186 501,173 488,159 480,148 474,127 469,115 452,99 436,96 419,96 408,110 393,117 380,110 363,112 358,124 365,135 375,147 380,161 374,175 354,173 338,176 322,164 311,153 293,145 268,129 250,117 231,104 216,89 204,92 187,85 173,65',300,740,2)
+ western=pts('72,420 74,404 90,387 104,362 108,342 95,327 75,313 58,300 53,282 64,263 82,248 105,244 132,248 152,254 169,249 174,238 182,213 181,194 175,176 162,158 145,145 132,130 139,116 158,97 170,81 172,65 178,51 190,55 191,71 198,88 212,94 227,93 240,76 247,58 245,31',360,600,2.5)
+ cailu_west=make_valid(Polygon(upper+lower+western))
+ # Cai-Lu northern (Jining / Zaozhuang) footprint.
+ cailu_north=make_valid(Polygon(pts('174,12 179,31 206,48 245,61 284,76 313,77 340,58 377,58 407,64 455,57 486,48 510,38 541,17 582,8 618,13 649,37 668,57 682,80 697,100 711,124 712,138 696,148 673,156 651,171 646,194 648,219 657,238 678,254 685,281 691,303 712,320 743,339 765,355 775,374 770,392 746,396 718,396 693,408 677,425 664,447 656,472 635,488 605,500 567,502 539,490 504,480 479,462 451,452 421,450 397,443 370,440 350,459 324,459 307,452 281,455 257,459 237,471 221,468 202,454 173,441 154,432 134,419 120,400 114,381 120,363 140,349 154,335 160,315 161,288 161,251 157,225 144,203 128,181 118,157 118,134 118,110 130,91 147,84 176,79 184,64 181,41',620,380,4)))
+ cailu_small=make_valid(Polygon(pts('90,195 117,190 147,197 172,190 194,198 214,184 230,166 254,155 283,157 315,160 339,159 360,160 371,185 390,205 404,225 413,248 414,276 416,308 430,340 451,368 476,395 501,422 480,438 472,456 460,476 447,490 423,489 404,479 391,464 376,450 363,435 339,424 315,427 298,447 283,471 261,487 241,493 226,484 220,460 206,432 187,416 169,400 156,378 137,362 116,363 99,380 81,395 73,391 65,360 62,331 64,299 64,266 67,235 75,215',610,730,6)))
+ # Xin-Beng principal Dabie/Xinyang piece, including the thin northern tongue.
+ xin_main=make_valid(Polygon(pts('40,80 75,88 94,83 113,85 134,93 150,86 158,77 173,65 187,85 204,92 216,89 231,104 250,117 268,129 293,145 311,153 322,164 338,176 354,173 374,175 380,161 375,147 365,135 358,124 363,112 380,110 393,117 408,110 419,96 436,96 452,99 469,115 474,127 480,148 488,159 501,173 517,186 533,197 554,197 571,187 580,171 587,151 593,137 608,135 622,124 639,122 649,111 656,99 666,102 681,117 694,131 699,141 710,143 720,133 729,122 742,124 752,135 760,140 768,134 774,120 786,112 800,99 814,88 832,108 843,115 846,136 871,138 871,157 884,158 884,192 890,211 885,223 879,229 882,247 888,269 867,276 843,282 819,291 810,280 808,268 797,261 783,247 770,253 749,257 739,256 721,266 707,279 708,293 711,308 704,333 691,349 676,359 690,362 706,369 715,382 711,391 701,398 693,409 691,430 691,447 678,455 666,462 661,484 651,497 641,499 635,480 623,482 610,477 606,466 594,462 588,459 580,462 575,473 566,476 558,466 552,450 539,445 537,433 526,424 525,414 514,418 503,417 493,411 492,391 493,376 488,365 482,358 478,370 473,384 461,393 445,394 433,391 418,396 407,391 393,387 378,374 364,366 355,362 345,368 339,362 339,345 346,328 348,319 340,313 327,319 311,315 295,311 284,301 273,289 263,285 252,292 246,304 229,310 221,308 222,291 216,285 207,291 198,281 196,263 194,248 196,237 189,224 188,214 198,205 188,195 182,183 189,173 194,162 192,149 184,142 176,143 162,160 143,167 125,170 114,162 104,151 89,145 76,132 65,143 55,140 42,132 32,140',300,740,2)))
+ xin_tongue=Polygon(pts('360,160 360,90 370,64 390,40 413,43 442,60 459,81 476,110 500,113 528,113 555,109 576,109 581,138 594,177 614,221 628,255 621,283 603,305 601,326 613,346 628,358 659,380 690,394 690,420 660,418 634,414 606,410 576,416 550,414 526,425 501,422 476,395 451,368 430,340 416,308 414,276 413,248 404,225 390,205 371,185',610,730,6))
+ xin_main=unary_union([xin_main,make_valid(xin_tongue)])
+ xin_bengbu=make_valid(Polygon(pts('211,267 213,230 245,209 262,186 278,169 295,175 315,186 351,195 369,218 389,247 413,266 435,274 456,267 461,249 458,211 455,176 457,152 475,120 490,84 502,62 525,51 553,47 586,49 622,42 648,28 664,31 679,38 676,117 674,134 673,157 665,173 647,184 640,199 637,219 625,242 608,258 597,271 607,282 610,306 597,322 589,349 598,375 607,390 617,409 617,430 601,448 571,448 559,460 548,482 545,501 559,510 573,526 570,544 577,565 590,588 596,606 591,625 568,638 548,634 511,616 493,657 471,670 441,642 414,641 307,653 289,637 274,619 268,602 273,592 290,580 302,569 303,554 302,528 303,503 308,480 321,455 335,435 337,415 321,392 302,366 280,346 263,324 252,296 233,281',690,630,4)))
+ cailu=unary_union([cailu_west,cailu_north,cailu_small])
+ # The freshly reread 3–6x source outlines supersede the coarse edges from
+ # the initial pass in the SAME B3 scan, not any other atlas sheet.
+ xin=unary_union([xin_main,xin_bengbu]).difference(cailu)
+ revised=unary_union([cailu,xin])
+ for r in REGIONS:
+  if r['sheet']=='B3' and r['id'] in ('b3-zhengcao-north','b3-hongchao','b3-huangxiao'):
+   old=Polygon(r['xy'],r.get('holes',[]));new=old.difference(revised)
+   parts=polygon_parts(new)
+   if len(parts)==1:
+    r['xy']=[list(p) for p in parts[0].exterior.coords][:-1]
+    r['holes']=[[list(p) for p in ring.coords][:-1] for ring in parts[0].interiors]
+    r['note']+=' 与新核蔡鲁/信蚌共边按同一B3源图更高倍率读线更新。'
+ for key,name,geom in [('cailu','蔡鲁片',cailu),('xinbeng','信蚌片',xin)]:
+  emit_pixel_geometry('B3','b3-'+key,name,'中原官话',name,geom,
+   '按B3横线/碎纹片区在3–6倍原图局部核读，分离片块分别保存；是原图的区域概括而非现代行政县范围。')
+
+# Independently reread B1 dotted micro-boundaries in original native pixels.
+B1_MICRO_CANDIDATES=[{'id': 'b1-tongxi-candidate', 'name': '通溪小片', 'family': '官话', 'branch': '东北官话', 'cluster': '吉沈片', 'subcluster': '通溪小片', 'level': '小片', 'source': 'B1', 'sourceNumber': 2, 'parentId': 'b1-jishen', 'reviewStatus': 'candidate-for-owner-review', 'method': 'manual original-pixel red dotted boundary trace, closed with actual parent source outline', 'sourceBoundary': [[740.56, 2605.48], [746.47, 2638.96], [787.83, 2627.15], [807.52, 2627.15], [813.43, 2631.09], [815.4, 2638.96], [821.31, 2638.96], [829.19, 2646.84], [829.19, 2658.66], [823.28, 2660.63], [831.16, 2664.56], [829.19, 2678.35], [841.01, 2682.29], [858.73, 2680.32], [880.4, 2658.66], [886.31, 2658.66], [892.21, 2644.87], [898.12, 2640.93], [906.0, 2640.93], [911.91, 2635.02], [933.58, 2638.96], [935.55, 2646.84], [947.36, 2652.75], [947.36, 2660.63], [953.27, 2662.59], [955.24, 2674.41], [965.09, 2682.29], [963.12, 2694.11], [957.21, 2696.07], [957.21, 2701.98], [943.42, 2721.68], [947.36, 2723.65], [947.36, 2735.46], [953.27, 2739.4], [953.27, 2749.25], [959.18, 2751.22], [963.12, 2763.03], [974.94, 2761.06], [998.57, 2739.4], [1006.45, 2739.4], [1006.45, 2731.52], [1018.27, 2729.55], [1018.27, 2723.65], [1034.02, 2711.83], [1032.05, 2682.29], [1035.99, 2680.32], [1032.05, 2678.35], [1032.05, 2662.59], [1045.84, 2642.9], [1045.84, 2613.36], [1051.75, 2611.39], [1051.75, 2603.51], [1083.26, 2568.07], [1100.99, 2528.68], [1134.47, 2526.71], [1152.2, 2512.92], [1167.95, 2508.98], [1173.86, 2524.74], [1177.8, 2524.74], [1181.74, 2534.59], [1189.62, 2540.49], [1193.56, 2554.28], [1205.38, 2564.13], [1199.47, 2603.51], [1191.59, 2613.36], [1199.47, 2619.27], [1215.22, 2621.24], [1232.95, 2615.33], [1244.77, 2589.73], [1254.62, 2581.85], [1254.62, 2575.94], [1264.46, 2573.97], [1270.37, 2568.07], [1286.13, 2536.55], [1297.95, 2534.59], [1297.95, 2520.8], [1305.82, 2493.23], [1319.61, 2477.47], [1333.4, 2477.47], [1341.28, 2465.66], [1360.97, 2469.6], [1366.88, 2477.47], [1364.91, 2491.26], [1376.73, 2499.14], [1378.7, 2508.98], [1390.52, 2508.98], [1394.45, 2518.83], [1422.03, 2518.83], [1427.94, 2524.74], [1447.63, 2524.74], [1451.57, 2528.68], [1477.18, 2520.8], [1487.02, 2530.65], [1498.84, 2530.65], [1502.78, 2516.86], [1514.6, 2507.01], [1510.66, 2487.32], [1494.9, 2473.53], [1488.99, 2430.21], [1492.93, 2426.27], [1536.26, 2426.27], [1545.7102649006622, 2424.9199621570483], [1545.7, 2424.7], [1545.0, 2409.7], [1545.0, 2395.0], [1545.3, 2379.3], [1549.3, 2369.0], [1556.0, 2359.7], [1562.0, 2350.0], [1570.0, 2337.0], [1576.3, 2325.7], [1579.3, 2310.0], [1579.3, 2293.0], [1580.0, 2281.0], [1586.7, 2271.7], [1592.7, 2264.7], [1596.7, 2255.7], [1600.0, 2243.3], [1599.3, 2230.7], [1597.7, 2217.3], [1597.3, 2203.3], [1596.3, 2193.0], [1589.0, 2198.3], [1581.7, 2203.0], [1573.3, 2209.0], [1566.3, 2213.0], [1558.0, 2218.3], [1554.7, 2225.0], [1554.0, 2234.3], [1550.7, 2240.0], [1548.0, 2245.0], [1544.0, 2248.0], [1537.0, 2247.0], [1527.7, 2247.3], [1518.0, 2247.7], [1506.7, 2251.7], [1498.3, 2258.0], [1492.0, 2265.3], [1488.7, 2274.3], [1490.0, 2283.3], [1489.3, 2292.0], [1481.0, 2299.0], [1473.0, 2303.0], [1464.7, 2305.3], [1456.7, 2305.0], [1450.3, 2299.3], [1445.0, 2297.7], [1435.3, 2304.0], [1426.7, 2314.7], [1418.3, 2324.3], [1411.0, 2332.3], [1403.7, 2336.7], [1396.3, 2334.0], [1388.7, 2329.3], [1380.3, 2329.7], [1377.7, 2324.0], [1377.0, 2313.7], [1374.7, 2306.0], [1367.0, 2302.0], [1355.3, 2300.7], [1343.0, 2304.7], [1330.7, 2310.0], [1319.7, 2318.7], [1308.7, 2326.3], [1305.9263237148718, 2328.216358160634], [1304.84, 2339.62], [1293.02, 2353.4], [1280.22, 2373.1], [1261.51, 2379.99], [1243.78, 2374.08], [1227.04, 2359.31], [1216.21, 2338.63], [1203.41, 2324.85], [1190.6, 2321.89], [1172.88, 2326.82], [1159.09, 2341.59], [1144.32, 2363.25], [1132.5, 2382.94], [1118.72, 2388.85], [1108.87, 2381.96], [1105.91, 2364.23], [1100.99, 2341.59], [1086.22, 2317.95], [1072.43, 2300.23], [1057.66, 2298.26], [1040.92, 2304.17], [1021.22, 2314.02], [1002.51, 2319.92], [983.8, 2327.8], [962.13, 2331.74], [940.47, 2334.69], [915.85, 2334.69], [905.02, 2329.77], [883.35, 2333.71], [881.38, 2353.4], [868.58, 2377.04], [865.63, 2406.58], [857.75, 2431.19], [843.96, 2451.87], [827.22, 2485.35], [785.86, 2516.86], [768.13, 2554.28], [750.41, 2595.64], [737.97, 2602.89], [740.56, 2605.48]], 'sourceHoles': [], 'sourceParts': [{'outer': [[740.56, 2605.48], [746.47, 2638.96], [787.83, 2627.15], [807.52, 2627.15], [813.43, 2631.09], [815.4, 2638.96], [821.31, 2638.96], [829.19, 2646.84], [829.19, 2658.66], [823.28, 2660.63], [831.16, 2664.56], [829.19, 2678.35], [841.01, 2682.29], [858.73, 2680.32], [880.4, 2658.66], [886.31, 2658.66], [892.21, 2644.87], [898.12, 2640.93], [906.0, 2640.93], [911.91, 2635.02], [933.58, 2638.96], [935.55, 2646.84], [947.36, 2652.75], [947.36, 2660.63], [953.27, 2662.59], [955.24, 2674.41], [965.09, 2682.29], [963.12, 2694.11], [957.21, 2696.07], [957.21, 2701.98], [943.42, 2721.68], [947.36, 2723.65], [947.36, 2735.46], [953.27, 2739.4], [953.27, 2749.25], [959.18, 2751.22], [963.12, 2763.03], [974.94, 2761.06], [998.57, 2739.4], [1006.45, 2739.4], [1006.45, 2731.52], [1018.27, 2729.55], [1018.27, 2723.65], [1034.02, 2711.83], [1032.05, 2682.29], [1035.99, 2680.32], [1032.05, 2678.35], [1032.05, 2662.59], [1045.84, 2642.9], [1045.84, 2613.36], [1051.75, 2611.39], [1051.75, 2603.51], [1083.26, 2568.07], [1100.99, 2528.68], [1134.47, 2526.71], [1152.2, 2512.92], [1167.95, 2508.98], [1173.86, 2524.74], [1177.8, 2524.74], [1181.74, 2534.59], [1189.62, 2540.49], [1193.56, 2554.28], [1205.38, 2564.13], [1199.47, 2603.51], [1191.59, 2613.36], [1199.47, 2619.27], [1215.22, 2621.24], [1232.95, 2615.33], [1244.77, 2589.73], [1254.62, 2581.85], [1254.62, 2575.94], [1264.46, 2573.97], [1270.37, 2568.07], [1286.13, 2536.55], [1297.95, 2534.59], [1297.95, 2520.8], [1305.82, 2493.23], [1319.61, 2477.47], [1333.4, 2477.47], [1341.28, 2465.66], [1360.97, 2469.6], [1366.88, 2477.47], [1364.91, 2491.26], [1376.73, 2499.14], [1378.7, 2508.98], [1390.52, 2508.98], [1394.45, 2518.83], [1422.03, 2518.83], [1427.94, 2524.74], [1447.63, 2524.74], [1451.57, 2528.68], [1477.18, 2520.8], [1487.02, 2530.65], [1498.84, 2530.65], [1502.78, 2516.86], [1514.6, 2507.01], [1510.66, 2487.32], [1494.9, 2473.53], [1488.99, 2430.21], [1492.93, 2426.27], [1536.26, 2426.27], [1545.7102649006622, 2424.9199621570483], [1545.7, 2424.7], [1545.0, 2409.7], [1545.0, 2395.0], [1545.3, 2379.3], [1549.3, 2369.0], [1556.0, 2359.7], [1562.0, 2350.0], [1570.0, 2337.0], [1576.3, 2325.7], [1579.3, 2310.0], [1579.3, 2293.0], [1580.0, 2281.0], [1586.7, 2271.7], [1592.7, 2264.7], [1596.7, 2255.7], [1600.0, 2243.3], [1599.3, 2230.7], [1597.7, 2217.3], [1597.3, 2203.3], [1596.3, 2193.0], [1589.0, 2198.3], [1581.7, 2203.0], [1573.3, 2209.0], [1566.3, 2213.0], [1558.0, 2218.3], [1554.7, 2225.0], [1554.0, 2234.3], [1550.7, 2240.0], [1548.0, 2245.0], [1544.0, 2248.0], [1537.0, 2247.0], [1527.7, 2247.3], [1518.0, 2247.7], [1506.7, 2251.7], [1498.3, 2258.0], [1492.0, 2265.3], [1488.7, 2274.3], [1490.0, 2283.3], [1489.3, 2292.0], [1481.0, 2299.0], [1473.0, 2303.0], [1464.7, 2305.3], [1456.7, 2305.0], [1450.3, 2299.3], [1445.0, 2297.7], [1435.3, 2304.0], [1426.7, 2314.7], [1418.3, 2324.3], [1411.0, 2332.3], [1403.7, 2336.7], [1396.3, 2334.0], [1388.7, 2329.3], [1380.3, 2329.7], [1377.7, 2324.0], [1377.0, 2313.7], [1374.7, 2306.0], [1367.0, 2302.0], [1355.3, 2300.7], [1343.0, 2304.7], [1330.7, 2310.0], [1319.7, 2318.7], [1308.7, 2326.3], [1305.9263237148718, 2328.216358160634], [1304.84, 2339.62], [1293.02, 2353.4], [1280.22, 2373.1], [1261.51, 2379.99], [1243.78, 2374.08], [1227.04, 2359.31], [1216.21, 2338.63], [1203.41, 2324.85], [1190.6, 2321.89], [1172.88, 2326.82], [1159.09, 2341.59], [1144.32, 2363.25], [1132.5, 2382.94], [1118.72, 2388.85], [1108.87, 2381.96], [1105.91, 2364.23], [1100.99, 2341.59], [1086.22, 2317.95], [1072.43, 2300.23], [1057.66, 2298.26], [1040.92, 2304.17], [1021.22, 2314.02], [1002.51, 2319.92], [983.8, 2327.8], [962.13, 2331.74], [940.47, 2334.69], [915.85, 2334.69], [905.02, 2329.77], [883.35, 2333.71], [881.38, 2353.4], [868.58, 2377.04], [865.63, 2406.58], [857.75, 2431.19], [843.96, 2451.87], [827.22, 2485.35], [785.86, 2516.86], [768.13, 2554.28], [750.41, 2595.64], [737.97, 2602.89], [740.56, 2605.48]], 'holes': []}], 'evidenceNote': '北界与东界均按原图红色密点小片线；没有按城市、县界或最近点划区。闭合沿既有吉沈片原图外界。父级外界为近似描绘，端点向外延长仅供与父界相交，延长段不留在区内。', 'placeExamples': ['靖宇', '抚松', '通化'], 'sourceImageSize': [2330, 3151]}, {'id': 'b1-nenke-hulun-candidate', 'name': '嫩克小片', 'family': '官话', 'branch': '东北官话', 'cluster': '黑松片', 'subcluster': '嫩克小片', 'level': '小片', 'source': 'B1', 'sourceNumber': 6, 'parentId': 'b1-heisong-2', 'reviewStatus': 'candidate-for-owner-review', 'coverageComplete': False, 'coverageStatus': 'source-confirmed-isolated-component-only', 'method': 'isolated printed orange component with unambiguous source numeral 6; inherited source outer boundary', 'sourceBoundary': [[226.5, 1185.56], [244.23, 1209.2], [267.86, 1209.2], [279.68, 1203.29], [293.47, 1207.23], [297.4, 1199.35], [319.07, 1199.35], [330.89, 1207.23], [332.86, 1215.1], [340.74, 1221.01], [352.55, 1221.01], [356.49, 1232.83], [366.34, 1236.77], [382.1, 1256.46], [388.01, 1256.46], [393.91, 1262.37], [393.91, 1268.28], [409.67, 1287.97], [421.49, 1295.85], [433.31, 1293.88], [447.09, 1301.76], [462.85, 1303.73], [470.73, 1313.57], [492.39, 1319.48], [504.21, 1315.54], [510.12, 1317.51], [512.09, 1323.42], [516.03, 1317.51], [577.08, 1325.39], [600.72, 1323.42], [612.54, 1325.39], [614.51, 1331.3], [622.38, 1331.3], [628.29, 1319.48], [651.93, 1319.48], [653.9, 1325.39], [673.59, 1323.42], [675.56, 1327.36], [677.53, 1321.45], [689.35, 1317.51], [703.14, 1299.79], [711.01, 1295.85], [711.01, 1266.31], [714.95, 1264.34], [711.01, 1260.4], [711.01, 1217.07], [714.95, 1215.1], [703.14, 1203.29], [703.14, 1193.44], [685.41, 1181.62], [675.56, 1181.62], [669.65, 1171.78], [649.96, 1167.84], [644.05, 1159.96], [630.26, 1161.93], [628.29, 1152.08], [604.66, 1132.39], [600.72, 1136.33], [535.72, 1136.33], [533.75, 1132.39], [529.81, 1136.33], [512.09, 1136.33], [488.45, 1126.48], [486.48, 1118.61], [478.61, 1112.7], [454.97, 1112.7], [425.43, 1120.57], [378.16, 1157.99], [352.55, 1167.84], [346.64, 1181.62], [338.77, 1181.62], [313.16, 1144.21], [303.31, 1144.21], [287.56, 1154.05], [279.68, 1154.05], [242.26, 1124.51], [228.47, 1124.51], [230.44, 1140.27], [224.53, 1157.99], [226.5, 1185.56]], 'sourceHoles': [], 'sourceParts': [{'outer': [[226.5, 1185.56], [244.23, 1209.2], [267.86, 1209.2], [279.68, 1203.29], [293.47, 1207.23], [297.4, 1199.35], [319.07, 1199.35], [330.89, 1207.23], [332.86, 1215.1], [340.74, 1221.01], [352.55, 1221.01], [356.49, 1232.83], [366.34, 1236.77], [382.1, 1256.46], [388.01, 1256.46], [393.91, 1262.37], [393.91, 1268.28], [409.67, 1287.97], [421.49, 1295.85], [433.31, 1293.88], [447.09, 1301.76], [462.85, 1303.73], [470.73, 1313.57], [492.39, 1319.48], [504.21, 1315.54], [510.12, 1317.51], [512.09, 1323.42], [516.03, 1317.51], [577.08, 1325.39], [600.72, 1323.42], [612.54, 1325.39], [614.51, 1331.3], [622.38, 1331.3], [628.29, 1319.48], [651.93, 1319.48], [653.9, 1325.39], [673.59, 1323.42], [675.56, 1327.36], [677.53, 1321.45], [689.35, 1317.51], [703.14, 1299.79], [711.01, 1295.85], [711.01, 1266.31], [714.95, 1264.34], [711.01, 1260.4], [711.01, 1217.07], [714.95, 1215.1], [703.14, 1203.29], [703.14, 1193.44], [685.41, 1181.62], [675.56, 1181.62], [669.65, 1171.78], [649.96, 1167.84], [644.05, 1159.96], [630.26, 1161.93], [628.29, 1152.08], [604.66, 1132.39], [600.72, 1136.33], [535.72, 1136.33], [533.75, 1132.39], [529.81, 1136.33], [512.09, 1136.33], [488.45, 1126.48], [486.48, 1118.61], [478.61, 1112.7], [454.97, 1112.7], [425.43, 1120.57], [378.16, 1157.99], [352.55, 1167.84], [346.64, 1181.62], [338.77, 1181.62], [313.16, 1144.21], [303.31, 1144.21], [287.56, 1154.05], [279.68, 1154.05], [242.26, 1124.51], [228.47, 1124.51], [230.44, 1140.27], [224.53, 1157.99], [226.5, 1185.56]], 'holes': []}], 'evidenceNote': '仅海拉尔—满洲里独立图斑，图内明确标6，对应嫩克小片；完整外边界已由父级原图色面描出，该孤立图斑没有其他小片编号或内部小片线。不将此部分冒充嫩克小片全部范围。', 'placeExamples': ['海拉尔', '满洲里'], 'sourceImageSize': [2330, 3151]}]
+B1_MICRO_ASSESSMENTS=[{'name': '蛟宁小片', 'sourceNumber': 1, 'result': 'not-closed', 'readable': '与通溪2的南界红色密点线已完整转录；与哈阜片的西界为明确红色长虚线。', 'unresolved': '与延吉3接界北段：在宁安—汪清/安图北面只见较粗黑色省界式点线，不能仅由1/3编号分列两侧，就把该线认作红色小片界。', 'focusNativeBounds': [1500, 1950, 1880, 2240]}, {'name': '通溪小片', 'sourceNumber': 2, 'result': 'closed-candidate', 'readable': '靖宇北片界至安图西北的红色密点线，以及安图/和龙西侧密点线至国界，可以连续追踪；余边沿既有吉沈片真实外界闭合。', 'nativeStart': [1308.7, 2326.3], 'nativeEnd': [1545.7, 2424.7], 'focusNativeBounds': [1200, 2150, 1650, 2450]}, {'name': '延吉小片', 'sourceNumber': 3, 'result': 'not-closed', 'readable': '安图—和龙以西的红色密点线及东南国界可读，西界已作为通溪2东界转录。', 'unresolved': '北界与粗黑点省/自治州界混线，未发现可独立复核的红色密点覆盖；须确认是否原图以行政线兼作小片界，当前不默认采用。', 'focusNativeBounds': [1500, 1950, 1880, 2240]}, {'name': '肇阜小片', 'sourceNumber': 4, 'result': 'readable-segment-not-closed', 'readable': '白城东侧—乾安北/西—长岭北—榆树西北可辨红色密点小片线。', 'unresolved': '西北回接嫩江/镇赉处与水系线靠近；乌兰浩特—白城之间同时有黑色内蒙古/吉林省界点线。未将该行政线补成4/5分区闭合边。', 'focusNativeBounds': [650, 1620, 1350, 2150]}, {'name': '长锦小片', 'sourceNumber': 5, 'result': 'not-closed', 'readable': '与肇阜4共用上述可读红色密点线；南部轮廓与哈阜片主体一致的部分有5编号佐证。', 'unresolved': '需要先解决4/5西北闭合；不能把整个哈阜片扣去一个猜测的4区得到5区。林西北侧5号小凸出与南部着色连续，不按经纬框截为独立子区。', 'focusNativeBounds': [650, 1620, 1350, 2150]}, {'name': '嫩克小片', 'sourceNumber': 6, 'result': 'isolated-component-candidate', 'readable': '海拉尔—满洲里分离着色块内仅标6，外界完整，可直接转录为嫩克小片已核部分。', 'unresolved': '黑松大陆主体与站话8、佳富7的内部边界仍需逐段复核；本次不把母区其余面积默认归6。', 'componentParentFeature': 'b1-heisong-2'}, {'name': '佳富小片', 'sourceNumber': 7, 'result': 'not-closed', 'readable': '东部佳木斯—富锦附近的7号着色主体及东部母区外界可读。', 'unresolved': '西侧伊春/松花江附近同时有水系、行政点线与浅红点线，尚无从北部到片界的可复核连续小片折线。', 'focusPreviewBounds': [740, 610, 1135, 965], 'previewSize': [1183, 1600]}, {'name': '站话小片', 'sourceNumber': 8, 'result': 'not-closed', 'readable': '塔河—黑河—嫩江南向条带内8编号可读，两侧局部细点线可见；肇州/肇源另有8编号。', 'unresolved': '北端回接漠河/塔河处以及嫩江以南转折与河流线重合，肇州段向北与6区连接处不能仅凭编号闭合。未用河道或直线补口。', 'focusPreviewBounds': [430, 285, 720, 960], 'previewSize': [1183, 1600]}]
+def b1_reviewed_subclusters():
+ for f in B1_MICRO_CANDIDATES:
+  sx=1183/2330;sy=1600/3151
+  xy=[[x*sx,y*sy] for x,y in f['sourceBoundary']]
+  if xy[0]==xy[-1]:xy=xy[:-1]
+  holes=[[[x*sx,y*sy] for x,y in h] for h in f.get('sourceHoles',[])]
+  REGIONS.append(dict(sheet='B1',id=f['id'].removesuffix('-candidate'),name=f['name'],branch=f['branch'],cluster=f['cluster'],subcluster=f['subcluster'],xy=xy,holes=holes,note=f['evidenceNote'],examples=f['placeExamples'],extraction='native-pixel-dotted-boundary-independent-review',parentId=f['parentId']))
+
+def b7_fenhe_regions():
+ """B7 orange footprint and dotted 5/6/7 micro-boundaries, crop x480 y1180 scale3."""
+ rgb=np.array(Image.open(SCANS/'B7.JPG').convert('RGB').resize(tuple(SHEETS['B7']['preview'])))
+ h,sa,v=cv2.split(cv2.cvtColor(rgb,cv2.COLOR_RGB2HSV))
+ m=((h>=7)&(h<=25)&(sa>90)&(v>160)).astype(np.uint8)*255
+ m[:1180]=0;m[:,:490]=0;m[:,770:]=0;m[1565:]=0
+ m=cv2.morphologyEx(m,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
+ raw=mask_geometry(m,minimum=180,epsilon=.8)
+ # Label/river hairlines are not language enclaves.
+ orange=unary_union([Polygon(g.exterior) for g in polygon_parts(raw)])
+ def crop(t):
+  return make_valid(Polygon([[480+float(z.split(',')[0])/3,1180+float(z.split(',')[1])/3] for z in t.split()]))
+ north=orange.intersection(crop('0,0 900,0 900,850 650,752 632,742 620,733 600,733 580,741 565,750 552,757 536,767 526,784 512,800 500,825 478,833 456,834 435,838 412,841 390,850 370,862 351,877 330,879 314,880 297,886 281,898 274,910 253,916 225,917 209,921 190,930 160,934 130,935 99,929 72,925 0,930'))
+ pingyang_south=crop('334,650 330,630 333,609 357,608 374,598 389,584 414,579 440,580 457,587 474,599 491,611 509,614 524,618 527,629 522,640 508,650 490,659 479,674 470,692 458,685 448,671 432,667 412,668 395,659 381,652 357,652')
+ jiezhou_center=crop('500,419 524,418 550,418 573,423 596,421 617,417 637,414 654,418 663,430 662,444 656,461 646,478 636,496 623,519 616,525 598,527 581,531 559,532 542,522 523,514 511,507 507,488 507,462 506,443')
+ jiezhou_east=crop('703,153 687,171 678,185 674,204 675,226 674,254 674,279 670,303 669,327 670,347 681,365 698,376 720,390 740,400 840,430 900,120')
+ pingyang_main=crop('396,99 418,115 436,126 433,150 428,174 424,194 429,209 437,218 427,240 414,260 404,277 381,284 361,286 346,288 339,298 342,308 354,313 377,311 389,316 397,329 404,339 418,348 440,355 443,377 441,398 446,422 445,444 461,434 480,421 500,419 524,418 550,418 573,423 596,421 617,417 637,414 654,418 663,430 662,444 656,461 646,478 636,496 623,519 616,525 624,543 628,562 626,584 631,606 651,615 900,615 900,0 396,0')
+ jiangzhou=crop('418,348 440,355 443,377 441,398 446,422 445,444 461,434 480,421 500,419 506,443 507,462 507,488 511,507 523,514 542,522 559,532 581,531 598,527 616,525 624,543 628,562 626,584 631,606 651,615 900,615 900,850 535,781 525,773 511,759 509,744 519,730 522,714 509,702 488,695 470,692 479,674 490,659 508,650 522,640 527,629 524,618 509,614 491,611 474,599 457,587 440,580 452,565 458,544 460,526 454,512 444,507 431,514 411,519 396,521 383,531 372,545 351,549 327,545 306,546 283,551 253,554 249,532 246,510 245,486 268,485 286,483 293,476 297,448 304,450 310,472 318,477 333,472 352,452 370,430 386,411 397,391 406,370')
+ geoms={
+  'pingyang':north.intersection(pingyang_main).difference(jiezhou_east).union(north.intersection(pingyang_south)),
+  'jiangzhou':north.intersection(jiangzhou).difference(unary_union([pingyang_south,jiezhou_center])),
+ }
+ geoms['jiezhou']=north.difference(unary_union(list(geoms.values())))
+ emit_pixel_geometry('B7','b7-fenhe','汾河片','中原官话','汾河片',orange,'B7橙色汾河片完整图内色面；黄河南岸原图未印5/6/7小片编号，保留为片级，不强行延伸北岸小片。')
+ for r in REGIONS:
+  if r['sheet']=='B7' and r['branch']=='晋语':
+   revised=Polygon(r['xy'],r.get('holes',[])).difference(orange)
+   ps=polygon_parts(revised)
+   if len(ps)==1:
+    r['xy']=[list(q) for q in ps[0].exterior.coords][:-1]
+    r['holes']=[[list(q) for q in ring.coords][:-1] for ring in ps[0].interiors]
+    r['note']+=' 与汾河片共边按同一B7原图橙色色面重新校核。'
+ for key,name in [('pingyang','平阳小片'),('jiangzhou','绛州小片'),('jiezhou','解州小片')]:
+  emit_pixel_geometry('B7','b7-'+key,name,'中原官话','汾河片',geoms[key],
+   'B7汾河片黄河北岸5/6/7编号与红色虚线逐段核读；共享同一条小片界线，源图河道和文字不作为空洞。分离的平阳/解州片块分别保存；黄河南岸没有小片编号的区域未归入任何小片。',subcluster=name)
+
+def b3_remaining_regions():
+ """Remaining clearly readable Zhongyuan footprints, without administrative fill."""
+ def pts(t,x0=0,y0=0,scale=1):return [[x0+float(z.split(',')[0])/scale,y0+float(z.split(',')[1])/scale] for z in t.split()]
+ east=make_valid(Polygon(pts('206,50 242,45 267,39 295,30 309,31 301,54 299,78 303,102 306,135 314,161 338,179 346,198 355,213 367,220 384,214 407,195 421,182 429,196 440,218 448,228 459,227 469,213 476,192 489,165 516,195 543,210 571,216 597,225 620,235 617,256 601,283 609,307 616,322 611,345 593,356 573,368 551,373 531,380 517,371 506,356 499,349 480,358 456,361 437,360 434,383 435,407 428,427 405,431 380,432 359,439 345,451 326,458 312,447 298,427 279,416 266,406 253,385 246,364 238,343 219,341 196,348 174,360 152,374 130,393 108,399 84,392 65,390 52,374 50,349 53,319 52,299 70,260 80,244 106,235 119,225 126,204 132,184 158,165 178,156 194,142 201,116 204,86',610,480,3)))
+ existing=unary_union([Polygon(r['xy'],r.get('holes',[])) for r in REGIONS if r['sheet']=='B3'])
+ east=east.difference(existing)
+ emit_pixel_geometry('B3','b3-luoxu-xuzhou','洛徐片·徐州一带','中原官话','洛徐片',east,
+  'B3徐州—淮北—单县片块，按洛徐片细波纹与片界逐段转录；南四湖及窄带保留源图概括，不按城市造面。')
+ # Large dots are visible continuously within the following outer-source
+ # perimeter. Already-read other texture classes are subtracted only in
+ # this same scan, preserving their exact shared edges.
+ outer=make_valid(Polygon(pts('54,563 66,560 82,552 96,548 115,540 128,534 150,525 170,524 176,510 179,490 198,475 208,456 222,459 231,465 248,470 258,478 276,487 292,492 307,487 317,483 330,494 351,488 368,475 408,471 442,468 458,465 464,443 466,424 477,404 487,389 505,371 524,352 527,335 521,317 521,301 540,298 558,306 577,320 596,325 620,320 632,323 645,337 669,339 693,339 695,318 706,312 725,316 729,351 746,358 762,358 777,385 796,397 813,389 819,398 832,409 844,416 854,418 859,430 870,438 878,437 884,446 895,450 902,453 906,465 921,473 938,474 956,473 969,469 974,479 972,494 966,512 961,530 953,550 940,561 927,561 912,559 902,578 895,593 899,609 907,622 902,634 887,640 871,638 858,644 852,665 849,688 837,706 836,723 843,738 833,744 826,767 835,781 824,791 805,795 790,790 779,793 767,791 753,794 732,792 708,803 681,804 663,799 647,806 630,807 615,807 599,816 579,812 551,813 534,804 514,790 492,790 477,798 482,815 466,825 453,823 435,810 420,803 403,794 389,783 378,775 365,782 351,782 338,779 320,779 302,777 284,791 264,799 249,805 235,810 218,810 207,806 201,809 191,807 181,797 174,791 166,795 160,796 153,787 140,783 130,779 124,767 116,762 106,758 96,753 91,741 87,731 83,718 78,710 76,701 70,694 63,679 58,667 51,654 49,641 39,632 34,621 27,613 20,607 13,595 7,586 0,581 2,571 15,568 30,564 42,565')))
+ # Above left-side coordinates x<100 must follow the printed western
+ # language edge: replace that segment with its actual x70+ crop trace.
+ western=pts('132,165 158,155 166,134 166,110 184,110 198,89 204,73 236,76 270,85 308,90 340,102 371,116 382,132 388,152 414,174 434,183 453,168 467,152 489,160 511,163 519,141 516,122 539,119 554,106 557,82 546,61 524,53 527,32 549,30 565,13 573,0 1020,0 1020,690 955,660 928,671 897,670 873,657 846,663 830,647 810,633 796,625 772,640 756,639 744,625 729,622 717,633 700,637 681,630 657,622 635,632 616,635 595,628 575,622 556,631 538,646 517,650 496,639 484,626 470,629 454,610 435,591 420,600 407,598 394,584 378,581 363,573 346,570 336,548 320,538 301,533 283,517 272,491 267,468 258,442 248,423 237,414 222,412 206,404 198,390 187,373 178,350 168,341 165,320 154,307 149,289 142,276 137,264 125,253 117,245 113,223 104,211 107,195 122,185',70,600,3)
+ # Only the source western edge is needed from the separate crop: use the
+ # southern full perimeter together with the already traced western classes.
+ # Restrict the full perimeter by the actual western contour below 600.
+ westclip=make_valid(Polygon(western))
+ upper=outer.intersection(Polygon([(0,0),(1600,0),(1600,600),(0,600)]))
+ lower=outer.intersection(Polygon([(410,600),(1600,600),(1600,1195),(410,1195)])).union(westclip)
+ outer=unary_union([upper,lower])
+ existing=unary_union([Polygon(r['xy'],r.get('holes',[])) for r in REGIONS if r['sheet']=='B3'])
+ # Kaifeng-Xuchang-Taikang has several tightly interleaved horizontal
+ # textures; read those separately, never silently label the remainder.
+ uncertain=pixel_polygon('420,585 493,515 526,520 526,572 546,584 543,618 533,636 458,636 449,653 416,657')
+ rest=outer.difference(unary_union([existing,uncertain]))
+ rest=unary_union(sorted(polygon_parts(rest),key=lambda g:g.area,reverse=True)[:2])
+ for suffix,text in [('xuchang','425,590 432,582 445,580 458,577 457,591 455,608 457,621 451,633 442,636 432,631 431,618 427,610 424,617 421,632 417,643 412,650 414,641 419,629 422,612'),('taikang','484,590 496,581 520,576 532,583 542,590 540,605 535,618 537,625 532,633 524,631 516,628 509,632 498,629 487,626 478,622 477,610 479,599')]:
+  g=pixel_polygon(text).difference(existing)
+  emit_pixel_geometry('B3','b3-luoxu-'+suffix,'洛徐片·'+('许昌窄带' if suffix=='xuchang' else '太康片块'),'中原官话','洛徐片',g,
+   'B3中部交错区内明示洛徐片的细纹片块；仅沿可闭合片界转录，邻接蔡鲁片窄舌另按粗横线转录，未用城市包围框填空。')
+ tongue=pixel_polygon('493,515 519,521 526,520 525,542 523,559 520,576 532,583 542,590 540,605 537,615 534,627 534,647 458,650 441,650 442,636 451,633 457,621 455,608 457,591 458,579 478,574 492,572 490,550 492,533')
+ tongue=tongue.difference(unary_union([Polygon(r['xy'],r.get('holes',[])) for r in REGIONS if r['sheet']=='B3']))
+ emit_pixel_geometry('B3','b3-cailu-tongue','蔡鲁片·开封以南窄舌','中原官话','蔡鲁片',tongue,
+  'B3开封以南经杞县向许昌、太康延伸的横线窄舌；在原图局部放大后复核粗横线与洛徐细波纹，沿同图已读共边闭合。狭窄接点仍为地图比例尺下概括，不能视为逐村边界。')
+ rest=rest.difference(unary_union([Polygon(r['xy'],r.get('holes',[])) for r in REGIONS if r['sheet']=='B3']))
+ emit_pixel_geometry('B3','b3-zhengcao-rest','郑曹片·豫南商阜鲁南','中原官话','郑曹片',rest,
+  'B3点纹郑曹片的南阳、商丘阜阳和鲁南连续片区，外界按原图语言区界，内界复用同图已读蔡鲁/信蚌/洛徐界线；Zb混合性质条纹保留分类说明，不视为纯一方言人口。开封—许昌—太康窄条交错段另行核读蔡鲁粗横线和洛徐细波纹，不将其按余面积强行分类。')
+
 def main():
- metadata={'schemaVersion':1,'scope':'B2 北京官话及旧版北方官话部分小片；B3 江淮官话三片；B7 晋语八片及部分小片',
+ xinjiang_color_regions()
+ northwest_regions()
+ northeast_regions()
+ b1_reviewed_subclusters()
+ b2_southern_subclusters()
+ b3_cailu_xinbeng()
+ b7_fenhe_regions()
+ b3_remaining_regions()
+ metadata={'schemaVersion':2,'scope':'B1东北三片及两小片已核部分、辽东与方言岛；B2图例13小片与北京三片；B3江淮三片、胶辽两片、中原四片主要片块；B4六片；B5三片；B7晋语八片与汾河三小片',
   'status':'approximate-traced','completeCoverage':False,
   'method':'Manual source-pixel outline tracing; independent per-sheet affine registration in Lambert conformal conic coordinates; source-city GCPs; no city buffers, Voronoi or administrative polygon substitution.',
   'limitations':['人工初描，不能作精确边界使用；边界为语言分布的概括。','细分覆盖不完整；图外、未描绘区域不能解释为无汉语方言。','只转录所供地图的分类，不等于最新方言分类；不为区域赋予未经实测的互通百分比。','B7 部分分散片区按独立区域发布，同名多块须结合 evidenceNote。'], 'sheets':{}}
+ metadata['legendInventory']={
+  'B1':{'mappedClusters':['吉沈片','哈阜片','黑松片','盖桓片','登连片'],'mappedIslands':['虎林方言岛','二屯方言岛','太平方言岛'],
+   'mappedSubclusters':['通溪小片','嫩克小片（仅海拉尔—满洲里独立片块）'],
+   'subclusterReview':B1_MICRO_ASSESSMENTS,
+   'reason':'两个独立识读者核查原图密点小片线；只纳入可闭合轮廓。其余具体缺口与行政/河流混线原因见逐项review，不按父面或行政线猜补。'},
+  'B2':{'mappedSubclusters':['涞阜','定霸','天津','蓟遵','滦昌','抚龙','赵深','邢衡','聊泰','黄乐','阳寿','章桓','莒照'],
+   'mappedBeijingClusters':['京师片','怀承片','朝峰片'],'minorLimits':['沿海极小碎片与羽状过渡不能逐村确定；不影响图例13小片均已有真实区域。'],'cityCoverageGaps':[]},
+  'B3':{'mapped':['洪巢片主体','泰如片主体','黄孝片主体','青州片主体','登连片胶东主体','洛徐片豫西/许昌/太康/徐州','郑曹片豫东北/南阳/商阜鲁南','蔡鲁片三个主要片块及开封以南窄舌','信蚌片两个主要片块'],
+   'unresolved':[{'item':'开封—许昌—太康窄舌的村落尺度接点','reason':'图内蔡鲁与洛徐主轮廓已分别转录；最窄接点只有数个印刷像素，被文字和界线占据，维持地图比例尺下概括，不宣称逐村精度。'},
+    {'item':'Zb/Bz/Bj/Br性质混合区独立分型','reason':'本轮保留原图主类并在说明标记混合；未将接触性质转化为独立方言比例或互通数值。'},
+    {'item':'沿海极小岛屿','reason':'原图尺度下多个岛仅为小色斑，无法可靠提取闭合类别轮廓。'}],
+   'contextNotDuplicated':['西部汾河片由更详细B7片/小片提供；B3不重复按低精度重画。','北方官话背景部分由B2提供，不误归中原官话。']},
+  'B4':{'mappedClusters':['关中片','秦陇片','陇中片','金城片','银吴片','河西片'],'subclusters':'原图未进一步划分小片',
+   'contextNotDuplicated':['晋语四片由B7提供','西南官话红色区域原图未分片，未冒充中原官话']},
+  'B5':{'mappedClusters':['北京官话北疆片','兰银官话北疆片','中原官话南疆片'],'subclusters':'原图未进一步划分小片',
+   'retainedUnknown':'浅绿未调查地区保留为真实几何空白；城市方块不外推区域。'},
+  'B7':{'mappedClusters':['并州片','吕梁片','上党片','五台片','大包片','张呼片','邯新片','志延片'],
+   'mappedContext':['中原官话汾河片','平阳小片','绛州小片','解州小片'],'uncertain':['北缘羽状渐变色带只能概括外包络','黄河南岸汾河片原图未标小片数字，保留为片级']}}
+ metadata['sourcePixelDensificationMaxStep']=3
  for sid,s in SHEETS.items():
   im=Image.open(SCANS/(sid+'.JPG'));s['size']=list(im.size);s['matrix']=fit(s['gcps'])
   errors=[]
@@ -182,21 +636,39 @@ def main():
  features=[]
  for r in REGIONS:
   s=SHEETS[r['sheet']]; xy=r['xy'];xy=xy+[xy[0]]
-  transformed=transform(xy,s['matrix']).round(6).tolist();poly=Polygon(transformed)
+  holes=[h+[h[0]] for h in r.get('holes',[])]
+  transformed=project_ring(xy,s['matrix']);poly=Polygon(transformed,[project_ring(h,s['matrix']) for h in holes])
   if not poly.is_valid: poly=make_valid(poly)
+  if r.get('parentId'):
+   parent=next((f for f in features if f['properties']['id']==r['parentId']),None)
+   if parent:
+    # Exact same-sheet parent containment after curved-edge densification.
+    from shapely.geometry import shape
+    poly=poly.intersection(shape(parent['geometry']))
   if poly.geom_type not in ('Polygon','MultiPolygon'):raise ValueError(r['id']+' invalid polygon')
   source=[[round(x*s['size'][0]/s['preview'][0],2),round(y*s['size'][1]/s['preview'][1],2)] for x,y in xy]
   note=r['note'] or '按所供地图色区、纹理与片/小片界线人工初描；尚未逐村核验。'
   if r['branch']=='北方官话':
    note+=' 原图分类名为“北方官话”，此处保留旧版分类；尚未逐片核对与现代冀鲁官话的对应关系。'
   p={'id':r['id'],'name':r['name'],'family':'晋语' if r['branch']=='晋语' else '官话','branch':r['branch'],'sourceBranch':r['branch'],'cluster':r['cluster'],'subcluster':r['subcluster'],
-   'level':'小片' if r['subcluster'] else '片','source':r['sheet'],'parentId':None,
-   'method':'manual-source-pixel-trace; sheet-specific-LCC-affine-registration','reviewStatus':'approximate-traced',
+   'level':'小片' if r['subcluster'] else '片','source':r['sheet'],'parentId':r.get('parentId'),
+   'method':r.get('extraction','manual-source-pixel-trace')+'; sheet-specific-LCC-affine-registration','reviewStatus':'approximate-traced',
    'evidenceNote':note,
    'sourceBoundary':source,'sourceImageSize':s['size'],'registrationRMSEKm':s['rmse'],
    'researchStatus':'no-region-wide-measurement','coverageComplete':not bool(r['note'])}
+  if holes:p['sourceHoles']=[[[round(x*s['size'][0]/s['preview'][0],2),round(y*s['size'][1]/s['preview'][1],2)] for x,y in h] for h in holes]
+  examples=[g[0] for g in s['gcps'] if Polygon(xy,holes).covers(__import__('shapely').geometry.Point(g[1:3]))][:3]
+  examples={'b3-qingzhou':['青岛','潍坊'],'b3-denglian-shandong':['烟台','威海','蓬莱'],
+   'b3-luoxu-west':['洛阳','三门峡'],'b3-zhengcao-north':['郑州','开封','濮阳'],
+   'b3-zhengcao-rest':['商丘','阜阳','临沂'],'b3-zhengcao-rest-2':['南阳','邓县','方城'],
+   'b3-luoxu-xuchang':['许昌'],'b3-luoxu-taikang':['太康'],'b3-luoxu-xuzhou':['徐州','淮北','单县'],
+   'b7-jiangzhou':['绛县','垣曲'],'b7-pingyang-2':['闻喜'],'b7-jiezhou-2':['安泽'],'b7-jiezhou-3':['翼城']}.get(r['id'],examples)
+  examples=r.get('examples',examples)
+  p['placeExamples']=examples
+  if examples:p['humanLabel']='、'.join(examples)+'一带'
   features.append({'type':'Feature','properties':p,'geometry':mapping(poly)})
   s['draw'].line([tuple(p) for p in xy],fill='#ef0066',width=3)
+  for h in holes:s['draw'].line([tuple(p) for p in h],fill='#ef0066',width=3)
   c=Polygon(xy).representative_point();s['draw'].text((c.x,c.y),r['id'],fill='#000080')
  out=ROOT/'dist/data';out.mkdir(parents=True,exist_ok=True)
  (out/'regions-north.geojson').write_text(json.dumps({'type':'FeatureCollection','features':features},ensure_ascii=False,separators=(',',':')),encoding='utf-8')

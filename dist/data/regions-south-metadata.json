@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "scope": "Selected mainland southern Han dialect atlas regions; not exhaustive",
+  "version": 2,
+  "scope": "Source-traced southern Han dialect regions, mainland plus independently registered Taiwan/Hainan insets; explicit unresolved internal boundaries",
   "sheets": {
     "B12": {
       "size": [
@@ -194,15 +194,15 @@
       "controls": [
         [
           "广州",
-          864,
+          869,
           609,
           113.264,
           23.129
         ],
         [
           "佛山",
-          834,
-          634,
+          835,
+          635,
           113.122,
           23.029
         ],
@@ -215,15 +215,15 @@
         ],
         [
           "清远",
-          810,
-          469,
+          819,
+          473,
           113.056,
           23.682
         ],
         [
           "河源",
-          1176,
-          480,
+          1172,
+          469,
           114.7,
           23.744
         ],
@@ -236,8 +236,8 @@
         ],
         [
           "惠州",
-          1116,
-          581,
+          1120,
+          623,
           114.416,
           23.112
         ],
@@ -257,22 +257,22 @@
         ],
         [
           "肇庆",
-          695,
-          615,
+          694,
+          627,
           112.465,
           23.047
         ],
         [
           "江门",
-          816,
-          744,
+          831,
+          740,
           113.081,
           22.578
         ],
         [
           "珠海",
-          934,
-          809,
+          938,
+          808,
           113.577,
           22.271
         ],
@@ -303,37 +303,72 @@
           382,
           115.259,
           24.1
+        ],
+        [
+          "香港旧城",
+          1073,
+          813,
+          114.161,
+          22.281
+        ],
+        [
+          "澳门",
+          932,
+          830,
+          113.543,
+          22.193
+        ],
+        [
+          "深圳旧城",
+          1054,
+          745,
+          114.118,
+          22.549
+        ],
+        [
+          "中山",
+          893,
+          754,
+          113.392,
+          22.517
+        ],
+        [
+          "东莞",
+          975,
+          631,
+          113.751,
+          23.021
         ]
       ],
       "coefficients": [
         [
-          108.32203082869474,
-          25.493934616188458
+          108.49549931184694,
+          25.630743355927606
         ],
         [
-          6.182497199935462,
-          0.45664722109053546
+          5.889020905881615,
+          0.20663062933109222
         ],
         [
-          0.964313204157835,
-          -4.182134707549932
+          0.7388633155590294,
+          -4.258064884478279
         ],
         [
-          -0.49317851762191306,
-          -0.20950580433582702
+          -0.3668595817901476,
+          -0.12760461803197606
         ],
         [
-          -1.2443144670406732,
-          -0.1669253970638463
+          -1.111223210962839,
+          0.03917955441240964
         ],
         [
-          0.11441175767557478,
-          0.0659269146125113
+          0.20660531354838557,
+          -0.011065622963428019
         ]
       ],
-      "rmseKm": 5.5062114915667895,
-      "loocvRMSEKm": 8.57290855687711,
-      "maxLOOCVErrorKm": 15.99554776279206
+      "rmseKm": 3.159793148187051,
+      "loocvRMSEKm": 5.0735004232356475,
+      "maxLOOCVErrorKm": 10.966308320393107
     },
     "B6": {
       "size": [
@@ -483,11 +518,584 @@
       "rmseKm": 4.188189732073443,
       "loocvRMSEKm": 9.325575524421838,
       "maxLOOCVErrorKm": 25.265056496035466
+    },
+    "B12-TW": {
+      "source": "B12",
+      "size": [
+        3100,
+        2299
+      ],
+      "controls": [
+        [
+          "台北",
+          1638,
+          120,
+          121.516,
+          25.046
+        ],
+        [
+          "基隆",
+          1676,
+          101,
+          121.739,
+          25.128
+        ],
+        [
+          "宜兰",
+          1678,
+          174,
+          121.753,
+          24.759
+        ],
+        [
+          "新竹",
+          1544,
+          166,
+          120.968,
+          24.804
+        ],
+        [
+          "台中市",
+          1496,
+          290,
+          120.683,
+          24.137
+        ],
+        [
+          "南投",
+          1494,
+          333,
+          120.683,
+          23.909
+        ],
+        [
+          "嘉义",
+          1455,
+          414,
+          120.449,
+          23.48
+        ],
+        [
+          "台南",
+          1408,
+          511,
+          120.202,
+          22.994
+        ],
+        [
+          "高雄",
+          1427,
+          571,
+          120.286,
+          22.62
+        ],
+        [
+          "花莲",
+          1654,
+          318,
+          121.604,
+          23.977
+        ],
+        [
+          "台东",
+          1574,
+          550,
+          121.146,
+          22.755
+        ]
+      ],
+      "coefficients": [
+        [
+          119.16940217206127,
+          40.41305585463477
+        ],
+        [
+          -2.8508568841585284,
+          -17.561741575345906
+        ],
+        [
+          -2.474140873518448,
+          -11.20144505047676
+        ],
+        [
+          2.6200033995491694,
+          5.238219823912348
+        ],
+        [
+          1.3912104043217834,
+          3.3626887917920976
+        ],
+        [
+          0.4165141481808754,
+          0.8274017674659668
+        ]
+      ],
+      "rmseKm": 1.2099150322189491,
+      "loocvRMSEKm": 3.9477126004634897,
+      "maxLOOCVErrorKm": 7.3207965443458285
+    },
+    "B12-HN": {
+      "source": "B12",
+      "size": [
+        3100,
+        2299
+      ],
+      "controls": [
+        [
+          "海口",
+          1057,
+          934,
+          110.35,
+          20.018
+        ],
+        [
+          "澄迈",
+          997,
+          988,
+          110.006,
+          19.738
+        ],
+        [
+          "定安",
+          1057,
+          995,
+          110.358,
+          19.681
+        ],
+        [
+          "文昌",
+          1137,
+          1012,
+          110.798,
+          19.544
+        ],
+        [
+          "琼海",
+          1083,
+          1082,
+          110.474,
+          19.259
+        ],
+        [
+          "万宁",
+          1070,
+          1159,
+          110.392,
+          18.795
+        ],
+        [
+          "陵水",
+          1003,
+          1220,
+          110.037,
+          18.506
+        ],
+        [
+          "三亚",
+          905,
+          1261,
+          109.512,
+          18.252
+        ],
+        [
+          "儋县",
+          920,
+          1029,
+          109.581,
+          19.521
+        ],
+        [
+          "白沙",
+          893,
+          1082,
+          109.451,
+          19.225
+        ],
+        [
+          "东方",
+          746,
+          1102,
+          108.65,
+          19.097
+        ],
+        [
+          "昌江",
+          819,
+          1077,
+          109.055,
+          19.298
+        ],
+        [
+          "琼中",
+          968,
+          1116,
+          109.839,
+          19.035
+        ],
+        [
+          "保亭",
+          941,
+          1194,
+          109.703,
+          18.64
+        ],
+        [
+          "屯昌",
+          1013,
+          1061,
+          110.102,
+          19.351
+        ],
+        [
+          "乐东",
+          845,
+          1172,
+          109.173,
+          18.75
+        ],
+        [
+          "通什",
+          906,
+          1162,
+          109.517,
+          18.775
+        ]
+      ],
+      "coefficients": [
+        [
+          104.14301055641087,
+          26.98685101237579
+        ],
+        [
+          5.732415978612531,
+          -0.8801777394663146
+        ],
+        [
+          0.5782360891211786,
+          -8.009998207942111
+        ],
+        [
+          0.29421045347117747,
+          -0.6218567041791033
+        ],
+        [
+          -0.7801115142301134,
+          1.832011011841618
+        ],
+        [
+          0.06198443533938253,
+          0.3686507547802035
+        ]
+      ],
+      "rmseKm": 2.209643652721071,
+      "loocvRMSEKm": 3.6291906756567185,
+      "maxLOOCVErrorKm": 6.5258735666905014
+    },
+    "B14": {
+      "size": [
+        3116,
+        2307
+      ],
+      "controls": [
+        [
+          "百色",
+          581,
+          609,
+          106.618,
+          23.902
+        ],
+        [
+          "田阳",
+          631,
+          651,
+          106.916,
+          23.736
+        ],
+        [
+          "田东",
+          674,
+          679,
+          107.124,
+          23.597
+        ],
+        [
+          "南丹",
+          756,
+          390,
+          107.54,
+          24.975
+        ],
+        [
+          "河池",
+          862,
+          452,
+          108.085,
+          24.692
+        ],
+        [
+          "环江",
+          900,
+          419,
+          108.258,
+          24.825
+        ],
+        [
+          "南宁",
+          908,
+          846,
+          108.322,
+          22.817
+        ],
+        [
+          "贵县",
+          1157,
+          781,
+          109.598,
+          23.113
+        ],
+        [
+          "桂平",
+          1241,
+          722,
+          110.079,
+          23.394
+        ],
+        [
+          "玉林",
+          1257,
+          883,
+          110.181,
+          22.654
+        ],
+        [
+          "横县",
+          1095,
+          869,
+          109.262,
+          22.68
+        ],
+        [
+          "梧州",
+          1486,
+          694,
+          111.305,
+          23.485
+        ]
+      ],
+      "coefficients": [
+        [
+          103.7961126227254,
+          26.796192284386933
+        ],
+        [
+          4.807097014983845,
+          0.1347686674223212
+        ],
+        [
+          0.027391901696124866,
+          -4.845506499582568
+        ],
+        [
+          -0.05536312790560427,
+          -0.1824061086386775
+        ],
+        [
+          0.7008272761361348,
+          0.31557540083779256
+        ],
+        [
+          -0.5131191297941802,
+          -0.14475826197589353
+        ]
+      ],
+      "rmseKm": 2.458178233732636,
+      "loocvRMSEKm": 7.46923649717706,
+      "maxLOOCVErrorKm": 19.505655182247832
+    },
+    "B15": {
+      "size": [
+        3100,
+        2315
+      ],
+      "controls": [
+        [
+          "广州",
+          877,
+          924,
+          113.264,
+          23.129
+        ],
+        [
+          "南宁",
+          299,
+          947,
+          108.322,
+          22.817
+        ],
+        [
+          "桂林",
+          528,
+          648,
+          110.299,
+          25.274
+        ],
+        [
+          "赣州",
+          1069,
+          578,
+          114.935,
+          25.831
+        ],
+        [
+          "宁都",
+          1183,
+          496,
+          116.009,
+          26.47
+        ],
+        [
+          "石城",
+          1217,
+          513,
+          116.346,
+          26.314
+        ],
+        [
+          "长汀",
+          1229,
+          574,
+          116.357,
+          25.833
+        ],
+        [
+          "梅县",
+          1207,
+          768,
+          116.122,
+          24.288
+        ],
+        [
+          "河源",
+          1038,
+          851,
+          114.7,
+          23.744
+        ],
+        [
+          "惠州",
+          1006,
+          932,
+          114.416,
+          23.112
+        ],
+        [
+          "铜鼓",
+          980,
+          220,
+          114.37,
+          28.52
+        ],
+        [
+          "南昌",
+          1170,
+          210,
+          115.858,
+          28.683
+        ],
+        [
+          "长沙",
+          845,
+          277,
+          112.938,
+          28.228
+        ],
+        [
+          "郴州",
+          846,
+          588,
+          113.028,
+          25.8
+        ],
+        [
+          "萍乡",
+          939,
+          350,
+          113.854,
+          27.622
+        ]
+      ],
+      "coefficients": [
+        [
+          105.50917096694597,
+          29.80674591451407
+        ],
+        [
+          8.9006236330212,
+          0.977794657673636
+        ],
+        [
+          0.27730103910873927,
+          -7.329657115563675
+        ],
+        [
+          0.02315016037145831,
+          -0.5365072696966537
+        ],
+        [
+          -0.3753258455044536,
+          -0.0842297028169496
+        ],
+        [
+          0.0007970687166695006,
+          -0.29612655226521345
+        ]
+      ],
+      "rmseKm": 6.349622113252129,
+      "loocvRMSEKm": 11.198452945526126,
+      "maxLOOCVErrorKm": 25.3911598769276
     }
   },
-  "featureCount": 30,
-  "excluded": "B12 Taiwan/Hainan insets; no shared transform with mainland; minority-language regions",
-  "registration": "Quadratic pixel-to-WGS84 regression from manually located historical city centres; leave-one-control-out validation. Town coordinates approximate modern centres; no survey accuracy claimed.",
-  "traceLimitations": "Boundaries are manually simplified. Small islands, enclaves and internal holes not comprehensively traced. B6 Kun-Gui main outline is broad regional approximation. No pairwise mutual-intelligibility data inferred from geometry.",
-  "publicSourceScans": false
+  "featureCount": 66,
+  "excluded": "Minority-language classification layers; city/settlement point symbols are not expanded into polygon areas; B15 Sichuan/Taiwan/Hainan insets are not inferred from the B15 mainland transform",
+  "registration": "Separate quadratic pixel-to-WGS84 regression for each sheet and inset; leave-one-control-out validation. B13 revised misread Huizhou, Qingyuan, Zhaoqing and Jiangmen symbols; added historical Hong Kong, Macau, Shenzhen, Zhongshan and Dongguan controls. Historic town symbols are not modern administrative centre points.",
+  "traceLimitations": "Manual source-line tracing plus reviewed color contours. B14 contiguous fill cannot be split into four Yue divisions from numbered points; B15 Yuetai is a parent fill while four subclusters have B13 geometries. Some isolated source blocks and internal mixed-use hatching remain unresolved. No city disk, Voronoi or administrative area substitutes; no mutual-intelligibility percentages inferred.",
+  "publicSourceScans": false,
+  "coverageBySheet": {
+    "B6": {
+      "features": 18,
+      "represented": "12个西南官话片名及滇西2、灌赤4小片的主体",
+      "unresolved": "陕西成渝孤立块、云南部分成渝条带及昆贵孤立块；散布点未面化；局部细线尚需精描"
+    },
+    "B12": {
+      "features": 21,
+      "represented": "大陆主要闽语色区/片、蛮话，台湾4类与海南7类独立插图",
+      "unresolved": "浙江沿海泉漳小岛、军话等点符号；海南汉语与其他语言兼用大带未单独闭合；未覆盖每个沿海小岛"
+    },
+    "B13": {
+      "features": 12,
+      "represented": "5个粤语片主体、雷州片、客家粤北/粤中、粤台4小片",
+      "unresolved": "部分北部孤立块及粤客/闽客兼用带未全部单独闭合；惠州片由B15表示；韶州土话另待处理"
+    },
+    "B14": {
+      "features": 6,
+      "represented": "粤语连续底色、明确编号2/3的独立部件、未定编号斑块、桂北/桂南平话",
+      "unresolved": "广府/邕浔/勾漏/钦廉同色连续区没有可核闭合片界，不能按编号分摊为4个面；点符号不扩面"
+    },
+    "B15": {
+      "features": 9,
+      "represented": "8个主要客家片名底色及未分片散布区；粤台为父级色区",
+      "unresolved": "粤台4小片纹理内部界在本图未全部闭合，B13提供小片主体；四川/台湾/海南插图未用B15大陆变换推断；西部散布区处于控制点凸包外"
+    }
+  },
+  "coverageComplete": false,
+  "sourceGeometryCounts": {
+    "parts": 199,
+    "vertices": 12074
+  },
+  "qualityNotes": [
+    "Registration errors are leave-one-control-out errors, not tracing uncertainty or intelligibility scores.",
+    "Source city rings and river ink must not become language holes: Wuzhou B14 reviewed and corrected against continuous pink hatching.",
+    "B15 formerly overlapping east/west unclassified extraction windows have been merged in source-pixel space.",
+    "Same-sheet geometry and original-pixel overlays reviewed; cross-sheet overlap is not sufficient evidence for language mixing."
+  ]
 }

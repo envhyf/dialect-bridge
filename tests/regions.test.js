@@ -30,7 +30,7 @@ test('conflicts preserve alternatives but suppress a containing parent and irrel
  const parent=feature;
  const child={...feature,properties:{...feature.properties,id:'child',level:'小片',parentId:'region-a'}};
  const sibling={...feature,properties:{...child.properties,id:'sibling'}};
- const unrelated={...feature,properties:{...feature.properties,id:'other'}};
+ const unrelated={...feature,properties:{...feature.properties,id:'other',cluster:'另一个片'}};
  const fs=[parent,child,sibling,unrelated];
  assert.deepEqual(candidatesAt(fs,'subcluster',[.5,.5]).map(f=>f.properties.id),['other','child','sibling']);
  assert.deepEqual(candidatesAt(fs,'cluster',[.5,.5]).map(f=>f.properties.id),['region-a','other']);
@@ -38,4 +38,30 @@ test('conflicts preserve alternatives but suppress a containing parent and irrel
  assert.equal(conflictVisible(conflict,fs,'cluster'),false);
  assert.equal(conflictVisible(conflict,fs,'subcluster'),true);
  assert.equal(conflictVisible(conflict,fs,'family'),false);
+});
+test('a compatible unsplit colour area does not hide or dispute finer source classification',()=>{
+ const coarse={...feature,properties:{...feature.properties,id:'coarse',level:'区',cluster:null,candidateClusters:['试验片']}};
+ assert.deepEqual(visibleRegions([feature,coarse],'cluster').map(f=>f.properties.id),['coarse','region-a']);
+ assert.deepEqual(candidatesAt([feature,coarse],'cluster',[.5,.5]).map(f=>f.properties.id),['region-a']);
+ assert.equal(conflictVisible({properties:{status:'compatible-coarse-overlap',regionIds:['coarse','region-a']}},[feature,coarse],'cluster'),false);
+ const incompatible={...coarse,properties:{...coarse.properties,candidateClusters:['另一个片']}};
+ assert.equal(candidatesAt([feature,incompatible],'cluster',[.5,.5]).length,2);
+ const mixed={...coarse,properties:{...coarse.properties,usageType:'mixed-use-zone'}};
+ assert.equal(candidatesAt([feature,mixed],'cluster',[.5,.5]).length,2);
+ const knownBranch={...coarse,properties:{...coarse.properties,cluster:'另一区'}};
+ assert.equal(candidatesAt([feature,knownBranch],'cluster',[.5,.5]).length,2);
+});
+test('a named parent on another source sheet is not a second competing small region',()=>{
+ const child={...feature,properties:{...feature.properties,id:'child',level:'小片',parentId:'different-source-parent',source:'B13'}};
+ const parent={...feature,properties:{...feature.properties,source:'B15'}};
+ assert.deepEqual(candidatesAt([parent,child],'subcluster',[.5,.5]).map(f=>f.properties.id),['child']);
+ assert.deepEqual(candidatesAt([parent,child],'cluster',[.5,.5]).map(f=>f.properties.id),['region-a']);
+ const derived={...parent,properties:{...parent.properties,id:'different-source-parent',derivedParent:true}};
+ assert.deepEqual(candidatesAt([derived,parent,child],'cluster',[.5,.5]).map(f=>f.properties.id),['region-a']);
+ assert.deepEqual(candidatesAt([derived,parent,child],'subcluster',[.5,.5]).map(f=>f.properties.id),['child']);
+ const different={...parent,properties:{...parent.properties,branch:'另一分区'}};
+ assert.equal(candidatesAt([different,child],'subcluster',[.5,.5]).length,2);
+ const mixed={...parent,properties:{...parent.properties,usageType:'mixed-use-zone'}};
+ assert.equal(candidatesAt([mixed,child],'subcluster',[.5,.5]).length,2);
+ assert.equal(conflictVisible({properties:{status:'compatible-hierarchy-overlap',regionIds:['region-a','child']}},[parent,child],'subcluster'),false);
 });

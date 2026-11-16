@@ -1,0 +1,10 @@
+{
+  "provider":"DataV GeoAtlas",
+  "sourceUrl":"https://datav.aliyun.com/portal/school/atlas/area_selector",
+  "documentationUrl":"https://help.aliyun.com/zh/datav/datav-7-0/user-guide/map-data-format-1",
+  "checkedOn":"2026-11-16",
+  "providerDocumentation":"DataV documents GCJ-02 as its primary map-component coordinate system.",
+  "localFileCrsDeclaration":null,
+  "coordinateHandling":"Provider boundary coordinates retained. No undocumented datum conversion or snapping of dialect outlines to administrative borders.",
+  "limitation":"The common SVG display projection does not prove that the provider boundary and all city control coordinates have an independently verified common geodetic datum. Registration residuals include source-coordinate uncertainty. Not suitable for precise positioning."
+}
