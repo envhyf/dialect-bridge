@@ -1,11 +1,13 @@
+import {listeningScores,scoreBands,scoreColor} from './listen.js';
+import {createShareImage} from './share.js';
 import {compare,haversine,directionalPair} from './model.js';
 import {regionEntity,regionSamples,visibleRegions,candidatesAt,conflictVisible,containsPoint} from './regions.js';
 const $=id=>document.getElementById(id), d3=window.d3;
-const state={cities:[],research:[],atlas:[],regions:[],entities:[],origin:null,target:null,mode:'family',detail:'subcluster',list:'points',pickOrigin:true,bridgeReversed:false,motionPaused:false,transform:null,metric:'sentence_target'};
+const state={cities:[],research:[],atlas:[],regions:[],entities:[],origin:null,target:null,mode:'family',detail:'subcluster',list:'points',pickOrigin:true,view:'pair',listenDirection:'in',anchor:null,listenRows:[],bridgeReversed:false,motionPaused:false,transform:null,metric:'sentence_target'};
 const familyColors={'官话':'#acbf8e','晋语':'#bd9bc5','吴语':'#60a99e','徽语':'#d9bd72','赣语':'#85b5d0','湘语':'#d49f9e','客家话':'#bda27d','粤语':'#d69a6e','平话':'#a3b46d','闽语':'#8b9fd0','儋州话':'#b3aaa0','未定汉语方言':'#b9b9b0'};
 const selectionColors=['#216dab','#ad4b20'];
 const levelNames=['同一代表点','同一方言片','同一分区','同一方言大区','跨方言大区'];
-let svg,viewport,projection,path,dialectPaths,regionLayer,regionPaths,regionLabels,regionLines,adminLines,uncertaintyLayer,dots,labels,route,selected,zoom,settlementLayer,tooltipTimer;
+let svg,viewport,projection,path,dialectPaths,regionLayer,regionPaths,regionLabels,regionLines,adminLines,uncertaintyLayer,dots,labels,route,selected,scoreLayer,zoom,settlementLayer,tooltipTimer;
 const labelCities=new Set(['beijing','harbin','urumqi','lanzhou','xian','chengdu','chongqing','kunming','wuhan','changsha','nanchang','shanghai','hangzhou','fuzhou','xiamen','guangzhou','nanning','haikou','taipei','taiyuan','jinan','nanjing','shenyang']);
 function txt(id,t){$(id).textContent=t;}
 function esc(t){return String(t??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
@@ -33,16 +35,16 @@ function swapJourney(){
 }
 function populateSelectors(){
  const options='<optgroup label="按地名选择 · 代表方言点">'+state.cities.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')+'</optgroup><optgroup label="按地图区域选择 · 不套用城市实测">'+state.entities.filter(c=>c.kind==='region'&&!c.derivedParent).map(c=>`<option value="${c.id}">${esc(displayName(c))}</option>`).join('')+'</optgroup>';
- for(const id of ['origin','target'])$(id).innerHTML=options;
+ for(const id of ['origin','target','listener-anchor'])$(id).innerHTML=options;
  // Partial parent regions can also be selected from the map at cluster level.
- for(const c of state.entities.filter(c=>c.derivedParent))for(const id of ['origin','target'])$(id).add(new Option(displayName(c),c.id));
+ for(const c of state.entities.filter(c=>c.derivedParent))for(const id of ['origin','target','listener-anchor'])$(id).add(new Option(displayName(c),c.id));
 }
 function setSelectionSide(origin){state.pickOrigin=origin;updateSelectionUI();renderList();}
 function updateSelectionUI(){
  for(const [id,on] of [['pick-origin',state.pickOrigin],['map-pick-a',state.pickOrigin],['pick-target',!state.pickOrigin],['map-pick-b',!state.pickOrigin]])$(id).setAttribute('aria-pressed',String(on));
  $('origin-stop').classList.toggle('active',state.pickOrigin);$('target-stop').classList.toggle('active',!state.pickOrigin);
- txt('map-hint',state.pickOrigin?'点地图选①说话地':'点地图选②听话地');
- txt('list-title',`为 ${state.pickOrigin?'①':'②'} 选择${state.list==='points'?'地点':'区域'}`);
+ txt('map-hint',state.view==='listen'?(state.listenDirection==='in'?'点地图，换一个听话地':'点地图，换一个说话地'):state.pickOrigin?'点地图选①说话地':'点地图选②听话地');
+ txt('list-title',state.view==='listen'?'选择中心地点':`为 ${state.pickOrigin?'①':'②'} 选择${state.list==='points'?'地点':'区域'}`);
 }
 function selectedAreas(c){
  if(c.kind==='region')return [c.feature];
@@ -50,9 +52,9 @@ function selectedAreas(c){
  // Ambiguous source outlines stay ambiguous; do not silently assign a city.
  return fs.length===1?fs:[];
 }
-function drawSelection(a,b){
+function drawSelection(a,b,single=false){
  selected.selectAll('*').remove();
- const endpoints=[a,b].map((c,i)=>({c,i,color:selectionColors[i],areas:selectedAreas(c)}));
+ const endpoints=(single?[a]:[a,b]).map((c,i)=>({c,i,color:selectionColors[i],areas:selectedAreas(c)}));
  const parents=new Map(),areas=new Map();
  for(const endpoint of endpoints)for(const f of endpoint.areas){
   if(!areas.has(f.properties.id))areas.set(f.properties.id,{f,color:endpoint.color});
@@ -70,8 +72,8 @@ function drawSelection(a,b){
  for(const {c,i,color} of endpoints){
   if(i&&a.id===b.id)continue;
   const p=projection(c.coordinates);
-  selected.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('fill',color).attr('stroke',a.id===b.id?selectionColors[1]:'#fff').attr('stroke-width',2).style('pointer-events','none');
-  selected.append('text').datum(c).attr('class','active-city-label').style('fill',color).text(`${a.id===b.id?'①②':i?'②':'①'} ${displayName(c)}`);
+  selected.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('fill',color).attr('stroke',!single&&a.id===b.id?selectionColors[1]:'#fff').attr('stroke-width',2).style('pointer-events','none');
+  selected.append('text').datum(c).attr('class','active-city-label').style('fill',color).text(`${single?'◎':a.id===b.id?'①②':i?'②':'①'} ${displayName(c)}`);
  }
 }
 function renderDirectionChart(a,b,m){
@@ -90,6 +92,7 @@ async function load(){
   state.entities=[...state.regions.map(f=>regionEntity(f,d3.geoCentroid(normalize(f)))),...state.dialects.features.map(f=>regionEntity(f,d3.geoCentroid(normalize(f)))),...state.cities];
   state.atlas=await fetch('atlas/manifest.json').then(r=>r.json());
   const q=new URLSearchParams(location.search);state.bridgeReversed=q.get('flow')==='reverse';state.motionPaused=matchMedia('(prefers-reduced-motion: reduce)').matches;state.origin=state.entities.find(c=>c.id===q.get('from'))||state.cities.find(c=>c.id==='suzhou');state.target=state.entities.find(c=>c.id===q.get('to'))||state.cities.find(c=>c.id==='nanchang');state.metric=q.get('metric')==='word_category'?'word_category':'sentence_target';
+  state.view=q.get('view')==='listen'?'listen':'pair';state.listenDirection=q.get('listen')==='out'?'out':'in';state.anchor=state.entities.find(c=>c.id===q.get('anchor'))||state.origin;
   if(['family','cluster','subcluster'].includes(q.get('detail')))state.detail=q.get('detail');
   populateSelectors();
   $('detail-level').value=state.detail;buildMap();bind();render();
@@ -129,7 +132,8 @@ function buildMap(){
  const measuredIds=new Set(state.research.map(r=>r.from));
  dots=viewport.append('g').attr('class','research-points').selectAll('circle').data(state.cities.filter(c=>measuredIds.has(c.id))).join('circle').attr('class','place-dot').attr('cx',d=>projection(d.coordinates)[0]).attr('cy',d=>projection(d.coordinates)[1]).attr('r',3).attr('tabindex',0).attr('role','button').style('display','none').on('mousemove',(e,c)=>showCityTooltip(e,c)).on('mouseleave',hideTooltip).on('click',(e,c)=>{e.stopPropagation();choose(c);}).on('keydown',(e,c)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(c);}});
  labels=viewport.append('g').selectAll('text').data(state.cities.filter(c=>labelCities.has(c.id))).join('text').attr('class','city-label').attr('x',d=>projection(d.coordinates)[0]+7).attr('y',d=>projection(d.coordinates)[1]+4).text(d=>d.name);
- selected=viewport.append('g');
+ scoreLayer=viewport.append('g').attr('class','listen-score-layer');
+ selected=viewport.append('g').attr('class','selection-marks');
  zoom=d3.zoom().scaleExtent([.85,8]).translateExtent([[-300,-300],[1300,1100]]).on('zoom',e=>{state.transform=e.transform;viewport.attr('transform',e.transform);hideTooltip();resizeMarkers(e.transform.k);});
  svg.call(zoom).on('dblclick.zoom',null).on('click',e=>{if(!e.defaultPrevented)toast('此处暂无已收录的汉语方言区域边界。空白表示资料未覆盖。');});
  state.transform=d3.zoomIdentity;
@@ -157,16 +161,18 @@ function resizeMarkers(k){
  svg?.select('#unknown-hatch').attr('patternTransform',`scale(${1/k})`);
  svg?.select('#boundary-hatch').attr('patternTransform',`scale(${1/k})`);
  settlementLayer?.selectAll('path').attr('d',d3.symbol().type(d3.symbolTriangle).size(12/(k*k)));
- const occupied=[...document.querySelectorAll('.map-heading,.map-controls,.map-action,.north-mark')].map(el=>el.getBoundingClientRect()),mapBox=$('map-stage').getBoundingClientRect();
+ scoreLayer?.selectAll('.listen-score-point').attr('transform',r=>`translate(${projection(r.peer.coordinates)}) scale(${1/k})`);
+ const occupied=[...document.querySelectorAll('.map-heading,.map-controls,.map-action,.map-readout,.north-mark')].map(el=>el.getBoundingClientRect()),mapBox=$('map-stage').getBoundingClientRect();
+ occupied.push(...layoutListeningLabels(mapBox,occupied));
  [regionLabels,labels].forEach(selection=>selection?.each(function(d){
-  const el=d3.select(this);if(this.classList.contains('city-label'))el.style('display',[state.origin?.id,state.target?.id].includes(d.id)?'none':null);
+  const el=d3.select(this);if(this.classList.contains('city-label'))el.style('display',(state.view==='listen'?[state.anchor?.id,...state.listenRows.map(r=>r.peer.id)]:[state.origin?.id,state.target?.id]).includes(d.id)?'none':null);
   if(getComputedStyle(this).display==='none')return;
   const b=this.getBoundingClientRect();
   if(b.left<mapBox.left+4||b.right>mapBox.right-4||b.top<mapBox.top+4||b.bottom>mapBox.bottom-4){el.style('display','none');return;}
   if(occupied.some(r=>b.left<r.right+4&&b.right>r.left-4&&b.top<r.bottom+3&&b.bottom>r.top-3))el.style('display','none');else occupied.push(b);
  }));
 }
-function choose(c){if(!c)return;hideTooltip();if(state.pickOrigin){state.origin=c;state.pickOrigin=false;}else state.target=c;render();}
+function choose(c){if(!c)return;hideTooltip();if(state.view==='listen'){state.anchor=c;render();return;}if(state.pickOrigin){state.origin=c;state.pickOrigin=false;}else state.target=c;render();}
 function render(){
  const a=state.origin,b=state.target,r=compare(a,b),m=directionalPair(a,b,state.research,state.metric);
  $('origin').value=a.id;$('target').value=b.id;
@@ -174,7 +180,7 @@ function render(){
  txt('map-origin',`① ${displayName(a)} → ② ${displayName(b)}`);txt('from-name',displayName(a));txt('to-name',displayName(b));txt('pair-varieties',`${a.variety||a.name} → ${b.variety||b.name}`);
  renderDirectionChart(a,b,m);
  const hasArea=a.kind==='region'||b.kind==='region';
- const anchorKnown=a.family!=='未定汉语方言'&&a.usageType!=='mixed-use-zone';
+ const mapAnchor=state.view==='listen'?state.anchor:a,anchorKnown=mapAnchor.family!=='未定汉语方言'&&mapAnchor.usageType!=='mixed-use-zone';
  txt('range',a.id===b.id&&hasArea?'同一已绘区域':levelNames[r.level]||'尚未分类');txt('distance',hasArea?'区域比较':Math.round(haversine(a.coordinates,b.coordinates)).toLocaleString()+' km');
  $('relationship').innerHTML=[a,b].map(c=>`<span>${esc(displayName(c))} · ${esc(taxonomy(c))}</span>`).join('<span class="tree-link">↔</span>');
  txt('reason',r.reason);txt('pair-sources',`${a.source} / ${b.source} · 另可查看 A2 总图`);
@@ -188,29 +194,107 @@ function render(){
   txt('score-heading',hasArea?'这两片乡音，尚无区域层面的实测':'这两地，尚无收录的互通实验');txt('score','—');txt('score-unit','未收录实测');txt('reverse-score','—');txt('evidence-label','没有实测，不从同片、邻近城市推算百分比');
   txt('result-title',a.id===b.id&&hasArea&&r.level>=0?'同一区域，也有不同声音':r.label);txt('result-phrase',r.phrase);txt('conversation-tip',hasArea?'下方列出落在所选区域内、分类一致的实验样本。样本的测试成绩只属于具体方言点，不能涂满整个片区。':'可以读出方言分类关系，不能据此知道个人听懂多少。已有研究样本可在左侧“找地点”中查看。');
  }
- dialectPaths.attr('fill',d=>state.mode==='family'?familyColors[d.properties.family]||'#d9dfce':!anchorKnown?'#e5e5dd':d.properties.family===a.family?'#adc29a':'#e1dfca').attr('opacity',.87);
- regionPaths.attr('fill',d=>{const c=d.properties;if(state.mode==='family')return familyColors[c.family]||'#ccd5c5';if(!anchorKnown||c.family==='未定汉语方言'||c.usageType==='mixed-use-zone')return '#e5e5dd';if(a.id===c.id)return '#52795d';if(compare(a,c).level===1)return '#8fae8a';return c.family===a.family?'#b3c5a1':'#dddec9';}).attr('fill-opacity',.94);
+ dialectPaths.attr('fill',d=>state.mode==='family'?familyColors[d.properties.family]||'#d9dfce':!anchorKnown?'#e5e5dd':d.properties.family===mapAnchor.family?'#adc29a':'#e1dfca').attr('opacity',.87);
+ regionPaths.attr('fill',d=>{const c=d.properties;if(state.mode==='family')return familyColors[c.family]||'#ccd5c5';if(!anchorKnown||c.family==='未定汉语方言'||c.usageType==='mixed-use-zone')return '#e5e5dd';if(mapAnchor.id===c.id)return '#52795d';if(compare(mapAnchor,c).level===1)return '#8fae8a';return c.family===mapAnchor.family?'#b3c5a1':'#dddec9';}).attr('fill-opacity',.94);
  uncertaintyLayer.style('display',state.detail==='family'?'none':null);
  uncertaintyLayer.selectAll('path').style('display',d=>conflictVisible(d,state.regions,state.detail)?null:'none');
- dots.attr('fill',c=>{if(state.mode==='family')return familyColors[c.family]||'#829b73';return '#537b62';}).attr('aria-label',c=>`${c.name}，${c.variety}，实验样本，点击比较`).style('display',$('show-research').checked?null:'none');
+ dots.attr('fill',c=>{if(state.mode==='family')return familyColors[c.family]||'#829b73';return '#537b62';}).attr('aria-label',c=>`${c.name}，${c.variety}，实验样本，点击比较`).style('display',state.view==='pair'&&$('show-research').checked?null:'none');
  labels.style('display',c=>[a.id,b.id].includes(c.id)?'none':null);
  const start=projection(a.coordinates),end=projection(b.coordinates),dx=end[0]-start[0],dy=end[1]-start[1],length=Math.hypot(dx,dy),side=dx>=0?1:-1,bend=Math.min(70,length*.25);
- route.attr('d',length<2?null:`M${start}Q${(start[0]+end[0])/2+side*dy/length*bend},${(start[1]+end[1])/2-side*dx/length*bend} ${end}`).attr('aria-label','说话方向示意，不表示地理路径');
- drawSelection(a,b);resizeMarkers(state.transform?.k||1);
+ route.attr('d',state.view==='listen'||length<2?null:`M${start}Q${(start[0]+end[0])/2+side*dy/length*bend},${(start[1]+end[1])/2-side*dx/length*bend} ${end}`).attr('aria-label','说话方向示意，不表示地理路径');
+ renderListeningMap();drawSelection(state.view==='listen'?state.anchor:a,state.view==='listen'?state.anchor:b,state.view==='listen');resizeMarkers(state.transform?.k||1);
  if(state.mode==='family')$('legend').innerHTML=Object.entries(familyColors).map(([n,c])=>`<span class="legend-item"><i style="background:${c}"></i>${n}</span>`).join('');
  else if(!anchorKnown)$('legend').innerHTML='<span class="legend-item">①为兼用或归属待核区域，暂不显示分类远近。</span>';
  else $('legend').innerHTML='<span class="legend-item"><i style="background:#8fae8a"></i>同片</span><span class="legend-item"><i style="background:#b3c5a1"></i>同大区</span><span class="legend-item"><i style="background:#dddec9"></i>其他已分类方言区</span><span class="legend-item">灰色：兼用或归属待核；浅底：未覆盖</span>';
  txt('layer-note',`${state.regions.filter(f=>!f.properties.derivedParent).length} 个详图描边区域 · ${state.detail==='subcluster'?'小片未收录处保留片界':state.detail==='cluster'?'片级视图':'总图视图'}。蓝①说话、橙②听话；小片实线/虚线描边，所属片淡亮。棕色斜纹：交叠待核。`);
- renderRegionFacts();renderList();const u=new URL(location.href);u.searchParams.set('from',a.id);u.searchParams.set('to',b.id);u.searchParams.set('metric',state.metric);u.searchParams.set('detail',state.detail);if(state.bridgeReversed)u.searchParams.set('flow','reverse');else u.searchParams.delete('flow');history.replaceState(null,'',u);
+ renderRegionFacts();renderList();renderViewControls(m);const u=new URL(location.href);u.searchParams.set('from',a.id);u.searchParams.set('to',b.id);u.searchParams.set('metric',state.metric);u.searchParams.set('detail',state.detail);if(state.bridgeReversed)u.searchParams.set('flow','reverse');else u.searchParams.delete('flow');u.searchParams.set('view',state.view);u.searchParams.set('anchor',state.anchor.id);u.searchParams.set('listen',state.listenDirection);history.replaceState(null,'',u);
 }
-function listPair(c){return state.pickOrigin?directionalPair(c,state.target,state.research,state.metric):directionalPair(state.origin,c,state.research,state.metric);}
+function listPair(c){if(state.view==='listen')return state.listenDirection==='in'?directionalPair(c,state.anchor,state.research,state.metric):directionalPair(state.anchor,c,state.research,state.metric);return state.pickOrigin?directionalPair(c,state.target,state.research,state.metric):directionalPair(state.origin,c,state.research,state.metric);}
 function renderList(){
- txt('list-direction',state.pickOrigin?`列表成绩：候选地说 → ${displayName(state.target)}听`:`列表成绩：${displayName(state.origin)}说 → 候选地听`);
+ txt('list-direction',state.view==='listen'?(state.listenDirection==='in'?`候选地说 → ${displayName(state.anchor)}听`:`${displayName(state.anchor)}说 → 候选地听`):state.pickOrigin?`列表成绩：候选地说 → ${displayName(state.target)}听`:`列表成绩：${displayName(state.origin)}说 → 候选地听`);
  const q=$('search').value.trim().toLowerCase(),isArea=state.list==='regions';let cs=(isArea?state.entities.filter(c=>c.kind==='region'&&c.level!=='大区'&&!c.derivedParent):state.cities).filter(c=>`${displayName(c)}${c.name}${c.variety}${taxonomy(c)}${c.id}`.toLowerCase().includes(q));
- cs.sort((a,b)=>{if($('sort').value==='name')return a.family.localeCompare(b.family,'zh-CN')||a.name.localeCompare(b.name,'zh-CN');const x=listPair(a),y=listPair(b);if(!!x!==!!y)return x?-1:1;if(x&&y)return y.forward.value-x.forward.value;const anchor=state.pickOrigin?state.target:state.origin;const rank=c=>{const level=compare(anchor,c).level;return level<0?99:level;};return rank(a)-rank(b)||a.name.localeCompare(b.name,'zh-CN');});
- $('city-list').innerHTML=cs.length?cs.map(c=>{const m=listPair(c);return `<button class="city-row${c.id===(state.pickOrigin?state.origin.id:state.target.id)?' active':''}" data-city="${c.id}"><strong>${esc(displayName(c))}</strong><small>${esc(c.kind==='region'?c.name+' · '+c.family:c.variety||c.family)}</small><span class="row-score">${m?m.forward.value+'<small>%</small>':'<small>'+(isArea?c.level:'代表点')+'</small>'}</span></button>`;}).join(''):'<p class="empty-list">暂未收录这个区域。<br>可切换“找地点”查找城市；不以城市圆圈代替片界。</p>';
+ cs.sort((a,b)=>{if($('sort').value==='name')return a.family.localeCompare(b.family,'zh-CN')||a.name.localeCompare(b.name,'zh-CN');const x=listPair(a),y=listPair(b);if(!!x!==!!y)return x?-1:1;if(x&&y)return y.forward.value-x.forward.value;const anchor=state.view==='listen'?state.anchor:state.pickOrigin?state.target:state.origin;const rank=c=>{const level=compare(anchor,c).level;return level<0?99:level;};return rank(a)-rank(b)||a.name.localeCompare(b.name,'zh-CN');});
+ $('city-list').innerHTML=cs.length?cs.map(c=>{const m=listPair(c);return `<button class="city-row${c.id===(state.view==='listen'?state.anchor.id:state.pickOrigin?state.origin.id:state.target.id)?' active':''}" data-city="${c.id}"><strong>${esc(displayName(c))}</strong><small>${esc(c.kind==='region'?c.name+' · '+c.family:c.variety||c.family)}</small><span class="row-score">${m?m.forward.value+'<small>%</small>':'<small>'+(isArea?c.level:'代表点')+'</small>'}</span></button>`;}).join(''):'<p class="empty-list">暂未收录这个区域。<br>可切换“找地点”查找城市；不以城市圆圈代替片界。</p>';
  $('city-list').querySelectorAll('[data-city]').forEach(el=>el.onclick=()=>{const c=state.entities.find(c=>c.id===el.dataset.city);choose(c);$('place-finder').open=false;if(c.kind==='region')focusRegion(c);});
  txt('list-count',isArea?`${cs.length} 个已描边片区 · 全国细分尚未齐备`:`${cs.length} 个代表点 · 15 个进入已收录实验`);
+}
+function layoutListeningLabels(mapBox,obstacles){
+ const placed=[],occupied=[...obstacles,...selected.selectAll('.active-city-label').nodes().map(n=>n.getBoundingClientRect())];
+ const pointObstacles=scoreLayer.selectAll('.listen-score-point').nodes().map(node=>{const m=node.getScreenCTM();return {node,left:m.e-5,right:m.e+5,top:m.f-5,bottom:m.f+5}});
+ const overlaps=(a,b)=>a.left<b.right+5&&a.right>b.left-5&&a.top<b.bottom+5&&a.bottom>b.top-5;
+ scoreLayer.selectAll('.listen-score-point').each(function(){
+  const node=d3.select(this),matrix=this.getScreenCTM();if(!matrix)return;
+  const x=matrix.e,y=matrix.f;
+  if(x<mapBox.left||x>mapBox.right||y<mapBox.top||y>mapBox.bottom){node.style('display','none');return;}node.style('display',null);
+  let chosen=null;
+  for(const radius of (mapBox.width<600?[0,16,30]:[0,22,44])){
+   const positions=[[8+radius,-35],[-54-radius,-35],[8+radius,8],[-54-radius,8],[-23,-48-radius],[-23,15+radius]];
+   for(const [dx,dy] of positions){const r={left:x+dx,top:y+dy,right:x+dx+46,bottom:y+dy+40};if(r.left<mapBox.left+4||r.right>mapBox.right-4||r.top<mapBox.top+4||r.bottom>mapBox.bottom-4)continue;if(![...occupied,...pointObstacles.filter(o=>o.node!==this)].some(o=>overlaps(r,o))){chosen={dx,dy,r};break;}}
+   if(chosen)break;
+  }
+  node.selectAll('rect,text,path').style('display',chosen?null:'none');
+  if(!chosen)return;
+  const {dx,dy,r}=chosen;occupied.push(r);placed.push(r);
+  node.select('rect').attr('x',dx).attr('y',dy+17);
+  node.select('.listen-peer-name').attr('x',dx).attr('y',dy+11);
+  node.select('.listen-peer-value').attr('x',dx+23).attr('y',dy+32);
+  node.select('.listen-leader').attr('d',`M0 0L${dx<0?dx+46:dx},${dy+28}`);
+ });
+ return placed;
+}
+function activeMapLegend(){
+ if(state.mode==='family')return Object.entries(familyColors).map(([label,color])=>({label,color}));
+ const anchor=state.view==='listen'?state.anchor:state.origin;
+ if(anchor.family==='未定汉语方言'||anchor.usageType==='mixed-use-zone')return [{label:'归属待核 · 不显示分类远近',color:'#e5e5dd'}];
+ return [{label:'同片',color:'#8fae8a'},{label:'同大区',color:'#b3c5a1'},{label:'其他方言区',color:'#dddec9'},{label:'兼用或归属待核',color:'#e5e5dd'}];
+}
+function enterPeerComparison(row){state.origin=row.from;state.target=row.to;state.view='pair';state.bridgeReversed=false;render();}
+function listenTitle(){return state.listenDirection==='in'?`${displayName(state.anchor)}听各地`:`各地听${displayName(state.anchor)}`;}
+function renderListeningMap(){
+ state.listenRows=state.view==='listen'?listeningScores(state.anchor,state.cities,state.research,state.metric,state.listenDirection):[];
+ const points=scoreLayer.selectAll('.listen-score-point').data(state.listenRows,r=>r.peer.id).join(enter=>{
+  const g=enter.append('g').attr('class','listen-score-point').attr('tabindex',0).attr('role','button');
+  g.append('path').attr('class','listen-leader');g.append('circle').attr('r',3.5);g.append('rect').attr('x',7).attr('y',-11).attr('width',46).attr('height',22).attr('rx',4);
+  g.append('text').attr('class','listen-peer-value').attr('x',28).attr('y',4).attr('text-anchor','middle');
+  g.append('text').attr('class','listen-peer-name').attr('x',7).attr('y',-16);return g;
+ });
+ points.attr('aria-label',r=>`${r.from.name}说给${r.to.name}听，${r.value}%，查看双向实验`).on('click',(e,r)=>{e.stopPropagation();enterPeerComparison(r)}).on('keydown',(e,r)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();enterPeerComparison(r)}}).on('mousemove',(e,r)=>showTooltip(e,`${r.from.name}说 → ${r.to.name}听`,`${r.value}% · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}实验<br>只代表这个研究点。点击看两个方向。`)).on('mouseleave',hideTooltip);
+ points.select('circle').attr('fill',r=>scoreColor(r.value));points.select('rect').attr('fill',r=>scoreColor(r.value));
+ points.select('.listen-peer-value').text(r=>r.value+'%');points.select('.listen-peer-name').text(r=>r.peer.name);
+}
+function renderViewControls(pair){
+ const listening=state.view==='listen';
+ document.querySelector('.skip').href=listening?'#listener-anchor':'#origin';document.querySelector('.skip').textContent='跳到地点选择';
+ for(const view of ['pair','listen'])$('view-'+view).setAttribute('aria-pressed',String(state.view===view));
+ $('journey-form').hidden=listening;$('listen-control').hidden=!listening;$('pair-results').hidden=listening;$('listen-results').hidden=!listening;
+ $('listener-anchor').value=state.anchor.id;
+ for(const direction of ['in','out'])$('listen-'+direction).setAttribute('aria-pressed',String(direction===state.listenDirection));
+ if(listening){
+  txt('map-hint',state.listenDirection==='in'?'点地图，换一个听话地':'点地图，换一个说话地');txt('list-title','选择中心地点');
+  const available=samples(state.anchor);
+  $('listen-results').innerHTML=`<h2>${esc(listenTitle())}</h2><p class="listen-note">${state.listenRows.length?`${state.listenRows.length} 个外地研究点 · 数字标在主图上`:'尚未收录这个地点的方向性实测'}</p><div class="score-key">${scoreBands.map(b=>`<span><i style="background:${b.color}"></i>${b.label}</span>`).join('')}</div><p class="listen-note">色块是${state.mode==='family'?'方言分布':'分类关系'}，数字标记是点对实测。未知不等于听不懂。</p>${!state.listenRows.length?`<p class="listen-empty">${state.anchor.kind==='region'?'整片区域没有实测百分比。':'不从附近城市推算成绩。'}${available.length?'可以选区域内的研究点查看：':''}</p>${available.map(c=>`<button class="sample-link" data-anchor="${c.id}">用${esc(c.name)}研究点</button>`).join('')}`:''}<div class="listen-ranking">${state.listenRows.map(r=>`<button data-peer="${r.peer.id}"><span>${esc(r.peer.name)}<small>${esc(r.peer.family)}</small></span><strong style="color:${scoreColor(r.value)}">${r.value}<small>%</small></strong></button>`).join('')}</div><p class="listen-note">Tang 2009 · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}，不是日常对话理解率。</p><button id="listen-method" class="inline-action">实验说明与来源 ↗</button>`;
+  $('listen-results').querySelectorAll('[data-peer]').forEach(el=>el.onclick=()=>enterPeerComparison(state.listenRows.find(r=>r.peer.id===el.dataset.peer)));
+  $('listen-results').querySelectorAll('[data-anchor]').forEach(el=>el.onclick=()=>{state.anchor=state.cities.find(c=>c.id===el.dataset.anchor);render()});
+  $('listen-method').onclick=methodDialog;
+  $('map-readout').innerHTML=`<span>${esc(listenTitle())}</span><strong>${state.listenRows.length?state.listenRows.length+' 个实测点':'暂无实测'}</strong><small>数字＝本研究任务正确率</small>`;
+ }else{
+  $('map-readout').innerHTML=`<span>${esc(displayName(state.origin))}说 → ${esc(displayName(state.target))}听</span><strong>${pair?pair.forward.value+'<small>%</small>':'暂无实测'}</strong><small>${pair?'反向 '+pair.reverse.value+'% · 研究任务正确率':'不推算区域百分比'}</small>`;
+ }
+ resizeMarkers(state.transform?.k||1);
+}
+let sharedImageURL=null;
+async function shareCurrentMap(){
+ const button=$('share');button.disabled=true;txt('share','正在生成…');
+ try{
+  const listening=state.view==='listen',pair=directionalPair(state.origin,state.target,state.research,state.metric);
+  const context={mode:state.view,title:listening?listenTitle():`${displayName(state.origin)}说，${displayName(state.target)}听`,subtitle:listening?'一地为中心，分别查看听与说。数字为点对实测。':'各说本地方言，不切换普通话。两个方向的实验成绩分别读取。',filename:listening?listenTitle():`${displayName(state.origin)}-${displayName(state.target)}`,metric:`Tang 2009 · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}任务`,legend:activeMapLegend(),rows:listening?state.listenRows.map(r=>({label:r.peer.name,value:r.value,color:scoreColor(r.value)})):[{label:`${displayName(state.origin)}说 → ${displayName(state.target)}听`,value:pair?.forward.value??null,color:selectionColors[0]},{label:`${displayName(state.target)}说 → ${displayName(state.origin)}听`,value:pair?.reverse.value??null,color:selectionColors[1]}]};
+  context.subtitle+=state.mode==='score'?' 当前色块表示分类关系，不是互通率。':'';
+  const result=await createShareImage(svg.node(),context);if(sharedImageURL)URL.revokeObjectURL(sharedImageURL);sharedImageURL=result.url;
+  const file=new File([result.blob],result.filename,{type:'image/png'}),canShare=!!navigator.canShare?.({files:[file]});
+  openDialog('分享这次',`<img class="share-preview" src="${result.url}" alt="${esc(context.title)}，含地图、实验数据与来源的分享图"><div class="share-actions"><a class="save-share" href="${result.url}" download="${esc(result.filename)}">保存图片 ↓</a>${navigator.clipboard?.write?'<button id="copy-share-image">复制图片</button>':''}${canShare?'<button id="native-share-image">系统分享</button>':''}</div>`);
+  if($('copy-share-image'))$('copy-share-image').onclick=async()=>{try{await navigator.clipboard.write([new ClipboardItem({'image/png':result.blob})]);toast('已复制分享图。')}catch{toast('此浏览器未允许复制图片，请选择保存图片。')}};
+  if($('native-share-image'))$('native-share-image').onclick=async()=>{try{await navigator.share({files:[file],title:'乡音桥'})}catch(e){if(e.name!=='AbortError')toast('暂时无法系统分享，请保存图片。')}};
+ }catch(e){console.error(e);toast('图片生成失败，请稍后重试。')}finally{button.disabled=false;txt('share','分享这次');}
 }
 function focusRegion(c){const b=path.bounds(normalize(c.feature)),dx=b[1][0]-b[0][0],dy=b[1][1]-b[0][1],k=Math.min(8,.65/Math.max(dx/1000,dy/780));svg.call(zoom.transform,d3.zoomIdentity.translate(500,390).scale(k).translate(-(b[0][0]+b[1][0])/2,-(b[0][1]+b[1][1])/2));}
 function samples(c){return c.kind==='region'?regionSamples(c.feature,state.cities,state.research):state.research.some(r=>r.from===c.id)?[c]:[];}
@@ -236,7 +320,7 @@ function hideTooltip(){$('tooltip').hidden=true;}
 function openDialog(title,html){txt('dialog-title',title);$('dialog-body').innerHTML=html;if(!$('info-dialog').open)$('info-dialog').showModal();}
 function methodDialog(){
  const reg=state.metadata.registration;
- openDialog('先读懂数字，再听见彼此',`<div class="notice">这一版只收录汉语方言。地图展示的是历史分布与研究样本，不能替代对今天某个人语言能力的判断。</div><div class="method-grid"><section><h3>有实验，才有百分数</h3><p>Tang（2009）测试了 15 个方言点。每项任务有 225 个“说者 → 听者”组合，含 15 个同点对照。这里同时保留两个方向，不把它们平均成一个互通率。</p><p>默认指标是句中指定目标词的翻译正确率；每个方向为 15 位听者、60 次回答。它不是整句理解率，更不是日常对话理解率。</p><p><a href="https://www.lotpublications.nl/Documents/228_fulltext.pdf#page=92" target="_blank" rel="noreferrer">查原始表 4.3 · 印刷第 80 页 ↗</a></p></section><section><h3>同片不等于听得懂</h3><p>苏州与温州同属吴语，实验成绩仍然可能很低。南昌与苏州的结果，也不能推广成整个赣语与吴语的结果。</p><p>区域模式不显示实验百分数；研究点模式中，84 个代表点里未进入这项实验的地点只显示分类关系。我们不拿邻近地点的百分数填补空缺。</p><p>接触经历、普通话能力、测试难度和样本来源都会影响成绩。部分听者与录音者可能来自邻近方言点。历史小样本不能代表今天所有人。</p></section></div><h3>你正在看的这一对</h3>${researchTable()}<p><button id="metric-toggle" class="inline-action">切换为${state.metric==='sentence_target'?'孤立词语义分类':'句中目标词翻译'}测试 →</button> <span class="live-status">两种任务分开展示，不混合评分。</span></p><h3>图像如何成为地理数据</h3><p>A2 总图按印刷填色提取轮廓，以 ${reg.gcpCount} 个城市控制点拟合圆锥投影中的仿射变换。留一验证 RMSE 为 ${reg.leaveOneOutRMSEkm} km（旧版二阶多项式为 21.94 km）。这只是拟合候选，不表示已经确认原图投影。行政边界来自 DataV，与旧作「赶集志」同源，独立绘制，不参与方言分区。</p><p>地区详图逐张独立配准，人工沿原图片、小片界线概化描绘。当前收录 ${state.regionData.metadata.tracedFeatureCount} 个轮廓；自动生成的父片仅是已描小片的几何并集，空缺不补齐。可在“对照原图轮廓”中本地打开对应扫描，查看保存的像素描线。配准误差只衡量控制点，不能当作语言边界精度。</p><p>分类沿用所供历史图版；如 B2 的“北方官话”，不会悄悄套用为另一版本的现代分区。细小方言岛、符号混用区和扫描模糊边界仍有遗漏。只收录汉语方言的代表类别；底图空白不表示无人居住或没有语言。</p><h3>散落的客家话居民点</h3><p>另行人工核对四川盆地的 ${state.settlements.features.length} 个原图三角符号。它们是居民点符号的部分转录，不是完整名录，没有擅自补村名，也没有把散点扩成连续的客家话区域。</p><p><a href="data/metadata.json" download>下载配准与来源记录 ↓</a> · <a href="data/research.json" download>下载两项测试数据 ↓</a></p>`);
+ openDialog('先读懂数字，再听见彼此',`<div class="notice">这一版只收录汉语方言。地图展示的是历史分布与研究样本，不能替代对今天某个人语言能力的判断。</div><div class="method-grid"><section><h3>有实验，才有百分数</h3><p>Tang（2009）测试了 15 个方言点。每项任务有 225 个“说者 → 听者”组合，含 15 个同点对照。这里同时保留两个方向，不把它们平均成一个互通率。</p><p>默认指标是句中指定目标词的翻译正确率；每个方向为 15 位听者、60 次回答。它不是整句理解率，更不是日常对话理解率。</p><p><a href="https://www.lotpublications.nl/Documents/228_fulltext.pdf#page=92" target="_blank" rel="noreferrer">查原始表 4.3 · 印刷第 80 页 ↗</a></p></section><section><h3>同片不等于听得懂</h3><p>苏州与温州同属吴语，实验成绩仍然可能很低。南昌与苏州的结果，也不能推广成整个赣语与吴语的结果。</p><p>区域模式不显示实验百分数；研究点模式中，84 个代表点里未进入这项实验的地点只显示分类关系。我们不拿邻近地点的百分数填补空缺。</p><p>接触经历、普通话能力、测试难度和样本来源都会影响成绩。部分听者与录音者可能来自邻近方言点。历史小样本不能代表今天所有人。</p></section></div>${state.view==='listen'?`<h3>${esc(listenTitle())}</h3><p>当前方向：${state.listenDirection==='in'?'各地说给中心地点听':'中心地点说给各地听'}。收录 ${state.listenRows.length} 个外地研究点；没有数据的地点不推算。</p>`:`<h3>你正在看的这一对</h3>${researchTable()}`}<p><button id="metric-toggle" class="inline-action">切换为${state.metric==='sentence_target'?'孤立词语义分类':'句中目标词翻译'}测试 →</button> <span class="live-status">两种任务分开展示，不混合评分。</span></p><h3>图像如何成为地理数据</h3><p>A2 总图按印刷填色提取轮廓，以 ${reg.gcpCount} 个城市控制点拟合圆锥投影中的仿射变换。留一验证 RMSE 为 ${reg.leaveOneOutRMSEkm} km（旧版二阶多项式为 21.94 km）。这只是拟合候选，不表示已经确认原图投影。行政边界来自 DataV，与旧作「赶集志」同源，独立绘制，不参与方言分区。</p><p>地区详图逐张独立配准，人工沿原图片、小片界线概化描绘。当前收录 ${state.regionData.metadata.tracedFeatureCount} 个轮廓；自动生成的父片仅是已描小片的几何并集，空缺不补齐。可在“对照原图轮廓”中本地打开对应扫描，查看保存的像素描线。配准误差只衡量控制点，不能当作语言边界精度。</p><p>分类沿用所供历史图版；如 B2 的“北方官话”，不会悄悄套用为另一版本的现代分区。细小方言岛、符号混用区和扫描模糊边界仍有遗漏。只收录汉语方言的代表类别；底图空白不表示无人居住或没有语言。</p><h3>散落的客家话居民点</h3><p>另行人工核对四川盆地的 ${state.settlements.features.length} 个原图三角符号。它们是居民点符号的部分转录，不是完整名录，没有擅自补村名，也没有把散点扩成连续的客家话区域。</p><p><a href="data/metadata.json" download>下载配准与来源记录 ↓</a> · <a href="data/research.json" download>下载两项测试数据 ↓</a></p>`);
  $('dialog-body').insertAdjacentHTML('beforeend','<h3>底图坐标也有待核条件</h3><p>同一个显示投影不等于坐标基准已经严格统一。DataV 文档说明其地图组件主要使用 GCJ-02；当前底图文件未声明 CRS，控制点也不是同一来源的实地测量。这里保留提供方坐标，不凭猜测二次转换或吸附行政线。<a href="data/basemap-metadata.json" target="_blank" rel="noreferrer">查看底图核验记录 ↗</a></p>');
  $('metric-toggle').onclick=()=>{state.metric=state.metric==='sentence_target'?'word_category':'sentence_target';render();methodDialog();};
 }
@@ -263,6 +347,10 @@ function settlementDialog(d){atlasDialog('A2',d.properties.sourcePixel);}
 function downloads(){openDialog('把这张地图带走',`<p>可在 QGIS、ArcGIS 或自己的网页里继续使用。数据保留原图出处和提取方式；配准与分类仍需要进一步校正。</p><a class="download-row" href="data/regions.geojson" download><strong>片与小片 · GeoJSON ↓</strong><small>${state.regionData.metadata.tracedFeatureCount} 个原图描边轮廓及局部父片 · 分类、原图像素与误差</small></a><a class="download-row" href="data/regions-north-metadata.json" download><strong>北方图幅配准记录 ↓</strong><small>控制点、原图指纹与留一误差；仅已转录图幅</small></a><a class="download-row" href="data/regions-wu-gan-metadata.json" download><strong>吴、徽、赣、湘配准记录 ↓</strong><small>吴语、徽语、赣语、湘语图幅</small></a><a class="download-row" href="data/regions-south-metadata.json" download><strong>西南与南方图幅配准记录 ↓</strong><small>西南、闽语与广东图幅</small></a><a class="download-row" href="data/dialects.geojson" download><strong>方言色区 · GeoJSON ↓</strong><small>10 类方言 · 来自原图形状提取，非行政区替代</small></a><a class="download-row" href="data/cities.geojson" download><strong>方言代表点 · GeoJSON ↓</strong><small>${state.cities.length} 个地点 · 分类、出处与备注</small></a><a class="download-row" href="data/settlements.geojson" download><strong>客家话居民点 · GeoJSON ↓</strong><small>${state.settlements.features.length} 个已核对的四川盆地点状符号 · 局部转录</small></a><a class="download-row" href="data/research.json" download><strong>互通度实验 · JSON ↓</strong><small>15 个方言点 × 15 个方向 × 2 项实验；不是 450 对独立地域</small></a><a class="download-row" href="data/metadata.json" download><strong>配准与数据说明 · JSON ↓</strong><small>控制点、误差、图像指纹、覆盖限制</small></a>`);}
 function bind(){
  $('journey-form').onsubmit=e=>{e.preventDefault();render();};
+ for(const view of ['pair','listen'])$('view-'+view).onclick=()=>{state.view=view;render();};
+ $('listener-anchor').onchange=e=>{state.anchor=state.entities.find(c=>c.id===e.target.value);render();};
+ for(const direction of ['in','out'])$('listen-'+direction).onclick=()=>{state.listenDirection=direction;render();};
+ $('origin').onfocus=()=>setSelectionSide(true);$('target').onfocus=()=>setSelectionSide(false);
  $('origin').onchange=e=>{state.origin=state.entities.find(c=>c.id===e.target.value);state.pickOrigin=false;render();};$('target').onchange=e=>{state.target=state.entities.find(c=>c.id===e.target.value);render();};$('search').oninput=renderList;$('sort').onchange=renderList;
  $('detail-level').onchange=e=>{state.detail=e.target.value;updateRegionLayer();render();};
  for(const tab of ['regions','points'])$('list-'+tab).onclick=()=>{state.list=tab;for(const t of ['regions','points']){$('list-'+t).classList.toggle('selected',t===tab);$('list-'+t).setAttribute('aria-pressed',String(t===tab));}updateSelectionUI();renderList();};
@@ -280,8 +368,8 @@ function bind(){
  $('show-settlements').onchange=e=>settlementLayer.style('display',e.target.checked?null:'none');
  $('zoom-in').onclick=()=>svg.call(zoom.scaleBy,1.4);$('zoom-out').onclick=()=>svg.call(zoom.scaleBy,1/1.4);$('reset-map').onclick=()=>svg.call(zoom.transform,d3.zoomIdentity);
  $('method-nav').onclick=methodDialog;$('score-info').onclick=methodDialog;$('atlas-nav').onclick=()=>atlasDialog();$('source-btn').onclick=()=>atlasDialog(state.target.source,null,state.target.feature);$('download').onclick=downloads;
- $('explore-nav').onclick=()=>{if($('info-dialog').open)$('info-dialog').close();$('origin').focus();};$('close-dialog').onclick=()=>$('info-dialog').close();$('info-dialog').onclick=e=>{if(e.target===$('info-dialog')){const b=e.target.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)e.target.close();}};
- $('share').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);toast('已复制这次相遇的链接。');}catch{openDialog('复制这次相遇',`<p>复制下面的地址即可保留这对地点：</p><input class="share-input" aria-label="分享链接" value="${esc(location.href)}" readonly>`);}};
+ $('explore-nav').onclick=()=>{if($('info-dialog').open)$('info-dialog').close();$(state.view==='listen'?'listener-anchor':'origin').focus();};$('close-dialog').onclick=()=>$('info-dialog').close();$('info-dialog').onclick=e=>{if(e.target===$('info-dialog')){const b=e.target.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)e.target.close();}};
+ $('share').onclick=shareCurrentMap;
  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)&&!$('info-dialog').open){e.preventDefault();$('place-finder').open=true;$('search').focus();}});
 }
 load();

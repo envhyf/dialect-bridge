@@ -6,19 +6,22 @@
 <header class="masthead">
  <a class="brand" href="./" aria-label="乡音桥首页"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 28h7m18 0h7M8 25V14m24 11V14M8 18C14 18 15 10 20 10s6 8 12 8M8 23h24M14 22v-5m6 5V11m6 11v6"/><circle cx="8" cy="29" r="3" style="fill:#216dab;stroke:none"/><circle cx="32" cy="29" r="3" style="fill:#c45d29;stroke:none"/></svg><span>乡音桥</span></a>
  <span class="brand-caption">各说乡音，隔岸听见</span>
- <nav aria-label="作品导航"><button class="nav-active" id="explore-nav">选两地</button><button id="atlas-nav">原图档案 <span>↗</span></button><button id="method-nav">如何理解数字</button></nav>
+ <nav aria-label="作品导航"><button class="nav-active" id="explore-nav">选地点</button><button id="atlas-nav">原图档案 <span>↗</span></button><button id="method-nav">如何理解数字</button></nav>
 
 </header>
 <main class="workspace">
  <aside class="origin-panel">
   <h1 class="sr-only">乡音桥 · 汉语方言地图</h1>
+  <div class="experience-tabs" role="group" aria-label="探索方式"><button id="view-pair" aria-pressed="true">两地对话</button><button id="view-listen" aria-pressed="false">听懂地图</button></div>
+  <div class="journey-shell">
   <form id="journey-form" class="journey-form" action="./" method="get" aria-label="选择说话地和听话地">
-   <svg class="journey-bridge" viewBox="0 0 320 58" aria-hidden="true"><path class="bridge-rail" d="M52 48 Q160 -20 268 48"/><path class="bridge-trail" d="M52 48 Q160 -20 268 48"/><circle class="bridge-pulse" r="3.5"/><path class="bridge-arrow" d="m255 34 13 14-18-1"/><circle cx="52" cy="48" r="3" class="bridge-bank-a"/><circle cx="268" cy="48" r="3" class="bridge-bank-b"/></svg>
-   <div class="journey-stop origin-stop active" id="origin-stop"><label for="origin"><span>①</span> 说话</label><div class="select-wrap"><select name="from" id="origin" aria-describedby="origin-taxonomy" aria-label="① 选择说话地"><option>正在读入地图…</option></select></div><p id="origin-taxonomy" class="taxonomy sr-only"></p><button type="button" id="pick-origin" aria-pressed="true">地图选①</button></div>
-   <button type="button" id="journey-swap" class="journey-swap" aria-label="交换说话地和听话地，查看反向成绩"><span class="swap-glyph" aria-hidden="true">⇄</span><span class="sr-only">交换方向</span></button>
-   <div class="journey-stop target-stop" id="target-stop"><label for="target"><span>②</span> 听话</label><div class="select-wrap"><select name="to" id="target" aria-describedby="target-taxonomy" aria-label="② 选择听话地"><option>正在读入地图…</option></select></div><p id="target-taxonomy" class="taxonomy sr-only"></p><button type="button" id="pick-target" aria-pressed="false">地图选②</button></div>
+   <svg class="journey-bridge" viewBox="0 0 120 40" aria-hidden="true"><path class="bridge-rail" d="M2 28 Q60 -6 118 28"/><circle class="bridge-pulse" r="3.5"/><path class="bridge-arrow" d="m112 21 6 7-9-1"/></svg>
+   <div class="journey-stop origin-stop active" id="origin-stop"><label for="origin" class="sr-only">说话地</label><button type="button" id="pick-origin" class="endpoint-role" aria-label="选择说话端，再点击地图换地点" aria-pressed="true"><i aria-hidden="true"></i>说话</button><div class="select-wrap"><select name="from" id="origin" aria-describedby="origin-taxonomy" aria-label="① 选择说话地"><option>正在读入地图…</option></select></div><p id="origin-taxonomy" class="taxonomy sr-only"></p></div>
+   <button type="button" id="journey-swap" class="journey-swap" aria-label="交换说话地和听话地，查看反向成绩"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4"/></svg><span>换向</span></button>
+   <div class="journey-stop target-stop" id="target-stop"><label for="target" class="sr-only">听话地</label><button type="button" id="pick-target" class="endpoint-role" aria-label="选择听话端，再点击地图换地点" aria-pressed="false"><i aria-hidden="true"></i>听话</button><div class="select-wrap"><select name="to" id="target" aria-describedby="target-taxonomy" aria-label="② 选择听话地"><option>正在读入地图…</option></select></div><p id="target-taxonomy" class="taxonomy sr-only"></p></div>
   </form>
-  <details id="place-finder" class="place-finder"><summary>搜索地点或片区 <span aria-hidden="true">⌕</span></summary><div class="finder-body">
+  <section id="listen-control" class="listen-control" hidden><label for="listener-anchor">以谁为中心</label><select id="listener-anchor" aria-label="选择听懂地图的中心地点"></select><div class="listen-direction" role="group" aria-label="听懂的方向"><button id="listen-in" aria-pressed="true">我听各地</button><button id="listen-out" aria-pressed="false">各地听我</button></div></section>
+  <details id="place-finder" class="place-finder"><summary><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5"/><path d="m12 12 4 4"/></svg><span>搜索城市或方言</span><kbd aria-hidden="true">/</kbd></summary><div class="finder-body">
   <div class="list-tabs" role="group" aria-label="查找对象"><button id="list-points" class="selected" aria-pressed="true">找地点</button><button id="list-regions" aria-pressed="false">找区域</button></div>
   <div class="search-wrap"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="m12 12 5 5"/></svg><input id="search" type="search" aria-label="搜索片区、方言或城市" placeholder="搜索片区、方言或城市" autocomplete="off"><kbd>/</kbd></div>
   <div class="list-head"><span id="list-title">为 ① 选择地点</span><select id="sort" aria-label="排序方式"><option value="score">实测优先</option><option value="name">分类排列</option></select></div>
@@ -26,6 +29,7 @@
   <div id="city-list" class="city-list" aria-label="地点比较列表"></div>
   <p id="list-count" class="list-count"></p>
   </div></details>
+  </div>
  </aside>
  <section class="map-sheet" aria-label="交互方言地图">
   <div class="map-top"><div class="map-tabs" role="group" aria-label="地图显示方式"><button id="mode-family" class="selected" aria-pressed="true">方言分布</button><button id="mode-score" aria-pressed="false">分类关系</button></div><span id="map-subtitle" class="sr-only">不同颜色是不同方言，不是听懂的比例</span>
@@ -35,12 +39,15 @@
    <div class="map-heading"><span id="map-origin" class="sr-only">① 苏州 → ② 南昌</span><small id="map-hint">先点击地图选择 ① 说话地</small></div>
    <div class="map-controls"><button id="zoom-in" aria-label="放大地图">＋</button><button id="zoom-out" aria-label="缩小地图">−</button><button id="reset-map" aria-label="恢复全国视图">⌖</button></div>
    <div class="map-action" hidden><div class="map-pick-switch"><button id="map-pick-a" aria-pressed="true">① 选说话地</button><button id="map-pick-b" aria-pressed="false">② 选听话地</button></div></div>
+   <div id="map-readout" class="map-readout" aria-live="polite"></div>
    <div class="north-mark" aria-hidden="true"><span>N</span><svg viewBox="0 0 20 30"><path d="M10 2L16 26L10 21L4 26Z"/></svg></div>
   </div>
   <div class="map-bottom"><div id="legend" class="legend"></div></div>
   <div class="map-credit"><span>行政底图 <a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noreferrer">DataV</a></span><span>方言边界为扫描图近似配准，不作精确定位</span></div>
  </section>
  <aside class="detail-panel">
+  <section id="listen-results" hidden></section>
+  <div id="pair-results">
   <div class="pair sr-only" hidden><div><small>① 说话</small><strong id="from-name">苏州</strong></div><button id="swap" tabindex="-1" aria-label="交换说话地与听话地，查看反向结果">⇄</button><div><small>② 听话</small><strong id="to-name">南昌</strong></div></div>
   <p id="pair-varieties" class="sr-only" hidden></p>
   <div class="score-label"><span id="score-heading">① 说 → ② 听 · 句中目标词测试</span> <button id="score-info" aria-label="了解测试数字">ⓘ</button></div>
@@ -56,9 +63,10 @@
   </details>
   <details id="region-disclosure" class="region-disclosure"><summary><span id="region-summary">② 听话地 · 分类与研究</span></summary><section id="region-facts" class="region-facts" aria-label="区域分类与研究"></section></details>
   <button id="source-btn" class="source-btn"><span>在原图里找到这两地<small id="pair-sources">中国语言地图集</small></span><span>↗</span></button>
+  </div>
  </aside>
 </main>
-<footer class="page-footer"><p>山川塑造口音，来往让彼此听懂。</p><div><button id="download">下载地理数据 ↓</button><button id="share">复制这次相遇 ↗</button></div></footer>
+<footer class="page-footer"><div><button id="download">下载地理数据 ↓</button><button id="share">分享这次</button></div></footer>
 <div id="toast" class="toast" role="status" hidden></div>
 <dialog id="info-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title"></h2><button id="close-dialog" aria-label="关闭窗口">×</button></div><div id="dialog-body" class="dialog-body"></div></dialog>
 <noscript>这个交互地图需要启用 JavaScript。原图目录及来源可在 atlas/manifest.json 中查看。</noscript>
