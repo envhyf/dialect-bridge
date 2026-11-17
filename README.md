@@ -8,7 +8,7 @@
 
 - 点击真实区域，查看分类层级、来源图号、配准误差，以及区域内已有的实验样本。
 - 切换大区 / 片 / 小片。小片尚未描绘处保留已知片界；片界尚未覆盖处保留 A2 总图，不用行政边界或城市圆圈补空。
-- 像选车次两端一样，选择 **①说话地 → ②听话地**。第一下选①，下一下选②；两端都能通过下拉框或地图按钮重新选择，交换按钮直接反转方向。
+- 像选车次两端一样，选择 **①说话地 → ②听话地**。第一下选①，下一下选②；两端都能通过下拉框或地图按钮重新选择；弧桥光点由说话地流向听话地，交换后角色与流动同时反向，地名保持在原来的左右位置。图层面板可暂停动效，系统减少动态效果时自动静止。
 - 地图默认多色方言分布。选中小片以蓝①实线、橙②虚线标明，所属片淡亮；默认以地名帮助定位，勾选“显示分类名”查看专业术语。
 - **区域没有实测百分比。** 只有核验过的具体实验点对显示双向刻度；例如苏州说→南昌听13%，反过来28%，均为句中目标词任务成绩，不是日常对话理解率。
 - 客家话居民点为独立三角符号；15 个实验样本点可单独开启，缩放时保持小尺寸。
@@ -48,6 +48,7 @@ python scripts/regions_north.py
 python scripts/regions_wu_gan.py
 python scripts/regions_south.py
 python scripts/assemble-regions.py
+python scripts/build-map-lines.py
 node scripts/update-representative-points.mjs
 python tests/test_segmentation.py
 ```
@@ -59,6 +60,10 @@ python tests/test_segmentation.py
 ## 界面参考
 
 根据用户指定的 [GoogleChrome modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance)，检索并应用 `forms`、`accessibility`、`color` 指南：原生表单与 select、明确的说者/听者标签、辅助按钮 `type="button"`、可见焦点、原生 dialog、移动端16px输入文字，以及不只依赖颜色的①②/实虚线状态。双向图表同时保留文字数值；未知值使用空虚线轨道。方言分布保留用户明确要求的多色分类，未把分类图改成单色成绩图。
+
+界面进一步参考 [江山时序](https://deanchen.me/jiangshan-map/) 的地图主视图、图层折叠与宋体/无衬线分工：地图占主要画幅，比较收在单侧栏；搜索、图层、研究细节按需展开。地名显示去掉“一带”，来源分类原文保留。两款 Noto 字体的本地 WOFF 子集附 SIL OFL 许可，无须访问外部字体服务。原有方言配色不变。
+
+共享描线由 `scripts/build-map-lines.py` 从已有几何推导，消除重合边线的重复绘制。行政参照线使用独立虚线图层并可关闭；方言多边形不平滑、不移动、不按行政边界裁剪。详图的既有误差仍保留。
 
 ## 来源
 

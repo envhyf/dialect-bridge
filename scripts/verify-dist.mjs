@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {readFile,readdir,stat} from 'node:fs/promises';
 import {join,resolve} from 'node:path';
 const root=resolve('dist');
@@ -58,3 +59,10 @@ assert.deepEqual((await readdir(join(root,'atlas'))).sort(),['manifest.json'],'O
 async function check(dir){for(const name of await readdir(dir)){const file=join(dir,name),s=await stat(file);if(s.isDirectory())await check(file);else assert.ok(!/\.(jpe?g|png|webp|pdf|zip|tar|gz)$/i.test(name),'Unexpected binary source material: '+name);}}
 await check(root);
 console.log(`Public dist verified: ${cities.length} representative points, ${records.length} observations, ${atlas.length} source records; no original scans.`);
+
+const mapLines=await read('data/map-lines.geojson');
+assert.deepEqual(mapLines.features.map(f=>f.properties.id),['admin','outline','cluster','subcluster']);
+for(const [file,digest] of Object.entries(mapLines.metadata.sourceSHA256)){
+ const source=(await readFile(join(root,'data',file),'utf8')).replace(/\r\n/g,'\n');
+ assert.equal(createHash('sha256').update(source).digest('hex'),digest,'Map linework stale: run python scripts/build-map-lines.py');
+}
