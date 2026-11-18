@@ -33,7 +33,7 @@
  </aside>
  <section class="map-sheet" aria-label="交互方言地图">
   <div class="map-top"><div class="map-tabs" role="group" aria-label="地图显示方式"><button id="mode-family" class="selected" aria-pressed="true">方言分布</button><button id="mode-score" aria-pressed="false">分类关系</button></div><span id="map-subtitle" class="sr-only">不同颜色是不同方言，不是听懂的比例</span>
-   <details id="map-layers" class="map-layers"><summary>图层与标注</summary><div class="layer-options"><div class="layer-bar"><label for="detail-level">边界细度</label><select id="detail-level"><option value="family">全国概览</option><option value="cluster">片</option><option value="subcluster" selected>小片</option></select></div><label><input id="show-technical" type="checkbox"> 显示分类名</label><label><input id="show-admin" type="checkbox" checked> 行政边界参照</label><label><input id="show-settlements" type="checkbox" checked> 客家居民点</label><label><input id="show-research" type="checkbox"> 实测点</label><button id="motion-toggle" type="button" aria-pressed="false">暂停方向动效</button><p id="layer-note"></p></div></details>
+   <details id="map-layers" class="map-layers"><summary>图层与标注</summary><div class="layer-options"><div class="layer-bar"><label for="detail-level">边界细度</label><select id="detail-level"><option value="family">全国概览</option><option value="cluster">片</option><option value="subcluster" selected>小片</option></select></div><label><input id="show-technical" type="checkbox"> 显示完整分类名</label><label><input id="show-admin" type="checkbox" checked> 行政边界参照</label><label><input id="show-settlements" type="checkbox" checked> 客家居民点</label><label><input id="show-research" type="checkbox"> 实测点</label><button id="motion-toggle" type="button" aria-pressed="false">暂停方向动效</button><p id="layer-note"></p></div></details>
   </div>
   <div id="map-stage" class="map-stage"><svg id="map" role="group" aria-label="中国方言区域地图，可点击片和小片查看分类与研究"></svg><div id="map-error" class="map-error" hidden><p>地图资料没有成功载入。</p><button onclick="location.reload()">重新载入</button></div><div id="tooltip" class="map-tooltip" hidden></div>
    <div class="map-heading"><span id="map-origin" class="sr-only">① 苏州 → ② 南昌</span><small id="map-hint">先点击地图选择 ① 说话地</small></div>
@@ -62,7 +62,6 @@
   <div class="distance-row"><span>地理距离</span><strong id="distance">—</strong><small>相距多远，不决定彼此听懂多少</small></div>
   </details>
   <details id="region-disclosure" class="region-disclosure"><summary><span id="region-summary">② 听话地 · 分类与研究</span></summary><section id="region-facts" class="region-facts" aria-label="区域分类与研究"></section></details>
-  <button id="source-btn" class="source-btn"><span>在原图里找到这两地<small id="pair-sources">中国语言地图集</small></span><span>↗</span></button>
   </div>
  </aside>
 </main>

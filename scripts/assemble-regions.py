@@ -8,6 +8,7 @@ import json, hashlib
 from collections import defaultdict
 from shapely.geometry import shape,mapping
 from shapely.ops import unary_union
+from shapely.ops import polylabel
 from pyproj import Geod
 
 root=Path(__file__).resolve().parents[1];data=root/'dist/data'
@@ -38,6 +39,13 @@ for (family,branch,cluster,source),children in groups.items():
         chosen=max(existing,key=lambda candidate:shape(candidate['geometry']).intersection(shape(f['geometry'])).area) if existing else parent
         f['properties']['parentId']=chosen['properties']['id']
 combined=parents+features
+for f in combined:
+    g=shape(f['geometry'])
+    largest=max(g.geoms,key=lambda p:p.area) if g.geom_type=='MultiPolygon' else g
+    anchor=polylabel(largest,tolerance=.01)
+    assert largest.contains(anchor)
+    f['properties']['labelCoordinates']=[round(anchor.x,7),round(anchor.y,7)]
+    f['properties']['labelAnchorMethod']='interior pole of largest polygon; not a settlement coordinate'
 assert len({f['properties']['id'] for f in combined})==len(combined)
 overlaps=[]
 geod=Geod(ellps='WGS84')

@@ -65,28 +65,28 @@ function wrap(ctx,value,x,y,width,size=20,color=muted,limit=4){
 export async function createShareImage(svg,context){
  const mapPromise=mapImage(svg,1080,842);
  await document.fonts.ready;
- const width=1600,height=1200,canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+ const width=1600,height=context.mode==='listen'?Math.max(1200,context.rows.length*52+570):1200,canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
  const ctx=canvas.getContext('2d');ctx.fillStyle=paper;ctx.fillRect(0,0,width,height);
  text(ctx,'乡音桥',48,72,40,ink,true);text(ctx,'汉语方言 · 片与小片',250,69,20,muted);
  text(ctx,context.title,48,134,30,ink,true);text(ctx,context.subtitle,48,172,19,muted);
  const map=await mapPromise;ctx.fillStyle='#f7f9f5';ctx.fillRect(36,200,1080,842);ctx.drawImage(map,36,200,1080,842);
  ctx.strokeStyle='#dce2da';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(1140,200);ctx.lineTo(1140,1042);ctx.stroke();
- text(ctx,context.mode==='listen'?'各地实测':'两个方向，分别作答',1172,228,24,ink,true);
+ text(ctx,context.mode==='listen'?'实测与估算分列':context.hasEstimates?'文献模型 · 双向平均':'两个方向，分别作答',1172,228,24,ink,true);
  if(context.mode==='listen'){
-  context.rows.slice(0,14).forEach((row,i)=>{const y=278+i*45;text(ctx,row.label,1172,y,21);text(ctx,row.value+'%',1485,y,23,ink,true);ctx.fillStyle=row.color;ctx.fillRect(1172,y+10,320*row.value/100,3)});
-  if(!context.rows.length)wrap(ctx,'未收录这个地点的方向性实测。留白不表示听不懂。',1172,290,330,23);
+  context.rows.forEach((row,i)=>{const estimated=row.kind==='model-estimate',y=278+i*52;text(ctx,row.label+(estimated?' · 估算':' · 实测'),1172,y,19);text(ctx,(estimated?'约 ':'')+row.value+'%',1470,y,22,ink,true);if(estimated){text(ctx,`双向平均 · 误差带 ${row.range[0]}–${row.range[1]}%`,1172,y+21,15,muted);ctx.setLineDash([4,3]);ctx.strokeStyle=muted;ctx.beginPath();ctx.moveTo(1172,y+28);ctx.lineTo(1492,y+28);ctx.stroke();ctx.setLineDash([])}else{ctx.fillStyle=row.color;ctx.fillRect(1172,y+12,320*row.value/100,3)}});
+  if(!context.rows.length)wrap(ctx,'未收录实测或可用模型估算。留白不表示听不懂。',1172,290,330,23);
  }else{
-  context.rows.forEach((row,i)=>{const y=288+i*170;wrap(ctx,row.label,1172,y,330,21,ink,2);text(ctx,row.value===null?'暂无实测':row.value+'%',1172,y+65,row.value===null?27:48,row.color,true);ctx.fillStyle='#dce2da';ctx.fillRect(1172,y+90,320,6);if(row.value!==null){ctx.fillStyle=row.color;ctx.fillRect(1172,y+90,320*row.value/100,6)}});
+  context.rows.forEach((row,i)=>{const estimated=row.kind==='model-estimate',y=288+i*170;wrap(ctx,row.label,1172,y,330,21,ink,2);text(ctx,row.value===null?'暂无实测':(estimated?'约 ':'')+row.value+'%',1172,y+65,row.value===null?27:48,row.color,true);if(estimated){wrap(ctx,`经验误差带 ${row.range[0]}–${row.range[1]}%。交换两地后同值，无法估计方向。`,1172,y+112,330,20,muted,3)}else{ctx.fillStyle='#dce2da';ctx.fillRect(1172,y+90,320,6);if(row.value!==null){ctx.fillStyle=row.color;ctx.fillRect(1172,y+90,320*row.value/100,6)}}});
  }
- const noteY=context.mode==='listen'?960:710;
+ const noteY=context.mode==='listen'?Math.max(870,290+context.rows.length*52):710;
  wrap(ctx,context.metric,1172,noteY,330,18,ink,3);
- wrap(ctx,'实验正确率 ≠ 日常对话理解率。只适用于具体研究点，不代表整个方言片。',1172,noteY+65,330,18,muted,4);
- let x=48,y=1078;
+ wrap(ctx,context.note,1172,noteY+42,330,18,muted,5);
+ let x=48,y=height-122;
  for(const item of context.legend){const span=item.label.length*18+35;if(x+span>1550){x=48;y+=32}ctx.fillStyle=item.color;ctx.fillRect(x,y-13,15,9);text(ctx,item.label,x+23,y,17,muted);x+=span;}
- if(context.mode==='listen'){text(ctx,'实测点',48,1110,17,muted);scoreBands.forEach((band,i)=>{const left=130+i*160;ctx.fillStyle=band.color;ctx.fillRect(left,1097,15,9);text(ctx,band.label,left+23,1110,17,muted)});}
- text(ctx,'来源：中国语言地图集 · Tang 2009。边界为近似描绘；无实测处不推算百分比。',48,1150,18,muted);
- text(ctx,'paisheng.me/dialect-bridge',48,1180,16,muted);
- const date=new Date().toLocaleDateString('zh-CN',{timeZone:'Asia/Shanghai'});text(ctx,date,1430,1180,16,muted);
+ if(context.mode==='listen'){text(ctx,'实测点',48,height-90,17,muted);scoreBands.forEach((band,i)=>{const left=130+i*160;ctx.fillStyle=band.color;ctx.fillRect(left,height-103,15,9);text(ctx,band.label,left+23,height-90,17,muted)});if(context.hasEstimates)text(ctx,'虚线约值：模型双向平均',960,height-90,17,muted);}
+ text(ctx,'边界：中国语言地图集近似描绘。'+context.sources,48,height-50,18,muted);
+ text(ctx,'paisheng.me/dialect-bridge',48,height-20,16,muted);
+ const date=new Date().toLocaleDateString('zh-CN',{timeZone:'Asia/Shanghai'});text(ctx,date,1430,height-20,16,muted);
  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('图片未能生成')),'image/png'));
  return {blob,url:URL.createObjectURL(blob),filename:`乡音桥-${context.filename}.png`};
 }

@@ -20,6 +20,17 @@ test('area never inherits percentage from its sample city, even with colliding I
  const p={id:'nanchang',kind:'point'};const records=[{from:'suzhou',to:'nanchang',value:13,metric:'sentence_target'},{from:'nanchang',to:'suzhou',value:28,metric:'sentence_target'}];
  assert.equal(measuredPair(area,p,records),null);
 });
+
+test('region label anchors stay inside concave outlines and outside holes',()=>{
+ const hole={...feature,geometry:{type:'Polygon',coordinates:[[[0,0],[6,0],[6,6],[0,6],[0,0]],[[2,2],[4,2],[4,4],[2,4],[2,2]]]}};
+ assert.equal(containsPoint(hole,regionEntity(hole,[3,3]).coordinates),true);
+ const concave={...feature,geometry:{type:'Polygon',coordinates:[[[0,0],[5,0],[5,1],[1,1],[1,5],[0,5],[0,0]]]}};
+ assert.equal(containsPoint(concave,regionEntity(concave,[2,2]).coordinates),true);
+ const supplied={...hole,properties:{...hole.properties,labelCoordinates:[1,3]}};
+ assert.deepEqual(regionEntity(supplied,[3,3]).coordinates,[1,3]);
+ const stale={...hole,properties:{...hole.properties,labelCoordinates:[3,3]}};
+ assert.equal(containsPoint(stale,regionEntity(stale,[3,3]).coordinates),true);
+});
 test('small-region mode retains known parent coverage and adds traced children',()=>{
  const child={...feature,properties:{...feature.properties,id:'child',level:'小片',parentId:'region-a'}};
  assert.deepEqual(visibleRegions([feature,child],'cluster').map(f=>f.properties.id),['region-a']);

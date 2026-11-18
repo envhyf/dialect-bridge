@@ -236,6 +236,10 @@ PLACE_EXAMPLES={
  'xiang-loushao':['娄底','邵阳','双峰'],'xiang-jixu':['吉首','泸溪','溆浦']}
 
 def main():
+ import importlib.util
+ spec=importlib.util.spec_from_file_location('xiang_refine',ROOT/'scripts/refine-xiang.py')
+ module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+ module.update_regions(REGIONS)
  fits={s:registration(s) for s in CONTROLS}; features=[]
  for r in REGIONS:
   r=r.copy(); p=r.pop('points'); holes=r.pop('holes'); extra_parts=r.pop('extraParts',[]); s=r['source']; fn,meta=fits[s]
@@ -274,6 +278,11 @@ def main():
    # interior ring. No raster labels, settlement circles or admin polygons fill it.
    geometry=make_valid(geometry)
    r['topologyRepair']='source self-touch converted to an interior ring with shapely.make_valid'
+  refined=r.pop('refinedSourceParts',None)
+  if refined:
+   source_geometry=unary_union([shape(dict(type='Polygon',coordinates=[q['outer']]+q['holes'])) for q in refined])
+   geometry=unary_union([shape(dict(type='Polygon',coordinates=[fn(ring).tolist() for ring in [q['outer']]+q['holes']])) for q in refined])
+   r['method']='reviewed B11 source-colour contours + shared texture boundaries + '+meta['method']
   geometry=polygonal(geometry);source_geometry=polygonal(source_geometry)
   assert geometry.is_valid and geometry.geom_type in ('Polygon','MultiPolygon') and geometry.area>0, r['id']
   source_polygons=list(source_geometry.geoms) if source_geometry.geom_type=='MultiPolygon' else [source_geometry]

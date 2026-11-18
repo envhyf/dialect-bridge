@@ -1,7 +1,8 @@
 import {listeningScores,scoreBands,scoreColor} from './listen.js';
 import {createShareImage} from './share.js';
+import {estimatedPair} from './estimates.js';
 import {compare,haversine,directionalPair} from './model.js';
-import {regionEntity,regionSamples,visibleRegions,candidatesAt,conflictVisible,containsPoint} from './regions.js';
+import {regionEntity,regionSamples,visibleRegions,candidatesAt,conflictVisible} from './regions.js';
 const $=id=>document.getElementById(id), d3=window.d3;
 const state={cities:[],research:[],atlas:[],regions:[],entities:[],origin:null,target:null,mode:'family',detail:'subcluster',list:'points',pickOrigin:true,view:'pair',listenDirection:'in',anchor:null,listenRows:[],bridgeReversed:false,motionPaused:false,transform:null,metric:'sentence_target'};
 const familyColors={'官话':'#acbf8e','晋语':'#bd9bc5','吴语':'#60a99e','徽语':'#d9bd72','赣语':'#85b5d0','湘语':'#d49f9e','客家话':'#bda27d','粤语':'#d69a6e','平话':'#a3b46d','闽语':'#8b9fd0','儋州话':'#b3aaa0','未定汉语方言':'#b9b9b0'};
@@ -13,12 +14,8 @@ function txt(id,t){$(id).textContent=t;}
 function esc(t){return String(t??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
 function taxonomy(c){return [...new Set([c.family,c.branch,c.cluster,c.subcluster].filter(Boolean))].join(' / ');}
 function displayName(c){
- const clean=name=>String(name).replace(/一带/g,'').replace(/・$/,'');
- if(c.kind!=='region')return clean(c.name);
- if(c.humanLabel)return clean(c.humanLabel);
- if(c.placeExamples?.length)return clean(c.placeExamples.slice(0,2).join('・'));
- const cities=state.cities.filter(p=>p.family===c.family&&containsPoint(c.feature,p.coordinates));
- return clean(cities.length?cities.slice(0,2).map(p=>p.name).join('・'):c.name);
+ if(c.kind!=='region')return c.name;
+ return String(c.subcluster||c.cluster||c.name).replace(/\s*[·・]\s*(?:片块|碎片|色块)\s*\d+\s*$/,'');
 }
 function updateBridge(){
  $('journey-form').classList.toggle('is-reversed',state.bridgeReversed);
@@ -72,11 +69,15 @@ function drawSelection(a,b,single=false){
  for(const {c,i,color} of endpoints){
   if(i&&a.id===b.id)continue;
   const p=projection(c.coordinates);
-  selected.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('fill',color).attr('stroke',!single&&a.id===b.id?selectionColors[1]:'#fff').attr('stroke-width',2).style('pointer-events','none');
-  selected.append('text').datum(c).attr('class','active-city-label').style('fill',color).text(`${single?'◎':a.id===b.id?'①②':i?'②':'①'} ${displayName(c)}`);
+  if(c.kind!=='region')selected.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('fill',color).attr('stroke',!single&&a.id===b.id?selectionColors[1]:'#fff').attr('stroke-width',1.5).style('pointer-events','none');
+  selected.append('text').datum(c).attr('class',`active-city-label${c.kind==='region'?' active-region-label':''}`).style('fill',color).text(`${single?'◎':a.id===b.id?'①②':i?'②':'①'} ${displayName(c)}`);
  }
 }
-function renderDirectionChart(a,b,m){
+function estimateRange(e){return `${e.range[0]}–${e.range[1]}%`;}
+function estimateCard(e){return `<div class="estimate-card"><span>文献模型估算 · 双向平均</span><strong>约 ${e.value}%</strong><p>经验误差带 ${estimateRange(e)}</p><small>无法估计说与听的方向差异；交换两地后数值相同。误差带不是置信区间。</small></div>`;}
+function renderDirectionChart(a,b,m,e=null){
+ $('direction-chart').setAttribute('aria-label',e?'文献模型估算，双向平均及经验误差带':'两个方向的实验成绩');
+ if(e){$('direction-chart').innerHTML=estimateCard(e);return;}
  $('direction-chart').innerHTML=[{from:a,to:b,record:m?.forward,label:'① → ②',reverse:false},{from:b,to:a,record:m?.reverse,label:'② → ①',reverse:true}].map(r=>`<div class="direction-row${r.reverse?' reverse':''}"><div class="direction-caption"><span>${r.label} <b>${esc(displayName(r.from))}</b>说 · ${esc(displayName(r.to))}听</span><strong>${r.record?r.record.value+'%':'暂无实测'}</strong></div><div class="direction-track${r.record?'':' unknown'}" aria-hidden="true">${r.record?`<span style="width:${r.record.value}%"></span>`:''}</div></div>`).join('')+'<div class="direction-axis" aria-hidden="true"><span>0</span><span>50</span><span>100%</span></div>';
 }
 function observedLabel(c){return c.id==='wuhan'?'汉口':c.id==='meizhou'?'梅县':c.name;}
@@ -85,9 +86,9 @@ function normalize(feature){const f=JSON.parse(JSON.stringify(feature));function
 async function load(){
  try{
   if(!d3)throw Error('地图绘图库未加载');
-  const files=['cities.json','dialects.geojson','basemap.json','metadata.json','research.json','settlements.geojson','regions.geojson','boundary-uncertainty.geojson','studies.json','map-lines.geojson'];
+  const files=['cities.json','dialects.geojson','basemap.json','metadata.json','research.json','settlements.geojson','regions.geojson','boundary-uncertainty.geojson','studies.json','map-lines.geojson','estimates.json'];
   const values=await Promise.all(files.map(async f=>{const r=await fetch('data/'+f);if(!r.ok)throw Error(f+' '+r.status);return r.json();}));
-  [state.cities,state.dialects,state.basemap,state.metadata,state.research,state.settlements,state.regionData,state.uncertainty,state.studyCatalog,state.mapLines]=values;
+  [state.cities,state.dialects,state.basemap,state.metadata,state.research,state.settlements,state.regionData,state.uncertainty,state.studyCatalog,state.mapLines,state.estimates]=values;
   state.cities.forEach(c=>c.kind='point');state.regions=state.regionData.features;
   state.entities=[...state.regions.map(f=>regionEntity(f,d3.geoCentroid(normalize(f)))),...state.dialects.features.map(f=>regionEntity(f,d3.geoCentroid(normalize(f)))),...state.cities];
   state.atlas=await fetch('atlas/manifest.json').then(r=>r.json());
@@ -151,19 +152,21 @@ function updateRegionLayer(){
  regionLines?.attr('d',state.detail==='family'?null:path(state.mapLines.features.find(f=>f.properties.id===state.detail)));
  const fs=visibleRegions(state.regions,state.detail).map(normalize);
  regionPaths=regionLayer.selectAll('path').data(fs,d=>d.properties.id).join('path').attr('class','dialect-shape region-shape').attr('d',path).attr('tabindex',0).attr('role','button').attr('aria-label',d=>`${taxonomy(d.properties)}，查看区域与研究`).on('mousemove',(e,d)=>showTooltip(e,displayName(entityFor(d)),`${esc(taxonomy(d.properties))}<br>${d.properties.source} 原图描边 · 点击查看研究`)).on('mouseleave',hideTooltip).on('click',(e,d)=>{e.stopPropagation();chooseAt(e,d);}).on('keydown',(e,d)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(entityFor(d));}});
- regionLabels=regionLayer.selectAll('text').data(fs.filter(f=>!f.properties.derivedParent),d=>d.properties.id).join('text').attr('class','region-label').attr('x',d=>projection(entityFor(d).coordinates)[0]).attr('y',d=>projection(entityFor(d).coordinates)[1]).text(d=>$('show-technical').checked?d.properties.name:displayName(entityFor(d)));
+ regionLabels=regionLayer.selectAll('text').data(fs.filter(f=>!f.properties.derivedParent),d=>d.properties.id).join('text').attr('class','region-label').attr('x',d=>projection(entityFor(d).coordinates)[0]).attr('y',d=>projection(entityFor(d).coordinates)[1]).text(d=>$('show-technical').checked?taxonomy(d.properties):displayName(entityFor(d)));
 }
 function resizeMarkers(k){
  const zoomScale=k;k*=Math.abs(svg.node().getScreenCTM()?.a||1);
  dots?.attr('r',3.2/k);labels?.style('font-size','13px').style('stroke-width','3px').attr('x',6).attr('y',3).attr('transform',d=>`translate(${projection(d.coordinates)}) scale(${1/k})`);
- regionLabels?.style('font-size','12px').style('stroke-width','3px').attr('x',0).attr('y',0).attr('transform',d=>`translate(${projection(entityFor(d).coordinates)}) scale(${1/k})`).style('display',zoomScale>=2.3?null:'none');
- selected?.selectAll('circle').attr('r',7/k);selected?.selectAll('text').style('font-size','15px').style('stroke-width','3px').attr('x',0).attr('y',0).attr('dx',11).attr('dy',-9).attr('transform',d=>`translate(${projection(d.coordinates)}) scale(${1/k})`);
+ const selectedRegionIds=new Set((state.view==='listen'?[state.anchor]:[state.origin,state.target]).filter(c=>c?.kind==='region').map(c=>c.id));
+ regionLabels?.style('font-size','12px').style('stroke-width','3px').attr('x',0).attr('y',0).attr('transform',d=>`translate(${projection(entityFor(d).coordinates)}) scale(${1/k})`).style('display',d=>zoomScale>=2.3&&!selectedRegionIds.has(d.properties.id)?null:'none');
+ selected?.selectAll('circle').attr('r',4.5/k);selected?.selectAll('text').style('font-size','15px').style('stroke-width','3px').attr('x',0).attr('y',0).attr('dx',d=>d.kind==='region'?0:9).attr('dy',d=>d.kind==='region'?0:-8).attr('text-anchor',d=>d.kind==='region'?'middle':'start').attr('transform',d=>`translate(${projection(d.coordinates)}) scale(${1/k})`);
  svg?.select('#unknown-hatch').attr('patternTransform',`scale(${1/k})`);
  svg?.select('#boundary-hatch').attr('patternTransform',`scale(${1/k})`);
  settlementLayer?.selectAll('path').attr('d',d3.symbol().type(d3.symbolTriangle).size(12/(k*k)));
  scoreLayer?.selectAll('.listen-score-point').attr('transform',r=>`translate(${projection(r.peer.coordinates)}) scale(${1/k})`);
  const occupied=[...document.querySelectorAll('.map-heading,.map-controls,.map-action,.map-readout,.north-mark')].map(el=>el.getBoundingClientRect()),mapBox=$('map-stage').getBoundingClientRect();
  occupied.push(...layoutListeningLabels(mapBox,occupied));
+ occupied.push(...selected.selectAll('text').nodes().map(n=>n.getBoundingClientRect()));
  [regionLabels,labels].forEach(selection=>selection?.each(function(d){
   const el=d3.select(this);if(this.classList.contains('city-label'))el.style('display',(state.view==='listen'?[state.anchor?.id,...state.listenRows.map(r=>r.peer.id)]:[state.origin?.id,state.target?.id]).includes(d.id)?'none':null);
   if(getComputedStyle(this).display==='none')return;
@@ -174,22 +177,27 @@ function resizeMarkers(k){
 }
 function choose(c){if(!c)return;hideTooltip();if(state.view==='listen'){state.anchor=c;render();return;}if(state.pickOrigin){state.origin=c;state.pickOrigin=false;}else state.target=c;render();}
 function render(){
- const a=state.origin,b=state.target,r=compare(a,b),m=directionalPair(a,b,state.research,state.metric);
+ const a=state.origin,b=state.target,r=compare(a,b),m=directionalPair(a,b,state.research,state.metric),estimate=m?null:estimatedPair(a,b,state.estimates,state.metric);
  $('origin').value=a.id;$('target').value=b.id;
  txt('origin-taxonomy',taxonomy(a));txt('target-taxonomy',taxonomy(b));$('origin').title=displayName(a)+' · '+taxonomy(a);$('target').title=displayName(b)+' · '+taxonomy(b);updateSelectionUI();updateBridge();
  txt('map-origin',`① ${displayName(a)} → ② ${displayName(b)}`);txt('from-name',displayName(a));txt('to-name',displayName(b));txt('pair-varieties',`${a.variety||a.name} → ${b.variety||b.name}`);
- renderDirectionChart(a,b,m);
+ renderDirectionChart(a,b,m,estimate);
  const hasArea=a.kind==='region'||b.kind==='region';
  const mapAnchor=state.view==='listen'?state.anchor:a,anchorKnown=mapAnchor.family!=='未定汉语方言'&&mapAnchor.usageType!=='mixed-use-zone';
  txt('range',a.id===b.id&&hasArea?'同一已绘区域':levelNames[r.level]||'尚未分类');txt('distance',hasArea?'区域比较':Math.round(haversine(a.coordinates,b.coordinates)).toLocaleString()+' km');
  $('relationship').innerHTML=[a,b].map(c=>`<span>${esc(displayName(c))} · ${esc(taxonomy(c))}</span>`).join('<span class="tree-link">↔</span>');
- txt('reason',r.reason);txt('pair-sources',`${a.source} / ${b.source} · 另可查看 A2 总图`);
+ txt('reason',r.reason);
  if(m){
   txt('score-heading',`① 说 → ② 听 · ${state.metric==='sentence_target'?'句中目标词':'孤立词分类'}测试`);txt('score',m.forward.value);txt('score-unit','%');txt('reverse-score',m.reverse.value+'%');
   txt('evidence-label',`Tang 2009 · 表 ${m.forward.table} · 不是日常对话理解率`);
   const v=m.forward.value;txt('result-title',v>=70?'这一次，话能接得上':v>=40?'听见一些熟悉的线索':v>=15?'像隔着一层字幕':'熟悉的字，陌生的声');
   txt('result-phrase',`实验里，${observedLabel(a)}话说给${observedLabel(b)}听者，${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}正确率为 ${v}%。换个方向，成绩是 ${m.reverse.value}%。`);
   txt('conversation-tip',state.metric==='sentence_target'?'不是“十句话听懂几句”，而是句子里指定词语的翻译成绩。每个方向 15 位听者、60 次回答。':'这是十选一的词语义类测试，随机猜测基线为 10%。它与句中目标词翻译任务不能混用。');
+ }else if(estimate){
+  txt('score-heading','文献模型估算 · 双向平均');txt('score','约 '+estimate.value);txt('score-unit','%');txt('reverse-score','同一均值');
+  txt('evidence-label',`Cheng 1997 词汇结构 · Tang 2009 校准 · 误差带 ${estimateRange(estimate)}`);
+  txt('result-title','由词汇结构估计的平均成绩');txt('result-phrase',`约 ${estimate.value}%，经验误差带 ${estimateRange(estimate)}。不是这两地的听者实测，也不能估计两个方向的差别。`);
+  txt('conversation-tip','文献词汇结构系数经已有实验校准。未对新增城市做听者实验；区间是留出验证的经验误差带，不是置信区间。不能推广到整个片区。');
  }else{
   txt('score-heading',hasArea?'这两片乡音，尚无区域层面的实测':'这两地，尚无收录的互通实验');txt('score','—');txt('score-unit','未收录实测');txt('reverse-score','—');txt('evidence-label','没有实测，不从同片、邻近城市推算百分比');
   txt('result-title',a.id===b.id&&hasArea&&r.level>=0?'同一区域，也有不同声音':r.label);txt('result-phrase',r.phrase);txt('conversation-tip',hasArea?'下方列出落在所选区域内、分类一致的实验样本。样本的测试成绩只属于具体方言点，不能涂满整个片区。':'可以读出方言分类关系，不能据此知道个人听懂多少。已有研究样本可在左侧“找地点”中查看。');
@@ -207,14 +215,15 @@ function render(){
  else if(!anchorKnown)$('legend').innerHTML='<span class="legend-item">①为兼用或归属待核区域，暂不显示分类远近。</span>';
  else $('legend').innerHTML='<span class="legend-item"><i style="background:#8fae8a"></i>同片</span><span class="legend-item"><i style="background:#b3c5a1"></i>同大区</span><span class="legend-item"><i style="background:#dddec9"></i>其他已分类方言区</span><span class="legend-item">灰色：兼用或归属待核；浅底：未覆盖</span>';
  txt('layer-note',`${state.regions.filter(f=>!f.properties.derivedParent).length} 个详图描边区域 · ${state.detail==='subcluster'?'小片未收录处保留片界':state.detail==='cluster'?'片级视图':'总图视图'}。蓝①说话、橙②听话；小片实线/虚线描边，所属片淡亮。棕色斜纹：交叠待核。`);
- renderRegionFacts();renderList();renderViewControls(m);const u=new URL(location.href);u.searchParams.set('from',a.id);u.searchParams.set('to',b.id);u.searchParams.set('metric',state.metric);u.searchParams.set('detail',state.detail);if(state.bridgeReversed)u.searchParams.set('flow','reverse');else u.searchParams.delete('flow');u.searchParams.set('view',state.view);u.searchParams.set('anchor',state.anchor.id);u.searchParams.set('listen',state.listenDirection);history.replaceState(null,'',u);
+ renderRegionFacts();renderList();renderViewControls(m,estimate);const u=new URL(location.href);u.searchParams.set('from',a.id);u.searchParams.set('to',b.id);u.searchParams.set('metric',state.metric);u.searchParams.set('detail',state.detail);if(state.bridgeReversed)u.searchParams.set('flow','reverse');else u.searchParams.delete('flow');u.searchParams.set('view',state.view);u.searchParams.set('anchor',state.anchor.id);u.searchParams.set('listen',state.listenDirection);history.replaceState(null,'',u);
 }
 function listPair(c){if(state.view==='listen')return state.listenDirection==='in'?directionalPair(c,state.anchor,state.research,state.metric):directionalPair(state.anchor,c,state.research,state.metric);return state.pickOrigin?directionalPair(c,state.target,state.research,state.metric):directionalPair(state.origin,c,state.research,state.metric);}
+function listEstimate(c){return estimatedPair(c,state.view==='listen'?state.anchor:state.pickOrigin?state.target:state.origin,state.estimates,state.metric);}
 function renderList(){
  txt('list-direction',state.view==='listen'?(state.listenDirection==='in'?`候选地说 → ${displayName(state.anchor)}听`:`${displayName(state.anchor)}说 → 候选地听`):state.pickOrigin?`列表成绩：候选地说 → ${displayName(state.target)}听`:`列表成绩：${displayName(state.origin)}说 → 候选地听`);
  const q=$('search').value.trim().toLowerCase(),isArea=state.list==='regions';let cs=(isArea?state.entities.filter(c=>c.kind==='region'&&c.level!=='大区'&&!c.derivedParent):state.cities).filter(c=>`${displayName(c)}${c.name}${c.variety}${taxonomy(c)}${c.id}`.toLowerCase().includes(q));
  cs.sort((a,b)=>{if($('sort').value==='name')return a.family.localeCompare(b.family,'zh-CN')||a.name.localeCompare(b.name,'zh-CN');const x=listPair(a),y=listPair(b);if(!!x!==!!y)return x?-1:1;if(x&&y)return y.forward.value-x.forward.value;const anchor=state.view==='listen'?state.anchor:state.pickOrigin?state.target:state.origin;const rank=c=>{const level=compare(anchor,c).level;return level<0?99:level;};return rank(a)-rank(b)||a.name.localeCompare(b.name,'zh-CN');});
- $('city-list').innerHTML=cs.length?cs.map(c=>{const m=listPair(c);return `<button class="city-row${c.id===(state.view==='listen'?state.anchor.id:state.pickOrigin?state.origin.id:state.target.id)?' active':''}" data-city="${c.id}"><strong>${esc(displayName(c))}</strong><small>${esc(c.kind==='region'?c.name+' · '+c.family:c.variety||c.family)}</small><span class="row-score">${m?m.forward.value+'<small>%</small>':'<small>'+(isArea?c.level:'代表点')+'</small>'}</span></button>`;}).join(''):'<p class="empty-list">暂未收录这个区域。<br>可切换“找地点”查找城市；不以城市圆圈代替片界。</p>';
+ $('city-list').innerHTML=cs.length?cs.map(c=>{const m=listPair(c),e=m?null:listEstimate(c);return `<button class="city-row${c.id===(state.view==='listen'?state.anchor.id:state.pickOrigin?state.origin.id:state.target.id)?' active':''}" data-city="${c.id}"><strong>${esc(displayName(c))}</strong><small>${e?'模型双向平均 · '+estimateRange(e):esc(c.kind==='region'?displayName(c)+' · '+c.family:c.variety||c.family)}</small><span class="row-score">${m?m.forward.value+'<small>%</small>':e?'约 '+e.value+'<small>%</small>':'<small>'+(isArea?c.level:'代表点')+'</small>'}</span></button>`;}).join(''):'<p class="empty-list">暂未收录这个区域。<br>可切换“找地点”查找城市；不以城市圆圈代替片界。</p>';
  $('city-list').querySelectorAll('[data-city]').forEach(el=>el.onclick=()=>{const c=state.entities.find(c=>c.id===el.dataset.city);choose(c);$('place-finder').open=false;if(c.kind==='region')focusRegion(c);});
  txt('list-count',isArea?`${cs.length} 个已描边片区 · 全国细分尚未齐备`:`${cs.length} 个代表点 · 15 个进入已收录实验`);
 }
@@ -250,20 +259,32 @@ function activeMapLegend(){
 }
 function enterPeerComparison(row){state.origin=row.from;state.target=row.to;state.view='pair';state.bridgeReversed=false;render();}
 function listenTitle(){return state.listenDirection==='in'?`${displayName(state.anchor)}听各地`:`各地听${displayName(state.anchor)}`;}
+function listeningEvidence(){
+ const measured=listeningScores(state.anchor,state.cities,state.research,state.metric,state.listenDirection).map(r=>({...r,kind:'measured'}));
+ if(state.anchor.kind==='region')return measured;
+ const known=new Set(measured.map(r=>r.peer.id));
+ const estimates=state.cities.filter(peer=>!known.has(peer.id)).flatMap(peer=>{
+  const e=estimatedPair(state.anchor,peer,state.estimates,state.metric);
+  return e?[{...e,peer,from:state.anchor,to:peer}]:[];
+ }).sort((a,b)=>b.value-a.value);
+ return [...measured,...estimates];
+}
 function renderListeningMap(){
- state.listenRows=state.view==='listen'?listeningScores(state.anchor,state.cities,state.research,state.metric,state.listenDirection):[];
- const points=scoreLayer.selectAll('.listen-score-point').data(state.listenRows,r=>r.peer.id).join(enter=>{
+ state.listenRows=state.view==='listen'?listeningEvidence():[];
+ const layers=scoreLayer.selectAll('.score-kind-layer').data(['measured','model-estimate']).join('g').attr('class',kind=>`score-kind-layer ${kind==='measured'?'measured-score-layer':'estimate-score-layer'}`);
+ const points=layers.selectAll('.listen-score-point').data(kind=>state.listenRows.filter(r=>r.kind===kind),r=>`${r.kind}:${r.peer.id}`).join(enter=>{
   const g=enter.append('g').attr('class','listen-score-point').attr('tabindex',0).attr('role','button');
   g.append('path').attr('class','listen-leader');g.append('circle').attr('r',3.5);g.append('rect').attr('x',7).attr('y',-11).attr('width',46).attr('height',22).attr('rx',4);
   g.append('text').attr('class','listen-peer-value').attr('x',28).attr('y',4).attr('text-anchor','middle');
   g.append('text').attr('class','listen-peer-name').attr('x',7).attr('y',-16);return g;
  });
- points.attr('aria-label',r=>`${r.from.name}说给${r.to.name}听，${r.value}%，查看双向实验`).on('click',(e,r)=>{e.stopPropagation();enterPeerComparison(r)}).on('keydown',(e,r)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();enterPeerComparison(r)}}).on('mousemove',(e,r)=>showTooltip(e,`${r.from.name}说 → ${r.to.name}听`,`${r.value}% · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}实验<br>只代表这个研究点。点击看两个方向。`)).on('mouseleave',hideTooltip);
- points.select('circle').attr('fill',r=>scoreColor(r.value));points.select('rect').attr('fill',r=>scoreColor(r.value));
- points.select('.listen-peer-value').text(r=>r.value+'%');points.select('.listen-peer-name').text(r=>r.peer.name);
+ points.classed('estimate-point',r=>r.kind==='model-estimate').attr('aria-label',r=>r.kind==='model-estimate'?`${r.from.name}与${r.to.name}，模型估算双向平均约${r.value}%，误差带${estimateRange(r)}`:`${r.from.name}说给${r.to.name}听，${r.value}%，查看双向实验`).on('click',(e,r)=>{e.stopPropagation();enterPeerComparison(r)}).on('keydown',(e,r)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();enterPeerComparison(r)}}).on('mousemove',(e,r)=>showTooltip(e,r.kind==='model-estimate'?`${r.from.name} ↔ ${r.to.name} · 文献模型估算`:`${r.from.name}说 → ${r.to.name}听`,r.kind==='model-estimate'?`双向平均约 ${r.value}% · 经验误差带 ${estimateRange(r)}<br>Cheng 1997 词汇结构 / Tang 2009 校准<br>非听者实测，无法估计方向差别。`:`${r.value}% · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}实验<br>只代表这个研究点。点击看两个方向。`)).on('mouseleave',hideTooltip);
+ points.select('circle').attr('fill',r=>r.kind==='model-estimate'?'#f7f9f5':scoreColor(r.value));points.select('rect').attr('fill',r=>r.kind==='model-estimate'?'#f7f9f5':scoreColor(r.value));
+ points.select('.listen-peer-value').text(r=>(r.kind==='model-estimate'?'约':'')+r.value+'%');points.select('.listen-peer-name').text(r=>r.peer.name);
 }
-function renderViewControls(pair){
+function renderViewControls(pair,estimate=null){
  const listening=state.view==='listen';
+ $('map-readout').classList.toggle('is-listening',listening);
  document.querySelector('.skip').href=listening?'#listener-anchor':'#origin';document.querySelector('.skip').textContent='跳到地点选择';
  for(const view of ['pair','listen'])$('view-'+view).setAttribute('aria-pressed',String(state.view===view));
  $('journey-form').hidden=listening;$('listen-control').hidden=!listening;$('pair-results').hidden=listening;$('listen-results').hidden=!listening;
@@ -271,23 +292,29 @@ function renderViewControls(pair){
  for(const direction of ['in','out'])$('listen-'+direction).setAttribute('aria-pressed',String(direction===state.listenDirection));
  if(listening){
   txt('map-hint',state.listenDirection==='in'?'点地图，换一个听话地':'点地图，换一个说话地');txt('list-title','选择中心地点');
-  const available=samples(state.anchor);
-  $('listen-results').innerHTML=`<h2>${esc(listenTitle())}</h2><p class="listen-note">${state.listenRows.length?`${state.listenRows.length} 个外地研究点 · 数字标在主图上`:'尚未收录这个地点的方向性实测'}</p><div class="score-key">${scoreBands.map(b=>`<span><i style="background:${b.color}"></i>${b.label}</span>`).join('')}</div><p class="listen-note">色块是${state.mode==='family'?'方言分布':'分类关系'}，数字标记是点对实测。未知不等于听不懂。</p>${!state.listenRows.length?`<p class="listen-empty">${state.anchor.kind==='region'?'整片区域没有实测百分比。':'不从附近城市推算成绩。'}${available.length?'可以选区域内的研究点查看：':''}</p>${available.map(c=>`<button class="sample-link" data-anchor="${c.id}">用${esc(c.name)}研究点</button>`).join('')}`:''}<div class="listen-ranking">${state.listenRows.map(r=>`<button data-peer="${r.peer.id}"><span>${esc(r.peer.name)}<small>${esc(r.peer.family)}</small></span><strong style="color:${scoreColor(r.value)}">${r.value}<small>%</small></strong></button>`).join('')}</div><p class="listen-note">Tang 2009 · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}，不是日常对话理解率。</p><button id="listen-method" class="inline-action">实验说明与来源 ↗</button>`;
+  const available=samples(state.anchor),measured=state.listenRows.filter(r=>r.kind==='measured'),estimates=state.listenRows.filter(r=>r.kind==='model-estimate');
+  const ranking=(rows,estimated=false)=>`<div class="listen-ranking${estimated?' estimate-ranking':''}">${rows.map(r=>`<button data-peer="${r.peer.id}"><span>${esc(r.peer.name)}<small>${estimated?'双向平均 · 误差带 '+estimateRange(r):esc(r.peer.family)}</small></span><strong>${estimated?'约 ':''}${r.value}<small>%</small></strong></button>`).join('')}</div>`;
+  $('listen-results').innerHTML=`<h2>${esc(listenTitle())}</h2><p class="listen-note">${measured.length} 个实测点 · ${estimates.length} 个估算点</p><div class="score-key">${scoreBands.map(b=>`<span><i style="background:${b.color}"></i>${b.label}</span>`).join('')}</div><p class="listen-note">彩色实底＝方向实测；虚线约值＝文献模型的双向平均。地图色块仅表示${state.mode==='family'?'方言分布':'分类关系'}。</p>${!state.listenRows.length?`<p class="listen-empty">${state.anchor.kind==='region'?'整片区域没有实测或估算百分比。':'尚无实测或可用的文献模型估算。'}${available.length?'可以选区域内的研究点查看：':''}</p>${available.map(c=>`<button class="sample-link" data-anchor="${c.id}">用${esc(c.name)}研究点</button>`).join('')}`:''}${measured.length?`<h3 class="evidence-group-title">方向实测 · Tang 2009</h3>${ranking(measured)}`:''}${estimates.length?`<h3 class="evidence-group-title">文献模型估算 · 双向平均</h3><p class="listen-note">无法估计方向差别，切换听与说后约值相同。经验误差带不是置信区间。Cheng 1997 词汇结构 / Tang 2009 校准。</p>${ranking(estimates,true)}`:''}<p class="listen-note">${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}任务，非日常对话理解率。</p><button id="listen-method" class="inline-action">数据说明与来源 ↗</button>`;
   $('listen-results').querySelectorAll('[data-peer]').forEach(el=>el.onclick=()=>enterPeerComparison(state.listenRows.find(r=>r.peer.id===el.dataset.peer)));
   $('listen-results').querySelectorAll('[data-anchor]').forEach(el=>el.onclick=()=>{state.anchor=state.cities.find(c=>c.id===el.dataset.anchor);render()});
   $('listen-method').onclick=methodDialog;
-  $('map-readout').innerHTML=`<span>${esc(listenTitle())}</span><strong>${state.listenRows.length?state.listenRows.length+' 个实测点':'暂无实测'}</strong><small>数字＝本研究任务正确率</small>`;
+  $('map-readout').innerHTML=`<span>${esc(listenTitle())}</span><strong>${state.listenRows.length?`实测 ${measured.length} · 估算 ${estimates.length}`:'暂无可用数据'}</strong><small>${estimates.length?'虚线约值＝双向平均，详情列出误差带':'数字＝研究任务正确率'}</small>`;
  }else{
-  $('map-readout').innerHTML=`<span>${esc(displayName(state.origin))}说 → ${esc(displayName(state.target))}听</span><strong>${pair?pair.forward.value+'<small>%</small>':'暂无实测'}</strong><small>${pair?'反向 '+pair.reverse.value+'% · 研究任务正确率':'不推算区域百分比'}</small>`;
+  $('map-readout').innerHTML=estimate?`<span>${esc(displayName(state.origin))} ↔ ${esc(displayName(state.target))}</span><strong>约 ${estimate.value}<small>%</small></strong><small>文献模型估算 · 双向平均<br>经验误差带 ${estimateRange(estimate)}<br>Cheng 1997 / Tang 2009 校准</small>`:`<span>${esc(displayName(state.origin))}说 → ${esc(displayName(state.target))}听</span><strong>${pair?pair.forward.value+'<small>%</small>':'暂无实测'}</strong><small>${pair?'反向 '+pair.reverse.value+'% · 研究任务正确率':'不推算区域百分比'}</small>`;
  }
  resizeMarkers(state.transform?.k||1);
 }
 let sharedImageURL=null;
+function shareContext(){
+ const listening=state.view==='listen',pair=directionalPair(state.origin,state.target,state.research,state.metric),estimate=pair?null:estimatedPair(state.origin,state.target,state.estimates,state.metric);
+ const rows=listening?state.listenRows.map(r=>({label:r.peer.name,value:r.value,color:scoreColor(r.value),kind:r.kind,range:r.range})):estimate?[{label:`${displayName(state.origin)} ↔ ${displayName(state.target)}`,value:estimate.value,range:estimate.range,kind:'model-estimate',color:selectionColors[0]}]:[{label:`${displayName(state.origin)}说 → ${displayName(state.target)}听`,value:pair?.forward.value??null,color:selectionColors[0],kind:'measured'},{label:`${displayName(state.target)}说 → ${displayName(state.origin)}听`,value:pair?.reverse.value??null,color:selectionColors[1],kind:'measured'}];
+ const hasEstimates=rows.some(r=>r.kind==='model-estimate');
+ return {mode:state.view,title:listening?listenTitle():estimate?`${displayName(state.origin)} ↔ ${displayName(state.target)}`:`${displayName(state.origin)}说，${displayName(state.target)}听`,subtitle:hasEstimates?'实底：方向实测；虚线约值：模型双向平均，无法估计方向差别。':'数字为具体研究点的方向实验成绩；非日常对话理解率。',filename:listening?listenTitle():`${displayName(state.origin)}-${displayName(state.target)}`,metric:`${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}任务`,sources:hasEstimates?'实测 Tang 2009；估算 Cheng 1997 词汇结构 / Tang 2009 校准。':'实测来源：Tang 2009。',note:hasEstimates?'估算区间为留出验证经验误差带，非置信区间。新增城市未经听者实验验证；所有点值均不能推广到整个方言片。':'实验正确率 ≠ 日常对话理解率。只适用于具体研究点，不代表整个方言片。',hasEstimates,legend:activeMapLegend(),rows};
+}
 async function shareCurrentMap(){
  const button=$('share');button.disabled=true;txt('share','正在生成…');
  try{
-  const listening=state.view==='listen',pair=directionalPair(state.origin,state.target,state.research,state.metric);
-  const context={mode:state.view,title:listening?listenTitle():`${displayName(state.origin)}说，${displayName(state.target)}听`,subtitle:listening?'一地为中心，分别查看听与说。数字为点对实测。':'各说本地方言，不切换普通话。两个方向的实验成绩分别读取。',filename:listening?listenTitle():`${displayName(state.origin)}-${displayName(state.target)}`,metric:`Tang 2009 · ${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}任务`,legend:activeMapLegend(),rows:listening?state.listenRows.map(r=>({label:r.peer.name,value:r.value,color:scoreColor(r.value)})):[{label:`${displayName(state.origin)}说 → ${displayName(state.target)}听`,value:pair?.forward.value??null,color:selectionColors[0]},{label:`${displayName(state.target)}说 → ${displayName(state.origin)}听`,value:pair?.reverse.value??null,color:selectionColors[1]}]};
+  const context=shareContext();
   context.subtitle+=state.mode==='score'?' 当前色块表示分类关系，不是互通率。':'';
   const result=await createShareImage(svg.node(),context);if(sharedImageURL)URL.revokeObjectURL(sharedImageURL);sharedImageURL=result.url;
   const file=new File([result.blob],result.filename,{type:'image/png'}),canShare=!!navigator.canShare?.({files:[file]});
@@ -318,13 +345,19 @@ function showTooltip(e,title,body){const rect=$('map-stage').getBoundingClientRe
 function showCityTooltip(e,c){const m=listPair(c),a=state.pickOrigin?c:state.origin,b=state.pickOrigin?state.target:c;showTooltip(e,`${c.name} · ${c.variety}`,`${esc(taxonomy(c))}<br>${esc(displayName(a))}说 → ${esc(displayName(b))}听<br>${m?`①→② ${m.forward.value}% · ②→① ${m.reverse.value}%<br>${state.metric==='sentence_target'?'句中目标词翻译':'孤立词义类分类'}实验成绩`:'暂无配对实测 · '+esc(levelNames[compare(a,b).level])}`);}
 function hideTooltip(){$('tooltip').hidden=true;}
 function openDialog(title,html){txt('dialog-title',title);$('dialog-body').innerHTML=html;if(!$('info-dialog').open)$('info-dialog').showModal();}
+function estimateMethod(){
+ const model=state.estimates.models.find(m=>m.metric===state.metric),record=state.estimates.records.find(r=>r.metric===state.metric);
+ if(!model||!record)return '';
+ return `<section class="estimate-method"><h3>文献模型估算：双向平均，无法估计方向</h3><p>Cheng（1997）附录 3 的词汇结构系数，经 Tang（2009）已有听者实验的双向平均成绩校准。仅对有对应结构资料的城市点对提供约值；有实测时优先显示实测。没有用距离或同片关系填数字。</p><p>按方言点留出验证：平均绝对误差 ${model.validation.mae} 个百分点，训练均值基线为 ${model.validation.baselineMae}；两端方言点均留出时误差 ${model.twoNewDialectsValidation.mae}，基线 ${model.twoNewDialectsValidation.baselineMae}。记录按场景使用留出绝对误差第 90 百分位构成经验误差带，裁剪到 0–100%。这是误差参考，不是统计置信区间。</p><p>新增城市尚无独立听者实验验证。交换说与听不会改变估算值；估算也不能推广到整个区域。</p><p><a href="${esc(record.sourceUrl)}" target="_blank" rel="noreferrer">Cheng 1997 · 结构资料 ↗</a> · <a href="${esc(record.calibrationSourceUrl)}" target="_blank" rel="noreferrer">Tang 2009 · 校准实验 ↗</a> · <a href="data/estimates.json" download>估算与验证记录 ↓</a></p></section>`;
+}
 function methodDialog(){
  const reg=state.metadata.registration;
- openDialog('先读懂数字，再听见彼此',`<div class="notice">这一版只收录汉语方言。地图展示的是历史分布与研究样本，不能替代对今天某个人语言能力的判断。</div><div class="method-grid"><section><h3>有实验，才有百分数</h3><p>Tang（2009）测试了 15 个方言点。每项任务有 225 个“说者 → 听者”组合，含 15 个同点对照。这里同时保留两个方向，不把它们平均成一个互通率。</p><p>默认指标是句中指定目标词的翻译正确率；每个方向为 15 位听者、60 次回答。它不是整句理解率，更不是日常对话理解率。</p><p><a href="https://www.lotpublications.nl/Documents/228_fulltext.pdf#page=92" target="_blank" rel="noreferrer">查原始表 4.3 · 印刷第 80 页 ↗</a></p></section><section><h3>同片不等于听得懂</h3><p>苏州与温州同属吴语，实验成绩仍然可能很低。南昌与苏州的结果，也不能推广成整个赣语与吴语的结果。</p><p>区域模式不显示实验百分数；研究点模式中，84 个代表点里未进入这项实验的地点只显示分类关系。我们不拿邻近地点的百分数填补空缺。</p><p>接触经历、普通话能力、测试难度和样本来源都会影响成绩。部分听者与录音者可能来自邻近方言点。历史小样本不能代表今天所有人。</p></section></div>${state.view==='listen'?`<h3>${esc(listenTitle())}</h3><p>当前方向：${state.listenDirection==='in'?'各地说给中心地点听':'中心地点说给各地听'}。收录 ${state.listenRows.length} 个外地研究点；没有数据的地点不推算。</p>`:`<h3>你正在看的这一对</h3>${researchTable()}`}<p><button id="metric-toggle" class="inline-action">切换为${state.metric==='sentence_target'?'孤立词语义分类':'句中目标词翻译'}测试 →</button> <span class="live-status">两种任务分开展示，不混合评分。</span></p><h3>图像如何成为地理数据</h3><p>A2 总图按印刷填色提取轮廓，以 ${reg.gcpCount} 个城市控制点拟合圆锥投影中的仿射变换。留一验证 RMSE 为 ${reg.leaveOneOutRMSEkm} km（旧版二阶多项式为 21.94 km）。这只是拟合候选，不表示已经确认原图投影。行政边界来自 DataV，与旧作「赶集志」同源，独立绘制，不参与方言分区。</p><p>地区详图逐张独立配准，人工沿原图片、小片界线概化描绘。当前收录 ${state.regionData.metadata.tracedFeatureCount} 个轮廓；自动生成的父片仅是已描小片的几何并集，空缺不补齐。可在“对照原图轮廓”中本地打开对应扫描，查看保存的像素描线。配准误差只衡量控制点，不能当作语言边界精度。</p><p>分类沿用所供历史图版；如 B2 的“北方官话”，不会悄悄套用为另一版本的现代分区。细小方言岛、符号混用区和扫描模糊边界仍有遗漏。只收录汉语方言的代表类别；底图空白不表示无人居住或没有语言。</p><h3>散落的客家话居民点</h3><p>另行人工核对四川盆地的 ${state.settlements.features.length} 个原图三角符号。它们是居民点符号的部分转录，不是完整名录，没有擅自补村名，也没有把散点扩成连续的客家话区域。</p><p><a href="data/metadata.json" download>下载配准与来源记录 ↓</a> · <a href="data/research.json" download>下载两项测试数据 ↓</a></p>`);
+ openDialog('先读懂数字，再听见彼此',`<div class="notice">这一版只收录汉语方言。地图展示的是历史分布与研究样本，不能替代对今天某个人语言能力的判断。</div><div class="method-grid"><section><h3>实测保留两个方向</h3><p>Tang（2009）测试了 15 个方言点。每项任务有 225 个“说者 → 听者”组合，含 15 个同点对照。这里同时保留两个方向，不把它们平均成一个互通率。</p><p>默认指标是句中指定目标词的翻译正确率；每个方向为 15 位听者、60 次回答。它不是整句理解率，更不是日常对话理解率。</p><p><a href="https://www.lotpublications.nl/Documents/228_fulltext.pdf#page=92" target="_blank" rel="noreferrer">查原始表 4.3 · 印刷第 80 页 ↗</a></p></section><section><h3>同片不等于听得懂</h3><p>苏州与温州同属吴语，实验成绩仍然可能很低。南昌与苏州的结果，也不能推广成整个赣语与吴语的结果。</p><p>区域不显示实测或估算百分数。城市点对优先显示实测；有文献词汇结构资料时另列模型双向平均约值，其余只显示分类关系。我们不拿邻近地点的百分数填补空缺。</p><p>接触经历、普通话能力、测试难度和样本来源都会影响成绩。部分听者与录音者可能来自邻近方言点。历史小样本不能代表今天所有人。</p></section></div>${state.view==='listen'?`<h3>${esc(listenTitle())}</h3><p>当前方向：${state.listenDirection==='in'?'各地说给中心地点听':'中心地点说给各地听'}。显示 ${state.listenRows.filter(r=>r.kind==='measured').length} 个实测点和 ${state.listenRows.filter(r=>r.kind==='model-estimate').length} 个模型估算点；估算不区分方向。</p>`:`<h3>你正在看的这一对</h3>${researchTable()}`}<p><button id="metric-toggle" class="inline-action">切换为${state.metric==='sentence_target'?'孤立词语义分类':'句中目标词翻译'}测试 →</button> <span class="live-status">两种任务分开展示，不混合评分。</span></p><h3>图像如何成为地理数据</h3><p>A2 总图按印刷填色提取轮廓，以 ${reg.gcpCount} 个城市控制点拟合圆锥投影中的仿射变换。留一验证 RMSE 为 ${reg.leaveOneOutRMSEkm} km（旧版二阶多项式为 21.94 km）。这只是拟合候选，不表示已经确认原图投影。行政边界来自 DataV，与旧作「赶集志」同源，独立绘制，不参与方言分区。</p><p>地区详图逐张独立配准，人工沿原图片、小片界线概化描绘。当前收录 ${state.regionData.metadata.tracedFeatureCount} 个轮廓；自动生成的父片仅是已描小片的几何并集，空缺不补齐。可在“对照原图轮廓”中本地打开对应扫描，查看保存的像素描线。配准误差只衡量控制点，不能当作语言边界精度。</p><p>分类沿用所供历史图版；如 B2 的“北方官话”，不会悄悄套用为另一版本的现代分区。细小方言岛、符号混用区和扫描模糊边界仍有遗漏。只收录汉语方言的代表类别；底图空白不表示无人居住或没有语言。</p><h3>散落的客家话居民点</h3><p>另行人工核对四川盆地的 ${state.settlements.features.length} 个原图三角符号。它们是居民点符号的部分转录，不是完整名录，没有擅自补村名，也没有把散点扩成连续的客家话区域。</p><p><a href="data/metadata.json" download>下载配准与来源记录 ↓</a> · <a href="data/research.json" download>下载两项测试数据 ↓</a></p>`);
  $('dialog-body').insertAdjacentHTML('beforeend','<h3>底图坐标也有待核条件</h3><p>同一个显示投影不等于坐标基准已经严格统一。DataV 文档说明其地图组件主要使用 GCJ-02；当前底图文件未声明 CRS，控制点也不是同一来源的实地测量。这里保留提供方坐标，不凭猜测二次转换或吸附行政线。<a href="data/basemap-metadata.json" target="_blank" rel="noreferrer">查看底图核验记录 ↗</a></p>');
  $('metric-toggle').onclick=()=>{state.metric=state.metric==='sentence_target'?'word_category':'sentence_target';render();methodDialog();};
+ $('dialog-body').insertAdjacentHTML('afterbegin',estimateMethod());
 }
-function researchTable(){const a=state.origin,b=state.target,m=directionalPair(a,b,state.research,state.metric);if(!m)return '<p class="notice">这两个代表点没有成对实测数据。分类关系不能替代互通实验。</p>';return `<table class="method-table"><thead><tr><th>说者 → 听者</th><th>正确率</th><th>实验任务</th></tr></thead><tbody>${[m.forward,m.reverse].map(r=>`<tr><td>${r.speakerLabel} → ${r.listenerLabel}</td><td>${r.value}%</td><td>${r.metricLabel}</td></tr>`).join('')}</tbody></table><p>${state.metric==='word_category'?'词语分类为十选一任务，随机猜测基线 10%。':'每个句子只计指定目标词；不是整句、也不是对话理解率。'} 特别是同点成绩低于 100%，也提醒我们测试受材料与样本影响。</p>`;}
+function researchTable(){const a=state.origin,b=state.target,m=directionalPair(a,b,state.research,state.metric);if(!m){const e=estimatedPair(a,b,state.estimates,state.metric);return e?estimateCard(e):'<p class="notice">这两个代表点没有成对实测或可用估算数据。分类关系不能替代互通实验。</p>';}return `<table class="method-table"><thead><tr><th>说者 → 听者</th><th>正确率</th><th>实验任务</th></tr></thead><tbody>${[m.forward,m.reverse].map(r=>`<tr><td>${r.speakerLabel} → ${r.listenerLabel}</td><td>${r.value}%</td><td>${r.metricLabel}</td></tr>`).join('')}</tbody></table><p>${state.metric==='word_category'?'词语分类为十选一任务，随机猜测基线 10%。':'每个句子只计指定目标词；不是整句、也不是对话理解率。'} 特别是同点成绩低于 100%，也提醒我们测试受材料与样本影响。</p>`;}
 const localAtlasImages=new Map();
 function atlasDialog(preferred='A2',pixel=null,feature=null){
  const a=state.atlas.find(x=>x.id===preferred)||state.atlas[0];
@@ -367,7 +400,7 @@ function bind(){
  $('show-technical').onchange=()=>{updateRegionLayer();render();};
  $('show-settlements').onchange=e=>settlementLayer.style('display',e.target.checked?null:'none');
  $('zoom-in').onclick=()=>svg.call(zoom.scaleBy,1.4);$('zoom-out').onclick=()=>svg.call(zoom.scaleBy,1/1.4);$('reset-map').onclick=()=>svg.call(zoom.transform,d3.zoomIdentity);
- $('method-nav').onclick=methodDialog;$('score-info').onclick=methodDialog;$('atlas-nav').onclick=()=>atlasDialog();$('source-btn').onclick=()=>atlasDialog(state.target.source,null,state.target.feature);$('download').onclick=downloads;
+ $('method-nav').onclick=methodDialog;$('score-info').onclick=methodDialog;$('atlas-nav').onclick=()=>atlasDialog();$('download').onclick=downloads;
  $('explore-nav').onclick=()=>{if($('info-dialog').open)$('info-dialog').close();$(state.view==='listen'?'listener-anchor':'origin').focus();};$('close-dialog').onclick=()=>$('info-dialog').close();$('info-dialog').onclick=e=>{if(e.target===$('info-dialog')){const b=e.target.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)e.target.close();}};
  $('share').onclick=shareCurrentMap;
  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)&&!$('info-dialog').open){e.preventDefault();$('place-finder').open=true;$('search').focus();}});
