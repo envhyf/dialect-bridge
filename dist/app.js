@@ -8,7 +8,7 @@ const state={cities:[],research:[],atlas:[],regions:[],entities:[],origin:null,t
 const familyColors={'官话':'#acbf8e','晋语':'#bd9bc5','吴语':'#60a99e','徽语':'#d9bd72','赣语':'#85b5d0','湘语':'#d49f9e','客家话':'#bda27d','粤语':'#d69a6e','平话':'#a3b46d','闽语':'#8b9fd0','儋州话':'#b3aaa0','未定汉语方言':'#b9b9b0'};
 const selectionColors=['#216dab','#b04c21'];
 const levelNames=['同一代表点','同一方言片','同一分区','同一方言大区','跨方言大区'];
-let svg,viewport,projection,path,dialectPaths,regionLayer,regionPaths,regionLabels,regionLines,adminLines,uncertaintyLayer,dots,labels,route,selected,scoreLayer,zoom,settlementLayer,tooltipTimer;
+let svg,viewport,projection,path,dialectPaths,regionLayer,regionPaths,regionLabels,regionLines,adminLines,uncertaintyLayer,cityPoints,dots,labels,route,selected,scoreLayer,zoom,settlementLayer,tooltipTimer;
 const labelCities=new Set(['beijing','harbin','urumqi','lanzhou','xian','chengdu','chongqing','kunming','wuhan','changsha','nanchang','shanghai','hangzhou','fuzhou','xiamen','guangzhou','nanning','haikou','taipei','taiyuan','jinan','nanjing','shenyang']);
 function txt(id,t){$(id).textContent=t;}
 function esc(t){return String(t??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
@@ -141,8 +141,10 @@ function buildMap(){
  settlementLayer.selectAll('path').data(state.settlements.features).join('path').attr('class','settlement').attr('transform',d=>`translate(${projection(d.geometry.coordinates)})`).attr('d',d3.symbol().type(d3.symbolTriangle).size(12)).attr('fill','#ab7859').attr('stroke','#fafcf7').attr('stroke-width','.5').attr('tabindex',0).attr('role','button').attr('aria-label',d=>d.properties.name+'，查看原图').on('mousemove',(event,d)=>showTooltip(event,'客家话居民点',`${esc(d.properties.name)}<br>原图三角符号转录 · 点击看出处`)).on('mouseleave',hideTooltip).on('click',(event,d)=>{event.stopPropagation();settlementDialog(d);}).on('keydown',(event,d)=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();settlementDialog(d);}});
  route=viewport.append('path').attr('class','route-line');
  const measuredIds=new Set(state.research.map(r=>r.from));
+ const estimateIds=new Set((state.estimates?.records||[]).flatMap(r=>[r.a,r.b]));
+ cityPoints=viewport.append('g').attr('class','city-points').selectAll('circle').data(state.cities).join('circle').attr('class',c=>`city-point${measuredIds.has(c.id)||estimateIds.has(c.id)?' has-evidence':''}`).attr('cx',d=>projection(d.coordinates)[0]).attr('cy',d=>projection(d.coordinates)[1]).attr('r',2.6).attr('tabindex',0).attr('role','button').attr('aria-label',c=>`${c.name}，${taxonomy(c)}，点击选择该地点`).on('mousemove',(e,c)=>showCityTooltip(e,c)).on('mouseleave',hideTooltip).on('click',(e,c)=>{e.stopPropagation();choose(c);}).on('keydown',(e,c)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(c);}});
  dots=viewport.append('g').attr('class','research-points').selectAll('circle').data(state.cities.filter(c=>measuredIds.has(c.id))).join('circle').attr('class','place-dot').attr('cx',d=>projection(d.coordinates)[0]).attr('cy',d=>projection(d.coordinates)[1]).attr('r',3).attr('tabindex',0).attr('role','button').style('display','none').on('mousemove',(e,c)=>showCityTooltip(e,c)).on('mouseleave',hideTooltip).on('click',(e,c)=>{e.stopPropagation();choose(c);}).on('keydown',(e,c)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(c);}});
- labels=viewport.append('g').selectAll('text').data(state.cities.filter(c=>labelCities.has(c.id))).join('text').attr('class','city-label').attr('x',d=>projection(d.coordinates)[0]+7).attr('y',d=>projection(d.coordinates)[1]+4).text(d=>d.name);
+ labels=viewport.append('g').selectAll('text').data(state.cities.filter(c=>labelCities.has(c.id))).join('text').attr('class','city-label').attr('x',d=>projection(d.coordinates)[0]+7).attr('y',d=>projection(d.coordinates)[1]+4).text(d=>d.name).on('mousemove',(e,c)=>showCityTooltip(e,c)).on('mouseleave',hideTooltip).on('click',(e,c)=>{e.stopPropagation();choose(c);});
  scoreLayer=viewport.append('g').attr('class','listen-score-layer');
  selected=viewport.append('g').attr('class','selection-marks');
  zoom=d3.zoom().scaleExtent([.85,8]).translateExtent([[-300,-300],[1300,1100]]).on('zoom',e=>{state.transform=e.transform;viewport.attr('transform',e.transform);hideTooltip();resizeMarkers(e.transform.k);});
@@ -166,7 +168,9 @@ function updateRegionLayer(){
 }
 function resizeMarkers(k){
  const zoomScale=k;k*=Math.abs(svg.node().getScreenCTM()?.a||1);
- dots?.attr('r',3.2/k);labels?.style('font-size','12.5px').style('stroke-width','3px').attr('x',6).attr('y',3).attr('transform',d=>`translate(${projection(d.coordinates)}) scale(${1/k})`);
+ const listenIds=new Set(state.view==='listen'?[state.anchor?.id,...state.listenRows.map(r=>r.peer.id)]:[state.origin?.id,state.target?.id]);
+ cityPoints?.attr('r',c=>((labelCities.has(c.id)||state.research.some(r=>r.from===c.id))?2.8:2.2)/k).style('display',c=>listenIds.has(c.id)?'none':(zoomScale>=1.6||labelCities.has(c.id)||state.research.some(r=>r.from===c.id))?null:'none');
+ dots?.attr('r',3.4/k);labels?.style('font-size','12.5px').style('stroke-width','3px').attr('x',6).attr('y',3).attr('transform',d=>`translate(${projection(d.coordinates)}) scale(${1/k})`);
  const selectedRegionIds=new Set((state.view==='listen'?[state.anchor]:[state.origin,state.target]).filter(c=>c?.kind==='region').map(c=>c.id));
  regionLabels?.style('font-size','12px').style('stroke-width','3px').attr('x',0).attr('y',0).attr('transform',d=>`translate(${projection(entityFor(d).coordinates)}) scale(${1/k})`).style('display',d=>zoomScale>=2.2&&!selectedRegionIds.has(d.properties.id)?null:'none');
  selected?.selectAll('circle').attr('r',4.5/k);selected?.selectAll('text').style('font-size','14.5px').style('stroke-width','3.5px').attr('x',0).attr('y',0).attr('dx',d=>d.kind==='region'?0:9).attr('dy',d=>d.kind==='region'?0:-8).attr('text-anchor',d=>d.kind==='region'?'middle':'start').attr('transform',d=>`translate(${projection(d.coordinates)}) scale(${1/k})`);

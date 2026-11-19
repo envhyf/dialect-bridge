@@ -26,7 +26,7 @@ async function mapImage(svg,width,height){
  for(const node of clone.querySelectorAll('.city-label,.active-city-label,.region-label,.listen-score-point')){
   node.setAttribute('transform',(node.getAttribute('transform')||'').replace(/scale\(([-\d.e]+)\)/g,(_,n)=>`scale(${Number(n)*scale})`));
  }
- for(const node of clone.querySelectorAll('.selection-marks>circle,.research-points>circle'))node.setAttribute('r',Number(node.getAttribute('r'))*scale);
+ for(const node of clone.querySelectorAll('.selection-marks>circle,.research-points>circle,.city-points>circle'))node.setAttribute('r',Number(node.getAttribute('r'))*scale);
  for(const node of clone.querySelectorAll('.settlement'))node.setAttribute('transform',(node.getAttribute('transform')||'')+` scale(${scale})`);
  layoutExportScores(svg,clone,width,height);
  const style=document.createElementNS('http://www.w3.org/2000/svg','style');style.textContent=await embeddedFonts();clone.prepend(style);

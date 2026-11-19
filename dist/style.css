@@ -182,12 +182,21 @@ summary:focus-visible {
   fill-opacity: 1 !important;
 }
 
+.dialect-shape:focus,
+.region-shape:focus,
+.place-dot:focus,
+.city-point:focus,
+.settlement:focus,
+.listen-score-point:focus {
+  outline: none;
+}
+
 .dialect-shape:focus-visible,
 .region-shape:focus-visible {
   outline: none;
   stroke: var(--ink) !important;
-  stroke-width: 1.8 !important;
-  stroke-opacity: 0.9 !important;
+  stroke-width: 1.6 !important;
+  stroke-opacity: 0.85 !important;
   vector-effect: non-scaling-stroke;
 }
 
@@ -210,22 +219,22 @@ summary:focus-visible {
 }
 
 .selected-parent {
-  fill-opacity: 0.10;
-  stroke-opacity: 0.24;
-  stroke-width: 2.4;
+  fill-opacity: 0.06;
+  stroke-opacity: 0.18;
+  stroke-width: 1.4;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
 .selection-fill {
-  fill-opacity: 0.15;
+  fill-opacity: 0.10;
   pointer-events: none;
 }
 
 .selection-halo {
   fill: none;
   stroke: #fffefb;
-  stroke-width: 2.8;
+  stroke-width: 2.6;
   stroke-opacity: 0.92;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
@@ -233,8 +242,8 @@ summary:focus-visible {
 
 .selected-region {
   fill: none;
-  stroke-width: 1.5;
-  stroke-opacity: 1;
+  stroke-width: 1.4;
+  stroke-opacity: 0.95;
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
@@ -248,6 +257,29 @@ summary:focus-visible {
   vector-effect: non-scaling-stroke;
   pointer-events: none;
   animation: map-flow 2.8s linear infinite;
+}
+
+.city-point {
+  fill: #fffefb;
+  stroke: #3b4b43;
+  stroke-width: 1.15;
+  cursor: pointer;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.12s ease, stroke-width 0.12s ease;
+}
+.city-point.has-evidence {
+  fill: #2f5c49;
+  stroke: #fffefb;
+  stroke-width: 1.2;
+}
+.city-point:hover {
+  stroke: var(--ink);
+  stroke-width: 1.8;
+}
+.city-point:focus-visible {
+  outline: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
 }
 
 .place-dot {
@@ -281,7 +313,10 @@ summary:focus-visible {
   stroke: var(--map-bg);
   stroke-width: 3.2;
   stroke-linejoin: round;
-  pointer-events: none;
+  cursor: pointer;
+}
+.city-label:hover {
+  fill: var(--ink);
 }
 
 .region-label {
